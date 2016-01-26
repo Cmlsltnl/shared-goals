@@ -1,75 +1,72 @@
 import dominate
 from dominate.tags import *
-# from dominate.util import text
 
-doc = dominate.document(title='Shared Goal')
+print '{% load staticfiles %}'
+
+doc = dominate.document(title="Shared Goal")
+
+with doc.head:
+    link(
+        rel="stylesheet", href="http://maxcdn.bootstrapcdn.com/bootstrap"
+        "/3.3.6/css/bootstrap.min.css")
+    link(
+        rel="stylesheet", href="{% static 'goal/goal.css' %}")
+    script(
+        type="text/javascript", src="https://ajax.googleapis.com/ajax/"
+        "libs/jquery/1.12.0/jquery.min.js")
+    script(
+        type="text/javascript", src="http://maxcdn.bootstrapcdn.com/"
+        "bootstrap/3.3.6/js/bootstrap.min.js")
+
 fair_trade_logo = (
-    "http://i27.photobucket.com/albums/c193/sally_anne_/"
-    "Fairtrade/mark_colour_vertical.jpg")
+    'http://i27.photobucket.com/albums/c193/sally_anne_/'
+    'Fairtrade/mark_colour_vertical.jpg')
 
 with doc:
-    with div(_class='container'):
-        with div(_class='row'):
-            div(_class='col-md-10')
+    with div(_class="container"):
+        with div(_class="row"):
+            div(_class="col-md-10")
             with div(_class="btn-group btn-new-proposal col-md-2"):
                 button("New Proposal", _class="btn")
 
-        with div(_class='row'):
-            with div(_class='text-center'):
-                with div(_class='proposal-header'):
-                    img(
-                        _class="proposal-img",
-                        src=fair_trade_logo,
-                        height=75,
-                        width=75)
-                    h3(
-                        "Buy Fair Trade products",
-                        _class="proposal-title")
+        with div(_class="row"):
+            with div(_class="text-center"):
+                h1("Improve the world")
+                with div(_class="button-grp"):
+                    button("Top Proposals", _class="btn btn-default")
+                    button("Members", _class="btn btn-default")
+                    button("My Profile", _class="btn btn-default")
 
-# <div class="container">
-#   <div class="row">
-#     <div class="col-md-10">
-#     </div>
-#     <div class="btn-group btn-new-proposal col-md-2">
-#       <button class="btn">
-#         New Proposal
-#       </button>
-#     </div>
-#   </div>
-#   <div class="row">
-#     <div class="text-center">
-#       <div class="proposal-header">
-#         <img class="proposal-img" src="http://i27.photobucket.com/albums/c193/sally_anne_/Fairtrade/mark_colour_vertical.jpg" height="75" width="75">
+        hr()
+        hr()
 
-#         <h3 class="proposal-title">
-#           Buy Fair Trade products
-#         </h3>
-#       </div>
-#       <hr>
-#       <div class="btn-group">
-#         <button class="btn btn-default" contenteditable="false">
-#           Top Proposals
-#         </button>
-#         <button class="btn btn-default" contenteditable="false">
-#           Members
-#         </button>
-#         <button class="btn btn-default" contenteditable="false">
-#           My Profile
-#         </button>
-#       </div>
-#     </div>
-#   </div>
-#   <hr class="">
-#   <hr class="">
-# </div>
-# <!-- /.container -->
+        with div(_class="row"):
+            div(_class="col-md-8")
+            with div(_class="col-md-1"):
+                h4("Rating")
+            with div(_class="col-md-2"):
+                h4("Published")
 
-    # with div(id='header').add(ol()):
-    #     for i in ['home', 'about', 'contact']:
-    #         li(a(i.title(), href='/%s.html' % i))
+        with div(_class="row proposal"):
+            div(_class="col-md-2")
+            with div(_class="col-md-1"):
+                img(src=fair_trade_logo, height="75", width="75")
+            with div(_class="col-md-5"):
+                h3("Buy Fair Trade products")
+            with div(_class="col-md-1"):
+                h4("4.2")
+            with div(_class="col-md-2"):
+                h4("10 Jan 2016")
 
-    # with div():
-    #     attr(cls='body')
-    #     p('Lorem ipsum..')
+        with div(_class="row proposal"):
+            div(_class="col-md-2")
+            with div(_class="col-md-1"):
+                img(src=fair_trade_logo, height="75", width="75")
+            with div(_class="col-md-5"):
+                h3("Buy Fair Trade products")
+            with div(_class="col-md-1"):
+                h4("4.2")
+            with div(_class="col-md-2"):
+                h4("10 Jan 2016")
 
 print doc

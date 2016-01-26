@@ -1,8 +1,10 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html>
   <head>
     <title>Shared Goal</title>
-  </head>
+    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{% static 'goal/goal.css' %}" rel="stylesheet"><script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js" type="text/javascript"></script><script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" type="text/javascript"></script></head>
   <body>
     <div class="container">
       <div class="row">
@@ -13,10 +15,53 @@
       </div>
       <div class="row">
         <div class="text-center">
-          <div class="proposal-header">
-            <img class="proposal-img" height="75" src="http://i27.photobucket.com/albums/c193/sally_anne_/Fairtrade/mark_colour_vertical.jpg" width="75">
-            <h3 class="proposal-title">Buy Fair Trade products</h3>
+          <h1>Improve the world</h1>
+          <div class="button-grp">
+            <button class="btn btn-default">Top Proposals</button>
+            <button class="btn btn-default">Members</button>
+            <button class="btn btn-default">My Profile</button>
           </div>
+        </div>
+      </div>
+      <hr>
+      <hr>
+      <div class="row">
+        <div class="col-md-8"></div>
+        <div class="col-md-1">
+          <h4>Rating</h4>
+        </div>
+        <div class="col-md-2">
+          <h4>Published</h4>
+        </div>
+      </div>
+      <div class="row proposal">
+        <div class="col-md-2"></div>
+        <div class="col-md-1">
+          <img height="75" src="http://i27.photobucket.com/albums/c193/sally_anne_/Fairtrade/mark_colour_vertical.jpg" width="75">
+        </div>
+        <div class="col-md-5">
+          <h3>Buy Fair Trade products</h3>
+        </div>
+        <div class="col-md-1">
+          <h4>4.2</h4>
+        </div>
+        <div class="col-md-2">
+          <h4>10 Jan 2016</h4>
+        </div>
+      </div>
+      <div class="row proposal">
+        <div class="col-md-2"></div>
+        <div class="col-md-1">
+          <img height="75" src="http://i27.photobucket.com/albums/c193/sally_anne_/Fairtrade/mark_colour_vertical.jpg" width="75">
+        </div>
+        <div class="col-md-5">
+          <h3>Buy Fair Trade products</h3>
+        </div>
+        <div class="col-md-1">
+          <h4>4.2</h4>
+        </div>
+        <div class="col-md-2">
+          <h4>10 Jan 2016</h4>
         </div>
       </div>
     </div>
