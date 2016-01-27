@@ -1,5 +1,7 @@
 import dominate
 from dominate.tags import *
+from dominate.util import text
+
 
 print '{% load staticfiles %}'
 
@@ -29,16 +31,13 @@ with doc:
             with div(_class="btn-group btn-new-proposal col-md-2"):
                 button("New Proposal", _class="btn")
 
-        with div(_class="row"):
+        with div(_class="row main-menu"):
             with div(_class="text-center"):
-                h1("Improve the world")
+                h1("{{ goal.title }}")
                 with div(_class="button-grp"):
                     button("Top Proposals", _class="btn btn-default")
                     button("Members", _class="btn btn-default")
                     button("My Profile", _class="btn btn-default")
-
-        hr()
-        hr()
 
         with div(_class="row"):
             div(_class="col-md-8")
@@ -47,26 +46,19 @@ with doc:
             with div(_class="col-md-2"):
                 h4("Published")
 
-        with div(_class="row proposal"):
-            div(_class="col-md-2")
-            with div(_class="col-md-1"):
-                img(src=fair_trade_logo, height="75", width="75")
-            with div(_class="col-md-5"):
-                h3("Buy Fair Trade products")
-            with div(_class="col-md-1"):
-                h4("4.2")
-            with div(_class="col-md-2"):
-                h4("10 Jan 2016")
+        text("{% for proposal in proposals %}")
 
         with div(_class="row proposal"):
             div(_class="col-md-2")
             with div(_class="col-md-1"):
                 img(src=fair_trade_logo, height="75", width="75")
             with div(_class="col-md-5"):
-                h3("Buy Fair Trade products")
+                h3("{{ proposal.title }}")
             with div(_class="col-md-1"):
                 h4("4.2")
             with div(_class="col-md-2"):
-                h4("10 Jan 2016")
+                h4("{{ proposal.pub_date|date:'d M Y' }}")
+
+        text("{% endfor %}")
 
 print doc

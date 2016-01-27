@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'goal.apps.GoalConfig',
+    'proposal.apps.ProposalConfig',
 
     'django.contrib.admin',
     'django.contrib.auth',
