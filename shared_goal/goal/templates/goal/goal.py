@@ -55,7 +55,7 @@ with doc:
             with div(_class="col-md-5"):
                 h3("{{ proposal.title }}")
             with div(_class="col-md-1"):
-                h4("4.2")
+                h4("{{ proposal.rating }}")
             with div(_class="col-md-2"):
                 h4("{{ proposal.pub_date|date:'d M Y' }}")
 
