@@ -1,30 +1,19 @@
 import dominate
+import re
 from dominate.tags import *
 from dominate.util import text
 
 
-print '{% load staticfiles %}'
-
 doc = dominate.document(title="Shared Goal")
-
-with doc.head:
-    link(
-        rel="stylesheet", href="http://maxcdn.bootstrapcdn.com/bootstrap"
-        "/3.3.6/css/bootstrap.min.css")
-    link(
-        rel="stylesheet", href="{% static 'goal/goal.css' %}")
-    script(
-        type="text/javascript", src="https://ajax.googleapis.com/ajax/"
-        "libs/jquery/1.12.0/jquery.min.js")
-    script(
-        type="text/javascript", src="http://maxcdn.bootstrapcdn.com/"
-        "bootstrap/3.3.6/js/bootstrap.min.js")
 
 fair_trade_logo = (
     'http://i27.photobucket.com/albums/c193/sally_anne_/'
     'Fairtrade/mark_colour_vertical.jpg')
 
 with doc:
+    text("\n{% extends 'base.html' %}\n")
+    text("\n{% block content %}\n")
+
     with div(_class="container"):
         with div(_class="row"):
             div(_class="col-md-10")
@@ -46,7 +35,7 @@ with doc:
             with div(_class="col-md-2"):
                 h4("Published")
 
-        text("{% for proposal in proposals %}")
+        text("\n{% for proposal in proposals %}\n")
 
         with div(_class="row proposal"):
             div(_class="col-md-2")
@@ -59,6 +48,14 @@ with doc:
             with div(_class="col-md-2"):
                 h4("{{ proposal.pub_date|date:'d M Y' }}")
 
-        text("{% endfor %}")
+        text("\n{% endfor %}\n")
 
-print doc
+    text("\n{% endblock %}\n")
+
+
+def strip(s):
+    def strip_leading(s):
+        return re.sub(r'<body>\s+', '', str(s))
+    return re.sub(r'\s+</body>', '', strip_leading(s))
+
+print(strip(doc.body))
