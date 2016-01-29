@@ -2,12 +2,16 @@ body {
   padding-top: 50px;
 }
 
+hr {
+    clear: both;
+    visibility: hidden;
+}
+
 .proposal {
     padding-bottom: 10px;
 }
 
 .btn-new-proposal {
-    padding-left: 50px;
 }
 
 .main-menu {
