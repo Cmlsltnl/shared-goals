@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'goal.apps.GoalConfig',
     'proposal.apps.ProposalConfig',
     'django_extensions',
+    'django_dominate',
 
     'django.contrib.admin',
     'django.contrib.auth',
