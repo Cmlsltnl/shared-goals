@@ -1,12 +1,12 @@
 from django.shortcuts import render
 from django.views.generic import View
-from .models import Goal
+from django.shortcuts import get_object_or_404
+from .models import Goal, Member
 
 
 class GoalView(View):
     def get(self, request, goal_slug):
-        goal = Goal.objects.all()[0]
-
+        goal = get_object_or_404(Goal, slug=goal_slug)
         context = {
             'goal': goal,
             'proposals': goal.proposal_set.order_by('-rating')
@@ -16,10 +16,12 @@ class GoalView(View):
 
 class ProfileView(View):
     def get(self, request, goal_slug):
-        goal = Goal.objects.all()[0]
-
+        goal = get_object_or_404(Goal, slug=goal_slug)
+        member = get_object_or_404(Member, user=request.user)
         context = {
             'goal': goal,
-            'proposals': goal.proposal_set.order_by('-rating')
+            'proposals': goal.proposal_set.filter(
+                owner=member
+            ).order_by('-rating')
         }
-        return render(request, 'goal/goal.html', context)
+        return render(request, 'goal/profile.html', context)

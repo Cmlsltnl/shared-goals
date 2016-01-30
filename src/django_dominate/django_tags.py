@@ -42,13 +42,23 @@ class django_if(django_tag):
         return "{%% if %s %%}" % tag_inner
 
 
-class django_else(html_tag):
+class django_single(html_tag):
+    tag = "undefined"
+
     def _render(self, rendered, indent=1, inline=False):
         from_index = len(rendered)
         super(html_tag, self)._render(rendered, indent, inline)
         for i in range(2):
             rendered.pop()
             del rendered[from_index]
-        rendered[from_index] = "{% else %}"
+        rendered[from_index] = self.tag
         del rendered[-1]
         return rendered
+
+
+class django_else(django_single):
+    tag = "{% else %}"
+
+
+class django_empty(django_single):
+    tag = "{% empty %}"
