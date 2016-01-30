@@ -62,3 +62,7 @@ class django_else(django_single):
 
 class django_empty(django_single):
     tag = "{% empty %}"
+
+
+class django_csrf_token(django_single):
+    tag = "{% csrf_token %}"

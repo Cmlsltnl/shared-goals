@@ -21,12 +21,20 @@ def top_right_menu():
                 text("{% trans 'Change password' %}")
 
 
+url_new_proposal = "location.href='{% url 'new-proposal' goal.slug %}';"
+
+
 @div(_class="row")
 def top_right_div():
     with div(_class="pull-right"):
-        with div(_class="btn-group btn-new-proposal"):
-            button("New Proposal", _class="btn")
         with django_if("user.is_authenticated"):
+            with django_if("member"):
+                with div(_class="btn-group btn-new-proposal"):
+                    button(
+                        "New Proposal",
+                        _class="btn",
+                        onclick=url_new_proposal
+                    )
             top_right_menu()
             with django_else():
                 with a(href="{% url 'auth_login' %}"):
