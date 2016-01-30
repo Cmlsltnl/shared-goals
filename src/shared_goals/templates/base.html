@@ -4,19 +4,21 @@
 
 {% block header %}
   <div class="row">
-    <div class="col-md-4 pull-right">
+    <div class="pull-right">
       <div class="btn-group btn-new-proposal">
         <button class="btn">New Proposal</button>
       </div>
       {% if user.is_authenticated %}
-        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">{{ user.first_name }}</a>
-        <span class="caret"></span>
-        <ul class="dropdown-menu">
-          <li>
-            <a href="{% url 'auth_logout' %}">{% trans 'Log out' %}</a>
-            <a href="{% url 'auth_password_change' %}">{% trans 'Change password' %}</a>
-          </li>
-        </ul>
+        <div class="dropdown clearfix pull-right">
+          <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">{{ user.first_name }}</a>
+          <span class="caret"></span>
+          <ul class="dropdown-menu">
+            <li>
+              <a href="{% url 'auth_logout' %}">{% trans 'Log out' %}</a>
+              <a href="{% url 'auth_password_change' %}">{% trans 'Change password' %}</a>
+            </li>
+          </ul>
+        </div>
         {% else %}
           <a href="{% url 'auth_login' %}">{% trans 'Log in' %}</a>
         

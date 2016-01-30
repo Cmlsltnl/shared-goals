@@ -1,15 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-<div>
   <div class="row main-menu">
     <div class="text-center">
       <h1>{{ goal.title }}</h1>
       <div class="button-grp">
         <button class="btn btn-default">Top Proposals</button>
         <button class="btn btn-default">Members</button>
-        <button class="btn btn-default">My Profile</button>
+        <button class="btn btn-default" onclick="location.href='{% url 'index' goal.slug %}';">My Profile</button>
       </div>
     </div>
   </div>
@@ -22,24 +20,21 @@
       <h4>Published</h4>
     </div>
   </div>
-{% for proposal in proposals %}
-
-  <div class="row proposal">
-    <div class="col-md-2"></div>
-    <div class="col-md-1">
-      <img height="75" src="http://i27.photobucket.com/albums/c193/sally_anne_/Fairtrade/mark_colour_vertical.jpg" width="75">
+  {% for proposal in proposals %}
+    <div class="row proposal">
+      <div class="col-md-2"></div>
+      <div class="col-md-1">
+        <img height="75" src="http://i27.photobucket.com/albums/c193/sally_anne_/Fairtrade/mark_colour_vertical.jpg" width="75">
+      </div>
+      <div class="col-md-5">
+        <h3>{{ proposal.title }}</h3>
+      </div>
+      <div class="col-md-1">
+        <h4>{{ proposal.rating }}</h4>
+      </div>
+      <div class="col-md-2">
+        <h4>{{ proposal.pub_date|date:'d M Y' }}</h4>
+      </div>
     </div>
-    <div class="col-md-5">
-      <h3>{{ proposal.title }}</h3>
-    </div>
-    <div class="col-md-1">
-      <h4>{{ proposal.rating }}</h4>
-    </div>
-    <div class="col-md-2">
-      <h4>{{ proposal.pub_date|date:'d M Y' }}</h4>
-    </div>
-  </div>
-{% endfor %}
-</div>
+  {% endfor %}
 {% endblock %}
-
