@@ -1,0 +1,9 @@
+- use context processor to lookup the current Goal. If it actually exists, insert it into the request
+- Check that url for the goal is not used
+- Advise member that their profile is totally public
+- Use now() timestamp from the db server
+- Check that Proposal title is unique
+- Allow markdown in Proposal description. First line of proposal == title. A new Proposal will have a default initial text (title + fill-in-this-description).
+- Show which Proposal version the rating applies to
+- When leaving a Goal as a member, confirm that all Proposals are deleted
+

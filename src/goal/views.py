@@ -28,14 +28,3 @@ class ProfileView(View):
             ).order_by('-rating')
         }
         return render(request, 'goal/profile.html', context)
-
-
-class NewProposalView(View):
-    def get(self, request, goal_slug):
-        goal = get_object_or_404(Goal, slug=goal_slug)
-        member = get_object_or_404(Member, user=request.user)
-        context = {
-            'goal': goal,
-            'member': member,
-        }
-        return render(request, 'goal/new_proposal.html', context)

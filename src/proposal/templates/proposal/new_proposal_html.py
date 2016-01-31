@@ -1,7 +1,6 @@
 from dominate.tags import *
 from dominate.util import text
 from django_dominate.django_tags import *
-from proposal.templates.dominate_tags import *
 from goal.templates.dominate_tags import *
 
 
@@ -9,15 +8,21 @@ from goal.templates.dominate_tags import *
 def proposal_form():
     django_csrf_token()
     with p():
-        with label(_for="id_title"):
+        text("{{ form.title.errors }}")
+        with label(_for="{{ form.title.id_for_label }}"):
             text("Title")
         input_(id="id_title", type="text", name="title", maxlength="254")
 
     with p():
-        with label(_for="id_description"):
+        text("{{ form.description.errors }}")
+        with label(_for="{{ form.description.id_for_label }}"):
             text("Description")
         with textarea(name="description", form="proposal_form"):
             text("Enter text here...")
+
+    with div():
+        button("Save", name="save", value="saved")
+        button("Cancel", name="cancel", value="cancelled")
 
 with django_block("content") as content:
     goal_header()

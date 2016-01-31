@@ -1,6 +1,5 @@
 from dominate.tags import *
 from django_dominate.django_tags import *
-from proposal.templates.dominate_tags import *
 
 
 @div(_class="row main-menu")

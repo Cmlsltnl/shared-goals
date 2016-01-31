@@ -1,0 +1,1 @@
+PYTHONPATH="/home/maarten/code/shared_goals/src/" watchmedo shell-command --patterns="*_html.py" --recursive --command='python ${watch_src_path} > `echo "${watch_src_path}" | sed s/_html.py/.html/`' .
