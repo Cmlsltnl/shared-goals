@@ -1,17 +1,9 @@
-body {
-  padding-top: 50px;
-}
-
-hr {
-    clear: both;
-    visibility: hidden;
-}
-
 .proposal {
     padding-bottom: 10px;
 }
 
-.btn-new-proposal {
+.top-right-div {
+  padding-top: 10px;
 }
 
 .main-menu {

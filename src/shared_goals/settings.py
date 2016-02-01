@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'proposal.apps.ProposalConfig',
     'django_extensions',
     'django_dominate',
+    'markdown_deux',
 
     'django.contrib.admin',
     'django.contrib.auth',

@@ -21,7 +21,8 @@ def proposal_list():
     with col(1):
         img(src="{{ proposal.image_url }}", height="75", width="75")
     with col(5):
-        h3("{{ proposal.title }}")
+        with a(href="{% url 'proposal' goal.slug proposal.slug %}"):
+            h3("{{ proposal.title }}")
     with col(1):
         h4("{{ proposal.rating }}")
     with col(2):

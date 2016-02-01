@@ -16,8 +16,8 @@ class django_tag(html_tag):
         for i in range(2):
             rendered.pop()
             del rendered[from_index]
-        rendered[from_index] = self.get_opening_tag(tag_inner)
-        rendered[-1] = self.closing_tag
+        rendered[from_index] = "\n" + self.get_opening_tag(tag_inner) + "\n"
+        rendered[-1] = "\n" + self.closing_tag + "\n"
         return rendered
 
 

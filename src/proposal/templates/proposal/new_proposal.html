@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 
+{% load markdown_deux_tags %}
+
 {% block content %}
+
   <div class="row main-menu">
     <div class="text-center">
       <h1>{{ goal.title }}</h1>
@@ -14,16 +17,18 @@
   <form action="." id="proposal_form" method="post">
     {% csrf_token %}
     <p>{{ form.title.errors }}
-      <label for="{{ form.title.id_for_label }}">Title</label>
-      <input id="id_title" maxlength="254" name="title" type="text">
+      <label class="form-label" for="{{ form.title.id_for_label }}">Title</label>
+      <input class="form-field" id="id_title" maxlength="100" name="title" type="text" value="{{ form.title.value }}">
     </p>
     <p>{{ form.description.errors }}
-      <label for="{{ form.description.id_for_label }}">Description</label>
-      <textarea form="proposal_form" name="description">Enter text here...</textarea>
+      <label class="form-label" for="{{ form.description.id_for_label }}">Description</label>
+      <textarea class="form-field" form="proposal_form" name="description">{{ form.description.value }}</textarea>
     </p>
     <div>
       <button name="save" value="saved">Save</button>
       <button name="cancel" value="cancelled">Cancel</button>
     </div>
   </form>
+
 {% endblock %}
+

@@ -24,7 +24,7 @@ def top_right_menu():
 url_new_proposal = "location.href='{% url 'new-proposal' goal.slug %}';"
 
 
-@div(_class="row")
+@div(_class="row top-right-div")
 def top_right_div():
     with div(_class="pull-right"):
         with django_if("user.is_authenticated"):

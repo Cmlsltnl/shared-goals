@@ -2,15 +2,23 @@
 
 {% load i18n %}
 
+
 {% block header %}
-  <div class="row">
+
+  <div class="row top-right-div">
     <div class="pull-right">
-      {% if user.is_authenticated %}
-        {% if member %}
+
+{% if user.is_authenticated %}
+
+
+{% if member %}
+
           <div class="btn-group btn-new-proposal">
             <button class="btn" onclick="location.href='{% url 'new-proposal' goal.slug %}';">New Proposal</button>
           </div>
-        {% endif %}
+
+{% endif %}
+
         <div class="dropdown clearfix pull-right">
           <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">{{ user.first_name }}</a>
           <span class="caret"></span>
@@ -23,8 +31,11 @@
         </div>
         {% else %}
           <a href="{% url 'auth_login' %}">{% trans 'Log in' %}</a>
-        
-      {% endif %}
+
+
+{% endif %}
+
     </div>
   </div>
+
 {% endblock %}
