@@ -7,7 +7,8 @@ class Proposal(models.Model):
     title = models.CharField(max_length=100, unique=True)
     pub_date = models.DateTimeField('date published', auto_now_add=True)
     goal = models.ForeignKey(Goal)
-    rating = models.DecimalField(max_digits=2, decimal_places=1, default=0.0)
+    avg_rating = models.DecimalField(
+        max_digits=2, decimal_places=1, default=0.0)
     owner = models.ForeignKey(Member)
     image_url = models.URLField(blank=True)
     slug = models.SlugField('slug', max_length=60, blank=True, unique=True)
@@ -19,3 +20,13 @@ class Proposal(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Rating(models.Model):
+    pub_date = models.DateTimeField('date published', auto_now_add=True)
+    owner = models.ForeignKey(Member)
+    proposal = models.ForeignKey(Proposal)
+    rating = models.PositiveSmallIntegerField(default=0)
+
+    def __str__(self):
+        return "Rating for %s" % self.proposal.title

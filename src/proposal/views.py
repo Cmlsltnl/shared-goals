@@ -8,14 +8,14 @@ from proposal.forms import ProposalForm
 from proposal.models import Proposal
 
 
-class ProposalView(View):
-    def get(self, request, goal_slug, proposal_slug=None):
-        return self.handle(request, goal_slug, proposal_slug)
+class NewProposalView(View):
+    def get(self, request, goal_slug):
+        return self.handle(request, goal_slug)
 
-    def post(self, request, goal_slug, proposal_slug=None):
-        return self.handle(request, goal_slug, proposal_slug)
+    def post(self, request, goal_slug):
+        return self.handle(request, goal_slug)
 
-    def handle(self, request, goal_slug, proposal_slug="new-proposal"):
+    def handle(self, request, goal_slug):
         goal = get_object_or_404(Goal, slug=goal_slug)
         member = get_object_or_404(Member, user=request.user)
 
@@ -32,21 +32,29 @@ class ProposalView(View):
                 return HttpResponseRedirect(
                     reverse(
                         'proposal',
-                        kwargs=dict(goal_slug=goal.slug, proposal_slug=p.slug)
+                        kwargs=dict(goal_slug=goal.slug)
                     )
                 )
         else:
             form = ProposalForm()
 
-        proposal = (
-            Proposal.objects.get(slug=proposal_slug) if proposal_slug
-            else None
-        )
-
         context = {
             'goal': goal,
-            'proposal': proposal,
             'member': member,
             'form': form
         }
         return render(request, 'proposal/new_proposal.html', context)
+
+
+class ProposalView(View):
+    def get(self, request, goal_slug, proposal_slug=None):
+        goal = get_object_or_404(Goal, slug=goal_slug)
+        member = get_object_or_404(Member, user=request.user)
+        proposal = get_object_or_404(Proposal, slug=proposal_slug)
+
+        context = {
+            'goal': goal,
+            'proposal': proposal,
+            'member': member
+        }
+        return render(request, 'proposal/proposal.html', context)

@@ -39,11 +39,8 @@ def proposal_form():
         button("Cancel", name="cancel", value="cancelled")
 
 print("{% extends 'base.html' %}\n")
-print("{% load markdown_deux_tags %}")
 
 with django_block("content") as content:
     goal_header()
     proposal_form()
-    # with django_if("proposal"):
-    #     text("{{ proposal.description|markdown }}")
 print(content)
