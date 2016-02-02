@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'django_dominate',
     'markdown_deux',
+    'sorl.thumbnail',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -90,6 +91,12 @@ DATABASES = {
     }
 }
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
@@ -131,3 +138,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = '/home/maarten/code/shared_goals/media/'
+
+THUMBNAIL_DEBUG = True

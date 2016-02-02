@@ -5,7 +5,7 @@ from . import views
 urlpatterns = [
     url(
         r'^new-proposal/$',
-        views.ProposalView.as_view(),
+        views.NewProposalView.as_view(),
         name='new-proposal'
     ),
     url(

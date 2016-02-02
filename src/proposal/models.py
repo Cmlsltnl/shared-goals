@@ -1,16 +1,18 @@
 from django.db import models
 from goal.models import Goal, Member
 from django.template.defaultfilters import slugify
+from sorl.thumbnail import ImageField
 
 
 class Proposal(models.Model):
     title = models.CharField(max_length=100, unique=True)
+    description = models.TextField()
     pub_date = models.DateTimeField('date published', auto_now_add=True)
     goal = models.ForeignKey(Goal)
     avg_rating = models.DecimalField(
         max_digits=2, decimal_places=1, default=0.0)
     owner = models.ForeignKey(Member)
-    image_url = models.URLField(blank=True)
+    image = ImageField(upload_to="proposals")
     slug = models.SlugField('slug', max_length=60, blank=True, unique=True)
 
     def save(self, *args, **kwargs):
@@ -22,11 +24,12 @@ class Proposal(models.Model):
         return self.title
 
 
-class Rating(models.Model):
+class Review(models.Model):
     pub_date = models.DateTimeField('date published', auto_now_add=True)
     owner = models.ForeignKey(Member)
     proposal = models.ForeignKey(Proposal)
     rating = models.PositiveSmallIntegerField(default=0)
+    description = models.TextField()
 
     def __str__(self):
-        return "Rating for %s" % self.proposal.title
+        return "Review for %s" % self.proposal.title

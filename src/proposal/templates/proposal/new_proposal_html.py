@@ -4,6 +4,7 @@ from django_dominate.django_tags import *
 from goal.templates.dominate_tags import *
 
 
+# 12
 @form(method="post", action=".", id="proposal_form")
 def proposal_form():
     django_csrf_token()

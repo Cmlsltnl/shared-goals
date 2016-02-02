@@ -1,0 +1,9 @@
+check process update_html with pidfile /home/maarten/code/shared_goals/bin/update_html.pid
+   group shared_goals
+   start program = "/home/maarten/code/shared_goals/bin/update_html.sh start"
+   stop program = "/home/maarten/code/shared_goals/bin/update_html.sh stop"
+
+check process django_server with pidfile /home/maarten/code/shared_goals/bin/django_server.pid
+   group shared_goals
+   start program = "/home/maarten/code/shared_goals/bin/django_server.sh start"
+   stop program = "/home/maarten/code/shared_goals/bin/django_server.sh stop"

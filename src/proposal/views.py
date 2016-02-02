@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
 from goal.models import Goal, Member
 from proposal.forms import ProposalForm
-from proposal.models import Proposal
+from proposal.models import Proposal, Review
 
 
 class NewProposalView(View):
@@ -49,12 +49,19 @@ class NewProposalView(View):
 class ProposalView(View):
     def get(self, request, goal_slug, proposal_slug=None):
         goal = get_object_or_404(Goal, slug=goal_slug)
-        member = get_object_or_404(Member, user=request.user)
         proposal = get_object_or_404(Proposal, slug=proposal_slug)
+        member = Member.objects.filter(user=request.user).first()
+        reviews = Review.objects.filter(proposal=proposal)
+        review = (
+            reviews.filter(owner=member).first() if member
+            else None
+        )
 
         context = {
             'goal': goal,
             'proposal': proposal,
-            'member': member
+            'member': member,
+            'review': review,
+            'reviews': reviews,
         }
         return render(request, 'proposal/proposal.html', context)

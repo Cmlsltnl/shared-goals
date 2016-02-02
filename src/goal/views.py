@@ -25,6 +25,6 @@ class ProfileView(View):
             'member': member,
             'proposals': goal.proposal_set.filter(
                 owner=member
-            ).order_by('-rating')
+            ).order_by('-avg_rating')
         }
         return render(request, 'goal/profile.html', context)

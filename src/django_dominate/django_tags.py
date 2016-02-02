@@ -42,6 +42,13 @@ class django_if(django_tag):
         return "{%% if %s %%}" % tag_inner
 
 
+class django_thumbnail(django_tag):
+    closing_tag = "{% endthumbnail %}"
+
+    def get_opening_tag(self, tag_inner):
+        return "{%% thumbnail %s %%}" % tag_inner
+
+
 class django_single(html_tag):
     tag = "undefined"
 

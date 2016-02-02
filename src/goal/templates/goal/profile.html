@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 
+
 {% block content %}
+
   <div class="row main-menu">
     <div class="text-center">
       <h1>{{ goal.title }}</h1>
@@ -21,17 +23,21 @@
       <h4>Published</h4>
     </div>
   </div>
-  {% for proposal in proposals %}
+
+{% for proposal in proposals %}
+
     <div class="row proposal">
       <div class="col-md-2"></div>
       <div class="col-md-1">
         <img height="75" src="{{ proposal.image_url }}" width="75">
       </div>
       <div class="col-md-5">
-        <h3>{{ proposal.title }}</h3>
+        <a href="{% url 'proposal' goal.slug proposal.slug %}">
+          <h3>{{ proposal.title }}</h3>
+        </a>
       </div>
       <div class="col-md-1">
-        <h4>{{ proposal.rating }}</h4>
+        <h4>{{ proposal.avg_rating }}</h4>
       </div>
       <div class="col-md-2">
         <h4>{{ proposal.pub_date|date:'d M Y' }}</h4>
@@ -39,6 +45,9 @@
     </div>
     {% empty %}
       <h5>You have not created any proposals yet</h5>
-    
-  {% endfor %}
+
+
+{% endfor %}
+
+
 {% endblock %}

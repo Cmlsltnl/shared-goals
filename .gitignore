@@ -2,7 +2,10 @@ django-registration-templates
 db.sqlite3
 migrations
 bootstrap.txt
-
+/bin/log/
+/bin/*.pid
+/media/
+minimal-django-file-upload-example
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

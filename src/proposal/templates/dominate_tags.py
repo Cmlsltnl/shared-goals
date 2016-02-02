@@ -24,6 +24,6 @@ def proposal_list():
         with a(href="{% url 'proposal' goal.slug proposal.slug %}"):
             h3("{{ proposal.title }}")
     with col(1):
-        h4("{{ proposal.rating }}")
+        h4("{{ proposal.avg_rating }}")
     with col(2):
         h4("{{ proposal.pub_date|date:'d M Y' }}")
