@@ -1,15 +1,50 @@
 {% extends 'base.html' %}
 
 {% load markdown_deux_tags %}
-{% load thumbnail %}
+{% load sorl_thumbnail %}
 
 {% block content %}
 
-{% thumbnail proposal.image "50x200" crop="center" as im %}
+  <div class="row main-menu">
+    <div class="text-center">
+      <h1>{{ goal.title }}</h1>
+      <div class="button-grp">
+        <button class="btn btn-default" onclick="location.href='{% url 'index' goal.slug %}';">Top Proposals</button>
+        <button class="btn btn-default">Members</button>
+        <button class="btn btn-default" onclick="location.href='{% url 'profile' goal.slug %}';">My Profile</button>
+      </div>
+    </div>
+  </div>
+  <h1>{{ proposal.title }}</h1>{{ proposal.description|markdown }}
+  
+{% thumbnail proposal.image '100x100' crop='center' as im %}
 
     <img height="{{ im.height }}" src="{{ im.url }}" width="{{ im.width }}">
-
+  
 {% endthumbnail %}
+
+  
+{% if review %}
+
+    {% else %}
+      <form action="." id="proposal_form" method="post">
+        {% csrf_token %}
+        <p>{{ form.title.errors }}
+          <label class="form-label" for="{{ form.rating.id_for_label }}">Rating</label>
+          <input class="form-field" id="id_rating" maxlength="3" name="rating" type="text" value="{{ form.rating.value }}">
+        </p>
+        <p>{{ form.description.errors }}
+          <label class="form-label" for="{{ form.description.id_for_label }}">Description</label>
+          <textarea class="form-field" form="proposal_form" name="description">{{ form.description.value }}</textarea>
+        </p>
+        <div>
+          <button name="save" value="saved">Save</button>
+          <button name="cancel" value="cancelled">Cancel</button>
+        </div>
+      </form>
+    
+  
+{% endif %}
 
 
 {% endblock %}

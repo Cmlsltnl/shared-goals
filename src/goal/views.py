@@ -11,7 +11,9 @@ class GoalView(View):
         context = {
             'goal': goal,
             'member': member,
-            'proposals': goal.proposal_set.order_by('-rating')
+            'proposals': goal.proposal_set.filter(
+                is_draft=False
+            ).order_by('-avg_rating')
         }
         return render(request, 'goal/goal.html', context)
 
@@ -24,7 +26,8 @@ class ProfileView(View):
             'goal': goal,
             'member': member,
             'proposals': goal.proposal_set.filter(
-                owner=member
+                owner=member,
+                is_draft=False
             ).order_by('-avg_rating')
         }
         return render(request, 'goal/profile.html', context)

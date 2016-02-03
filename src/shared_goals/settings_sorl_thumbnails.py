@@ -1,0 +1,1 @@
+THUMBNAIL_DEBUG = True

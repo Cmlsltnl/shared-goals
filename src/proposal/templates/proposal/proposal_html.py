@@ -55,10 +55,10 @@ with django_block("content") as content:
         with django_else():
             rating_form()
 
-
 print("{% extends 'base.html' %}\n")
 print("{% load markdown_deux_tags %}")
-print("{% load thumbnail %}")
+print("{% load sorl_thumbnail %}")
 
 print(content)
 
+# done

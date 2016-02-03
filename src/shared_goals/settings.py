@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
-from .settings_registration import *
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -39,6 +38,8 @@ INSTALLED_APPS = [
     'django_dominate',
     'markdown_deux',
     'sorl.thumbnail',
+    'easy_thumbnails',
+    'image_cropping',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -74,6 +75,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries': {
+                'sorl_thumbnail': 'sorl.thumbnail.templatetags.thumbnail',
+            },
         },
     },
 ]
@@ -142,4 +146,6 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = '/home/maarten/code/shared_goals/media/'
 
-THUMBNAIL_DEBUG = True
+from .settings_registration import *
+from .settings_cropping import *
+from .settings_sorl_thumbnails import *

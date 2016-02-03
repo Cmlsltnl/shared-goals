@@ -4,10 +4,25 @@ from django_dominate.django_tags import *
 from goal.templates.dominate_tags import *
 
 
-# 12
-@form(method="post", action=".", id="proposal_form")
+# 123
+@form(
+    method="post",
+    action=".",
+    id="proposal_form",
+    enctype="multipart/form-data"
+)
 def proposal_form():
     django_csrf_token()
+    with p():
+        text("{{ image_form.image.errors }}")
+        with label(
+            _for="{{ image_form.image.id_for_label }}",
+            _class="form-label"
+        ):
+            text("Image")
+        text("{{ image_form.image }}")
+        button("Upload", id="upload-submit", name="submit", value="upload")
+
     with p():
         text("{{ form.title.errors }}")
         with label(_for="{{ form.title.id_for_label }}", _class="form-label"):
@@ -36,10 +51,14 @@ def proposal_form():
             text("{{ form.description.value }}")
 
     with div():
-        button("Save", name="save", value="saved")
-        button("Cancel", name="cancel", value="cancelled")
+        button("Save", id="save-submit", name="submit", value="save")
+        button("Cancel", id="cancel-submit", name="submit", value="cancel")
 
 print("{% extends 'base.html' %}\n")
+
+with django_block("head") as head:
+    text("{{ image_form.media }}")
+print(head)
 
 with django_block("content") as content:
     goal_header()

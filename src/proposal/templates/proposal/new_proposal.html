@@ -1,5 +1,11 @@
 {% extends 'base.html' %}
 
+
+{% block head %}
+{{ image_form.media }}
+{% endblock %}
+
+
 {% block content %}
 
   <div class="row main-menu">
@@ -12,8 +18,15 @@
       </div>
     </div>
   </div>
-  <form action="." id="proposal_form" method="post">
+  <form action="." enctype="multipart/form-data" id="proposal_form" method="post">
     {% csrf_token %}
+    <p>{{ image_form.cropping.errors }}
+      <label class="form-label" for="{{ image_form.cropping.id_for_label }}">Cropping</label>{{ image_form.cropping }}
+    </p>
+    <p>{{ image_form.image.errors }}
+      <label class="form-label" for="{{ image_form.image.id_for_label }}">Image</label>{{ image_form.image }}
+      <button id="upload-submit" name="submit" value="upload">Upload</button>
+    </p>
     <p>{{ form.title.errors }}
       <label class="form-label" for="{{ form.title.id_for_label }}">Title</label>
       <input class="form-field" id="id_title" maxlength="100" name="title" type="text" value="{{ form.title.value }}">
@@ -23,8 +36,8 @@
       <textarea class="form-field" form="proposal_form" name="description">{{ form.description.value }}</textarea>
     </p>
     <div>
-      <button name="save" value="saved">Save</button>
-      <button name="cancel" value="cancelled">Cancel</button>
+      <button id="save-submit" name="submit" value="save">Save</button>
+      <button id="cancel-submit" name="submit" value="cancel">Cancel</button>
     </div>
   </form>
 
