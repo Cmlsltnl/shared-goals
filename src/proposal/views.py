@@ -31,17 +31,18 @@ class NewProposalView(View):
             draft.save()
 
         if request.method == 'POST':
+            image_form = ProposalImageForm(request.POST, request.FILES)
+            image_form_valid = image_form.is_valid()
+
             if request.POST['submit'] == 'upload':
-                image_form = ProposalImageForm(request.POST, request.FILES)
-                if image_form.is_valid():
+                if image_form_valid:
                     draft.image = image_form.cleaned_data['image']
                     draft.save()
 
             else:
                 form = ProposalForm(request.POST, request.FILES)
-                if form.is_valid():
-                    # todo save cropping
-                    # draft.cropping = image_form.cleaned_data['cropping']
+                if image_form_valid and form.is_valid():
+                    draft.cropping = image_form.cleaned_data['cropping']
                     draft.title = form.cleaned_data['title']
                     draft.description = form.cleaned_data['description']
                     draft.save()
@@ -65,7 +66,8 @@ class NewProposalView(View):
             image_form = ProposalImageForm(
                 dict(),
                 dict(
-                    image=draft.image
+                    image=draft.image,
+                    cropping=draft.cropping,
                 )
             )
 
