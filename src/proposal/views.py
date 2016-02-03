@@ -3,9 +3,10 @@ from django.views.generic import View
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
+from django.template.defaultfilters import slugify
 from goal.models import Goal, Member
 from proposal.forms import ProposalForm, ProposalImageForm
-from proposal.models import Proposal, Review
+from proposal.models import Proposal, Review, ProposalVersion
 
 
 class NewProposalView(View):
@@ -22,29 +23,43 @@ class NewProposalView(View):
         draft = Proposal.objects.filter(
             is_draft=True, owner=member
         ).first()
+
         if not draft:
+            draft_version = ProposalVersion()
+            draft_version.save()
+
             draft = Proposal()
             draft.owner = member
             draft.goal = goal
-            draft.title = "Enter a title"
-            draft.description = "Enter a description"
+            draft.current_version = draft_version
             draft.save()
 
+            draft_version.proposal = draft
+            draft_version.save()
+
         if request.method == 'POST':
+            form = ProposalForm(request.POST, request.FILES)
+
             image_form = ProposalImageForm(request.POST, request.FILES)
             image_form_valid = image_form.is_valid()
+
+            # always update title and description
+            draft.current_version.title = form['title'].value()
+            draft.current_version.description = form['description'].value()
+            draft.current_version.save()
+
+            # always update cropping
+            if image_form_valid:
+                draft.cropping = image_form.cleaned_data['cropping']
 
             if request.POST['submit'] == 'upload':
                 if image_form_valid:
                     draft.image = image_form.cleaned_data['image']
                     draft.save()
-
             else:
-                form = ProposalForm(request.POST, request.FILES)
                 if image_form_valid and form.is_valid():
-                    draft.cropping = image_form.cleaned_data['cropping']
-                    draft.title = form.cleaned_data['title']
-                    draft.description = form.cleaned_data['description']
+                    draft.slug = slugify(draft.current_version.title)
+                    draft.is_draft = False
                     draft.save()
 
                     return HttpResponseRedirect(
@@ -58,17 +73,14 @@ class NewProposalView(View):
                     )
         else:
             form = ProposalForm(
-                dict(
-                    title=draft.title,
-                    description=draft.description
+                initial=dict(
+                    title=draft.current_version.title,
+                    description=draft.current_version.description
                 )
             )
             image_form = ProposalImageForm(
-                dict(),
-                dict(
-                    image=draft.image,
-                    cropping=draft.cropping,
-                )
+                initial=dict(cropping=draft.cropping),
+                files=dict(image=draft.image)
             )
 
         context = {
@@ -85,7 +97,7 @@ class ProposalView(View):
         goal = get_object_or_404(Goal, slug=goal_slug)
         proposal = get_object_or_404(Proposal, slug=proposal_slug)
         member = Member.objects.filter(user=request.user).first()
-        reviews = Review.objects.filter(proposal=proposal)
+        reviews = Review.objects.filter(proposal_version__proposal=proposal)
         review = (
             reviews.filter(owner=member).first() if member
             else None

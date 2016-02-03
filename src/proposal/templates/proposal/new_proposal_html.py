@@ -14,6 +14,14 @@ from goal.templates.dominate_tags import *
 def proposal_form():
     django_csrf_token()
     with p():
+        text("{{ image_form.cropping.errors }}")
+        label(
+            _for="{{ image_form.cropping.id_for_label }}",
+            _class="form-label"
+        )
+        text("{{ image_form.cropping }}")
+
+    with p():
         text("{{ image_form.image.errors }}")
         with label(
             _for="{{ image_form.image.id_for_label }}",
