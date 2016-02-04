@@ -1,13 +1,17 @@
-.proposal {
-    padding-bottom: 10px;
-}
-
 .top-right-div {
-  padding-top: 10px;
+  padding-top: 16px;
 }
 
-.main-menu {
-    padding-bottom: 50px;
+.big-gap-below {
+    padding-bottom: 56px;
+}
+
+.big-gap-above {
+    padding-top: 56px;
+}
+
+.small-gap-below {
+    padding-bottom: 28px;
 }
 
 .proposal--gradient {
@@ -22,18 +26,19 @@
     height: 200px;
 }
 
-.groupCard--title {
-    background: transparent none repeat scroll 0px 0px;
-}
-
 .proposal--title {
     background: transparent
     display: block;
     color: #FFF;
-    padding-left: 28px;
-    padding-right: 28px;
+    padding-left: 24px;
+    padding-right: 24px;
     width: 100%;
     position: absolute;
     bottom: 0px;
     left: 0px;
+}
+
+.proposal--stars {
+    height: 20px;
+    width: 100px;
 }

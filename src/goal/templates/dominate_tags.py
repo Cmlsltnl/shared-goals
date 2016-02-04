@@ -3,7 +3,7 @@ from django_dominate.django_tags import *
 from dominate.tags import *
 
 
-@div(_class="row main-menu")
+@div(_class="row big-gap-below")
 def goal_header():
     with div(_class="text-center"):
         h1("{{ goal.title }}")

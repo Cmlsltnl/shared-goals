@@ -1,8 +1,12 @@
+import re
+
+from django.conf import settings
 from django.db import models
 
 from goal.models import Goal, Member
 
 from image_cropping import ImageRatioField
+from image_cropping.templatetags.cropping import cropped_thumbnail
 
 from sorl.thumbnail import ImageField
 
@@ -23,6 +27,12 @@ class Proposal(models.Model):
 
     def get_current_version(self):
         return self.versions.latest('pub_date')
+
+    def apply_cropping_to_image(self):
+        def rel_url(url):
+            return re.sub("^%s" % settings.MEDIA_URL, "", url)
+        self.image = rel_url(
+            cropped_thumbnail(None, self, "cropping"))
 
 
 class Version(models.Model):
