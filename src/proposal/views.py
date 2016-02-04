@@ -7,6 +7,8 @@ from django.views.generic import View
 
 from goal.models import Goal, Member
 
+from image_cropping.templatetags.cropping import cropped_thumbnail
+
 from proposal.forms import ProposalForm, ProposalImageForm
 from proposal.models import Proposal, Review, Version
 
@@ -65,6 +67,7 @@ class NewProposalView(View):
 
             if is_form_valid and request.POST['submit'] == 'save':
                 draft.slug = slugify(draft.get_current_version().title)
+                draft.image = cropped_thumbnail(None, draft, "cropping")[1:]
                 draft.is_draft = False
 
             draft.save()

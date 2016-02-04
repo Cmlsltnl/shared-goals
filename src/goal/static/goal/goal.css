@@ -9,3 +9,30 @@
 .main-menu {
     padding-bottom: 50px;
 }
+
+.proposal--gradient {
+    height: 100%;
+    width: 100%;
+    background-color: transparent;
+    background-image: linear-gradient(rgba(15, 20, 31, 0) 0px, rgba(15, 20, 31, 0.1) 25%, rgba(15, 20, 31, 0.8) 100%);
+}
+
+.proposal--photo {
+    height: 200px;
+}
+
+.groupCard--title {
+    background: transparent none repeat scroll 0px 0px;
+}
+
+.proposal--title {
+    background: transparent
+    display: block;
+    color: #FFF;
+    padding-left: 28px;
+    padding-right: 28px;
+    width: 100%;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+}

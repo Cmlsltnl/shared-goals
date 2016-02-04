@@ -3,53 +3,39 @@
 
 {% block content %}
 
-  <div class="row main-menu">
-    <div class="text-center">
-      <h1>{{ goal.title }}</h1>
-      <div class="button-grp">
-        <button class="btn btn-default" onclick="location.href='{% url 'goal' goal.slug %}';">Top Proposals</button>
-        <button class="btn btn-default">Members</button>
-        <button class="btn btn-default" onclick="location.href='{% url 'profile' goal.slug %}';">My Profile</button>
-      </div>
+<div class="row main-menu">
+  <div class="text-center">
+    <h1>{{ goal.title }}</h1>
+    <div class="button-grp">
+      <button class="btn btn-default" onclick="location.href='{% url 'goal' goal.slug %}';">Top Proposals</button>
+      <button class="btn btn-default">Members</button>
+      <button class="btn btn-default" onclick="location.href='{% url 'profile' goal.slug %}';">My Profile</button>
     </div>
   </div>
-  <div class="row">
-    <div class="col-md-8"></div>
-    <div class="col-md-1">
-      <h4>Rating</h4>
-    </div>
-    <div class="col-md-2">
-      <h4>Published</h4>
+</div>
+
+<div class="row">
+  <div class="col-md-4">
+    <div class="proposal--photo" style="background-image: url(http://photos1.meetupstatic.com/photo_api/event/rx308x180/cpt/cr308x180/ql90/sgb54c13bc46/437990978.jpeg);">
+      <div class="proposal--gradient"></div>
+      <h3 class="proposal--title">Become a certified yogi as if your life depended on it</h3>
     </div>
   </div>
-  
-{% for proposal in proposals %}
 
-    <div class="row proposal">
-      
-{% with proposal.get_current_version as version %}
-
-        <div class="col-md-2"></div>
-        <div class="col-md-1">
-          <img height="75" src="{{ proposal.image.url }}" width="75">
-        </div>
-        <div class="col-md-5">
-          <a href="{% url 'proposal' goal.slug proposal.slug %}">
-            <h3>{{ version.title }}</h3>
-          </a>
-        </div>
-        <div class="col-md-1">
-          <h4>{{ proposal.avg_rating }}</h4>
-        </div>
-        <div class="col-md-2">
-          <h4>{{ version.pub_date|date:'d M Y' }}</h4>
-        </div>
-      
-{% endwith %}
-
+  <div class="col-md-4">
+    <div class="proposal--photo" style="background-image: url(http://photos1.meetupstatic.com/photo_api/event/rx308x180/cpt/cr308x180/ql90/sgb54c13bc46/437990978.jpeg);">
+      <div class="proposal--gradient"></div>
+      <h3 class="proposal--title">Become a certified yogi as if your life depended on it</h3>
     </div>
-  
-{% endfor %}
+  </div>
+
+  <div class="col-md-4">
+    <div class="proposal--photo" style="background-image: url(http://photos1.meetupstatic.com/photo_api/event/rx308x180/cpt/cr308x180/ql90/sgb54c13bc46/437990978.jpeg);">
+      <div class="proposal--gradient"></div>
+      <h3 class="proposal--title">Become a certified yogi as if your life depended on it</h3>
+    </div>
+  </div>
+</div>
 
 
 {% endblock %}
