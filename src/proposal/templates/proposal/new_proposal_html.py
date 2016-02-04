@@ -1,6 +1,9 @@
-from dominate.tags import *
-from dominate.util import text
 from django_dominate.django_tags import *
+
+from dominate.tags import *
+
+from dominate.util import text
+
 from goal.templates.dominate_tags import *
 
 
@@ -50,7 +53,7 @@ def proposal_form():
             _for="{{ form.description.id_for_label }}",
             _class="form-label"
         ):
-            text("Description")
+            text("Describe your proposal")
         with textarea(
             name="description",
             form="proposal_form",

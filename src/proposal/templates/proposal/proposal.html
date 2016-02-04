@@ -9,21 +9,21 @@
     <div class="text-center">
       <h1>{{ goal.title }}</h1>
       <div class="button-grp">
-        <button class="btn btn-default" onclick="location.href='{% url 'index' goal.slug %}';">Top Proposals</button>
+        <button class="btn btn-default" onclick="location.href='{% url 'goal' goal.slug %}';">Top Proposals</button>
         <button class="btn btn-default">Members</button>
         <button class="btn btn-default" onclick="location.href='{% url 'profile' goal.slug %}';">My Profile</button>
       </div>
     </div>
   </div>
   <h1>{{ proposal.title }}</h1>{{ proposal.description|markdown }}
-  
+
 {% thumbnail proposal.image '100x100' crop='center' as im %}
 
     <img height="{{ im.height }}" src="{{ im.url }}" width="{{ im.width }}">
-  
+
 {% endthumbnail %}
 
-  
+
 {% if review %}
 
     {% else %}
@@ -42,8 +42,8 @@
           <button name="cancel" value="cancelled">Cancel</button>
         </div>
       </form>
-    
-  
+
+
 {% endif %}
 
 

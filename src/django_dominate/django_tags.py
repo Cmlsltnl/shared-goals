@@ -35,6 +35,13 @@ class django_for(django_tag):
         return "{%% for %s %%}" % tag_inner
 
 
+class django_with(django_tag):
+    closing_tag = "{% endwith %}"
+
+    def get_opening_tag(self, tag_inner):
+        return "{%% with %s %%}" % tag_inner
+
+
 class django_if(django_tag):
     closing_tag = "{% endif %}"
 

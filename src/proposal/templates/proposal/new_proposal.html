@@ -12,7 +12,7 @@
     <div class="text-center">
       <h1>{{ goal.title }}</h1>
       <div class="button-grp">
-        <button class="btn btn-default" onclick="location.href='{% url 'index' goal.slug %}';">Top Proposals</button>
+        <button class="btn btn-default" onclick="location.href='{% url 'goal' goal.slug %}';">Top Proposals</button>
         <button class="btn btn-default">Members</button>
         <button class="btn btn-default" onclick="location.href='{% url 'profile' goal.slug %}';">My Profile</button>
       </div>

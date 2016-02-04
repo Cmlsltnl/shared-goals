@@ -1,5 +1,6 @@
-from dominate.tags import *
 from django_dominate.django_tags import *
+
+from dominate.tags import *
 
 
 @div(_class="row main-menu")
@@ -10,7 +11,7 @@ def goal_header():
             button(
                 "Top Proposals",
                 _class="btn btn-default",
-                onclick="location.href='{% url 'index' goal.slug %}';"
+                onclick="location.href='{% url 'goal' goal.slug %}';"
             )
             button("Members", _class="btn btn-default")
             button(
