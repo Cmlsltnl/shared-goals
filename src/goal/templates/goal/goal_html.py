@@ -16,9 +16,10 @@ with django_block("content") as content:
         with div(_class="row"):
             with django_for("proposal in proposal_list"):
                 with col(4):
-                    with div(
+                    with a(
                         _class="proposal--photo",
-                        style="background-image:url({{ proposal.image.url }});"
+                        style="background-image:url({{ proposal.image.url }});",
+                        href="{% url 'proposal' goal.slug proposal.slug %}"
                     ):
                         div(_class="proposal--gradient")
                         with h3(_class="proposal--title"):

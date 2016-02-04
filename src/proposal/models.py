@@ -15,7 +15,7 @@ class Proposal(models.Model):
     is_draft = models.BooleanField(default=True)
     image = ImageField(
         upload_to="proposals", blank=True)
-    cropping = ImageRatioField('image', '430x360')
+    cropping = ImageRatioField('image', '360x200')
     slug = models.SlugField('slug', max_length=60, blank=True, unique=True)
 
     def __str__(self):

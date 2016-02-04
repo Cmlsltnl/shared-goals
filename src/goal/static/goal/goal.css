@@ -18,6 +18,7 @@
 }
 
 .proposal--photo {
+    display: block;
     height: 200px;
 }
 

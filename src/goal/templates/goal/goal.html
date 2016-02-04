@@ -21,10 +21,10 @@
 {% for proposal in proposal_list %}
 
         <div class="col-md-4">
-          <div class="proposal--photo" style="background-image:url({{ proposal.image.url }});">
+          <a class="proposal--photo" href="{% url 'proposal' goal.slug proposal.slug %}" style="background-image:url({{ proposal.image.url }});">
             <div class="proposal--gradient"></div>
             <h3 class="proposal--title">{{ proposal.get_current_version.title }}</h3>
-          </div>
+          </a>
         </div>
 
 {% endfor %}
