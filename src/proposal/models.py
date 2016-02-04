@@ -19,7 +19,7 @@ class Proposal(models.Model):
     slug = models.SlugField('slug', max_length=60, blank=True, unique=True)
 
     def __str__(self):
-        return self.slug + "(draft)" if self.is_draft else ""
+        return self.slug + ("(draft)" if self.is_draft else "")
 
     def get_current_version(self):
         return self.versions.latest('pub_date')

@@ -1,3 +1,6 @@
+import re
+
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -66,8 +69,12 @@ class NewProposalView(View):
             draft.cropping = image_form.cleaned_data['cropping']
 
             if is_form_valid and request.POST['submit'] == 'save':
+                def rel_url(url):
+                    return re.sub("^%s" % settings.MEDIA_URL, "", url)
+
                 draft.slug = slugify(draft.get_current_version().title)
-                draft.image = cropped_thumbnail(None, draft, "cropping")[1:]
+                draft.image = rel_url(
+                    cropped_thumbnail(None, draft, "cropping"))
                 draft.is_draft = False
 
             draft.save()
