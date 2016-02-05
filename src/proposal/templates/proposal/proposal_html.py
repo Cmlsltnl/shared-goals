@@ -107,7 +107,17 @@ def proposal_image():
     with h3(_class="proposal--title"):
         text("{{ proposal.get_current_version.title }}")
 
+url_edit_proposal = "location.href='{% url 'new-proposal' goal.slug %}';"
+
 with django_block("content") as content:
+    with django_if("proposal.owner == member"):
+        button(
+            "Edit Proposal",
+            id="btn-edit-proposal",
+            _class="btn btn-danger",
+            onclick=url_edit_proposal
+        )
+
     goal_header()
 
     with div(_class="row small-gap-below"):

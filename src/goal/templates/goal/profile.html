@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+  <div class="row big-gap-below">
+    <div class="text-center">
+      <h1>{{ goal.title }}</h1>
+      <div class="button-grp">
+        <button class="btn btn-default" onclick="location.href='{% url 'goal' goal.slug %}';">Top Proposals</button>
+        <button class="btn btn-default">Members</button>
+        <button class="btn btn-default" onclick="location.href='{% url 'profile' goal.slug %}';">My Profile</button>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <h3 class="small-gap-below">Your proposals:</h3>
+    </div>
+  </div>
+
+{% for proposal_list in proposal_lists %}
+
+    <div class="row">
+
+{% for proposal in proposal_list %}
+
+        <div class="col-md-4">
+          <a class="proposal--photo" href="{% url 'proposal' goal.slug proposal.slug %}" style="background-image:url({{ proposal.image.url }});">
+            <div class="proposal--gradient"></div>
+            <h3 class="proposal--title">{{ proposal.get_current_version.title }}</h3>
+          </a>
+        </div>
+
+{% endfor %}
+
+    </div>
+    {% empty %}
+      <h5>You have not created any proposals yet</h5>
+
+
+{% endfor %}
+
+
+{% endblock %}

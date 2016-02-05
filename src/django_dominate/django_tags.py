@@ -1,3 +1,5 @@
+import os
+
 from dominate.tags import html_tag
 
 
@@ -16,8 +18,10 @@ class django_tag(html_tag):
         for i in range(2):
             rendered.pop()
             del rendered[from_index]
-        rendered[from_index] = "\n" + self.get_opening_tag(tag_inner) + "\n"
-        rendered[-1] = "\n" + self.closing_tag + "\n"
+        rendered[from_index] = (
+            os.linesep + self.get_opening_tag(tag_inner) + os.linesep
+        )
+        rendered[-1] = os.linesep + self.closing_tag + os.linesep
         return rendered
 
 

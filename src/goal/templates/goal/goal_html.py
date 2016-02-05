@@ -1,7 +1,6 @@
 from django_dominate.django_tags import *
 
 from dominate.tags import *
-from dominate.util import text
 
 from goal.templates.dominate_tags import *
 
@@ -16,14 +15,9 @@ with django_block("content") as content:
         with div(_class="row"):
             with django_for("proposal in proposal_list"):
                 with column(4):
-                    with a(
-                        _class="proposal--photo",
-                        style="background-image:url({{ proposal.image.url }});",
-                        href="{% url 'proposal' goal.slug proposal.slug %}"
-                    ):
-                        div(_class="proposal--gradient")
-                        with h3(_class="proposal--title"):
-                            text("{{ proposal.get_current_version.title }}")
+                    proposal_list_item()
+        with django_empty():
+            h5("There are no proposals yet")
 
 print("{% extends 'base.html' %}\n")
 print(content)

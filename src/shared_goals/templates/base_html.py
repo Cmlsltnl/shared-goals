@@ -29,7 +29,7 @@ def top_right_div():
     with div(_class="pull-right"):
         with django_if("user.is_authenticated"):
             with django_if("member"):
-                with div(_class="btn-group btn-new-proposal"):
+                with div(id="top-right-div-inner", _class="btn-group"):
                     button(
                         "New Proposal",
                         _class="btn",
