@@ -62,7 +62,7 @@ def proposal_form():
             text("{{ form.description.value }}")
 
     with div():
-        button("Save", id="save-submit", name="submit", value="save")
+        button("Submit", id="save-submit", name="submit", value="save")
         button("Cancel", id="cancel-submit", name="submit", value="cancel")
 
 print("{% extends 'base.html' %}\n")

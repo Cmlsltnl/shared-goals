@@ -31,11 +31,11 @@
       <input class="form-field" id="id_title" maxlength="100" name="title" type="text" value="{{ form.title.value }}">
     </p>
     <p>{{ form.description.errors }}
-      <label class="form-label" for="{{ form.description.id_for_label }}">Description</label>
+      <label class="form-label" for="{{ form.description.id_for_label }}">Describe your proposal</label>
       <textarea class="form-field" form="proposal_form" name="description">{{ form.description.value }}</textarea>
     </p>
     <div>
-      <button id="save-submit" name="submit" value="save">Save</button>
+      <button id="save-submit" name="submit" value="save">Submit</button>
       <button id="cancel-submit" name="submit" value="cancel">Cancel</button>
     </div>
   </form>

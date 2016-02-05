@@ -16,10 +16,22 @@ with django_block("head") as head:
 
 
 #
-@form(method="post", action=".", id="review_form", _class="big-gap-above")
+@form(
+    method="post",
+    action=".",
+    id="review_form",
+    enctype="multipart/form-data",
+    _class="big-gap-above"
+)
 def review_form():
     django_csrf_token()
     with p():
+        with label(
+            _for="{{ form.rating.id_for_label }}",
+            _class="form-label"
+        ):
+            text("Rate this proposal and give feedback")
+        text("{{ form.rating.errors }}")
         input_(
             id="id_rating",
             type="hidden",
@@ -27,15 +39,6 @@ def review_form():
             value="{{ form.rating.value }}",
             _class="form-field"
         )
-
-    with p():
-        with label(
-            _for="{{ form.description.id_for_label }}",
-            _class="form-label"
-        ):
-            text("Rate this proposal and give feedback")
-
-        text("{{ form.rating.errors }}")
         div(
             id="rateit-review",
             _class="rateit",
@@ -43,17 +46,23 @@ def review_form():
             data_rateit_value="{{ form.rating.value }}"
         )
 
+    with p():
         text("{{ form.description.errors }}")
         with textarea(
             name="description",
-            form="proposal_form",
+            form="review_form",
             _class="form-field"
         ):
             text("{{ form.description.value }}")
 
     with div():
-        button("Save", name="save", value="saved")
-        button("Cancel", name="cancel", value="cancelled")
+        button(
+            "{{ post_button_label }}",
+            id="save-submit",
+            name="submit",
+            value="save"
+        )
+        button("Cancel", id="cancel-submit", name="submit", value="cancel")
 
 with django_block("content") as content:
     goal_header()
@@ -74,10 +83,7 @@ with django_block("content") as content:
         column(2)
         with column(8):
             text("{{ proposal.get_current_version.description|markdown }}")
-
-            with django_if("review"):
-                with django_else():
-                    review_form()
+            review_form()
 
 print("{% extends 'base.html' %}\n")
 print("{% load staticfiles %}")

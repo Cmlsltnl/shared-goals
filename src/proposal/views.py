@@ -37,19 +37,14 @@ class NewProposalView(View):
 
     def __get_populated_forms(self, request, draft):
         return (
-            ProposalForm(
-                initial=dict(
-                    title=draft.get_current_version().title,
-                    description=draft.get_current_version().description
-                )
-            ),
+            ProposalForm(initial=draft.get_current_version().__dict__),
             ProposalImageForm(
-                initial=dict(cropping=draft.cropping),
+                initial=draft.__dict__,
                 files=dict(image=draft.image)
             )
         )
 
-    def __update_draft(self, draft, request):
+    def __update_draft_and_save(self, draft, request):
         form, image_form = self.__get_posted_forms(request)
         is_form_valid = form.is_valid()
         is_image_form_valid = image_form.is_valid()
@@ -107,7 +102,8 @@ class NewProposalView(View):
         draft = self.__get_or_create_draft(member, goal)
 
         if request.method == 'POST':
-            is_data_valid = self.__update_draft(draft, request)
+            is_data_valid = self.__update_draft_and_save(draft, request)
+
             if request.POST['submit'] == 'cancel':
                 return self.__on_cancel(goal.slug)
             elif request.POST['submit'] == 'save' and is_data_valid:
@@ -126,6 +122,8 @@ class NewProposalView(View):
             'goal': goal,
             'member': member,
             'form': form,
+
+
             'image_form': image_form,
         }
         return render(request, 'proposal/new_proposal.html', context)
@@ -138,15 +136,7 @@ class ProposalView(View):
         if existing_review:
             existing_review.delete()
 
-        review = Review()
-        review.owner = member
-        review.version = proposal.get_current_version()
-        review.rating = rating
-        review.description = description
-
-        review.save()
-
-    def __on_save(self, goal_slug, proposal_slug):
+    def __on_cancel_or_save(self, goal_slug, proposal_slug):
         return HttpResponseRedirect(
             reverse(
                 'proposal',
@@ -156,6 +146,30 @@ class ProposalView(View):
                 )
             )
         )
+
+    def __get_or_create_review(self, member, version, all_reviews):
+        review = all_reviews.filter(owner=member).first()
+        if not review:
+            review = Review()
+            review.owner = member
+            review.version = version
+            review.save()
+
+        return review
+
+    def __update_review_and_save(self, review, request):
+        form = ReviewForm(request.POST, request.FILES)
+        is_form_valid = form.is_valid()
+        if is_form_valid:
+            review.rating = form.cleaned_data['rating']
+            review.description = form.cleaned_data['description']
+
+            if request.POST['submit'] == 'save':
+                review.is_draft = False
+
+            review.save()
+
+        return is_form_valid
 
     def get(self, request, goal_slug, proposal_slug):
         return self.handle(request, goal_slug, proposal_slug)
@@ -167,33 +181,32 @@ class ProposalView(View):
         goal = get_object_or_404(Goal, slug=goal_slug)
         member = Member.objects.filter(user=request.user).first()
         proposal = get_object_or_404(Proposal, slug=proposal_slug)
+        version = proposal.get_current_version()
         all_reviews = Review.objects.filter(version__proposal=proposal)
-        review = (
-            all_reviews.filter(owner=member).first() if member
-            else None
-        )
+        review = self.__get_or_create_review(member, version, all_reviews)
 
         if request.method == 'POST':
-            form = ReviewForm(request.POST)
-            if form.is_valid():
-                self.__publish_review(
-                    member,
-                    proposal,
-                    form.cleaned_data['rating'],
-                    form.cleaned_data['description'],
-                    existing_review=review
-                )
-                return self.__on_save(goal.slug, proposal.slug)
-        else:
-            form = ReviewForm(review) if review else ReviewForm()
+            is_data_valid = self.__update_review_and_save(review, request)
+            try_again = request.POST['submit'] == 'save' and not is_data_valid
+            if not try_again:
+                return self.__on_cancel_or_save(goal.slug, proposal.slug)
 
-        other_reviews = all_reviews.filter(~Q(pk=review.pk if review else -1))
+        form = (
+            ReviewForm(request.POST, request.FILES) if request.method == 'POST'
+            else ReviewForm(initial=review.__dict__)
+        )
+
+        other_reviews = all_reviews.filter(
+            ~Q(pk=review.pk) & Q(is_draft=False)
+        )
+
         context = {
             'goal': goal,
             'proposal': proposal,
-            'version': proposal.get_current_version(),
+            'version': version,
             'member': member,
             'review': review,
+            'post_button_label': "Submit" if review.is_draft else "Update",
             'form': form,
             'other_reviews': other_reviews,
         }

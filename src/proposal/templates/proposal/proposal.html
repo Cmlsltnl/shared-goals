@@ -25,36 +25,28 @@
     <div class="col-md-4">
       <div class="proposal--photo" href="{% url 'proposal' goal.slug proposal.slug %}" style="background-image:url({{ proposal.image.url }});">
         <div class="proposal--gradient"></div>
-        <h3 class="proposal--title">{{ version.title }}</h3>
+        <h3 class="proposal--title">{{ proposal.get_current_version.title }}</h3>
       </div>
     </div>
   </div>
   <div class="row">
     <div class="col-md-2"></div>
-    <div class="col-md-8">{{ version.description|markdown }}
-
-{% if review %}
-
-        {% else %}
-          <form action="." class="big-gap-above" id="review_form" method="post">
-            {% csrf_token %}
-            <p>
-              <input class="form-field" id="id_rating" name="rating" type="hidden" value="{{ form.rating.value }}">
-            </p>
-            <p>
-              <label class="form-label" for="{{ form.description.id_for_label }}">Rate this proposal and give feedback</label>{{ form.rating.errors }}
-              <div class="rateit" data-rateit-resetable="false" data-rateit-value="{{ form.rating.value }}" id="rateit-review"></div>{{ form.description.errors }}
-              <textarea class="form-field" form="review_form" name="description">{{ form.description.value }}</textarea>
-            </p>
-            <div>
-              <button name="save" value="saved">Save</button>
-              <button name="cancel" value="cancelled">Cancel</button>
-            </div>
-          </form>
-
-
-{% endif %}
-
+    <div class="col-md-8">{{ proposal.get_current_version.description|markdown }}
+      <form action="." class="big-gap-above" enctype="multipart/form-data" id="review_form" method="post">
+        {% csrf_token %}
+        <p>
+          <label class="form-label" for="{{ form.rating.id_for_label }}">Rate this proposal and give feedback</label>{{ form.rating.errors }}
+          <input class="form-field" id="id_rating" name="rating" type="hidden" value="{{ form.rating.value }}">
+          <div class="rateit" data-rateit-resetable="false" data-rateit-value="{{ form.rating.value }}" id="rateit-review"></div>
+        </p>
+        <p>{{ form.description.errors }}
+          <textarea class="form-field" form="review_form" name="description">{{ form.description.value }}</textarea>
+        </p>
+        <div>
+          <button id="save-submit" name="submit" value="save">{{ post_button_label }}</button>
+          <button id="cancel-submit" name="submit" value="cancel">Cancel</button>
+        </div>
+      </form>
     </div>
   </div>
 

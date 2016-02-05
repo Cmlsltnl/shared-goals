@@ -53,6 +53,7 @@ class Review(models.Model):
     version = models.ForeignKey(Version, related_name="reviews")
     rating = models.DecimalField(max_digits=2, decimal_places=1, default=0)
     description = models.TextField()
+    is_draft = models.BooleanField(default=True)
 
     def __str__(self):
         return "Review for %s" % self.proposal.title
