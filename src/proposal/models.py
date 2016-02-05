@@ -51,7 +51,7 @@ class Review(models.Model):
     pub_date = models.DateTimeField('date published', auto_now_add=True)
     owner = models.ForeignKey(Member)
     version = models.ForeignKey(Version, related_name="reviews")
-    rating = models.PositiveSmallIntegerField(default=0)
+    rating = models.DecimalField(max_digits=2, decimal_places=1, default=0)
     description = models.TextField()
 
     def __str__(self):

@@ -1,4 +1,5 @@
 from django.core.urlresolvers import reverse
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
@@ -7,7 +8,7 @@ from django.views.generic import View
 
 from goal.models import Goal, Member
 
-from proposal.forms import ProposalForm, ProposalImageForm
+from proposal.forms import ProposalForm, ProposalImageForm, ReviewForm
 from proposal.models import Proposal, Review, Version
 
 
@@ -131,21 +132,69 @@ class NewProposalView(View):
 
 
 class ProposalView(View):
-    def get(self, request, goal_slug, proposal_slug=None):
+    def __publish_review(
+        self, member, proposal, rating, description, existing_review
+    ):
+        if existing_review:
+            existing_review.delete()
+
+        review = Review()
+        review.owner = member
+        review.version = proposal.get_current_version()
+        review.rating = rating
+        review.description = description
+
+        review.save()
+
+    def __on_save(self, goal_slug, proposal_slug):
+        return HttpResponseRedirect(
+            reverse(
+                'proposal',
+                kwargs=dict(
+                    goal_slug=goal_slug,
+                    proposal_slug=proposal_slug
+                )
+            )
+        )
+
+    def get(self, request, goal_slug, proposal_slug):
+        return self.handle(request, goal_slug, proposal_slug)
+
+    def post(self, request, goal_slug, proposal_slug):
+        return self.handle(request, goal_slug, proposal_slug)
+
+    def handle(self, request, goal_slug, proposal_slug):
         goal = get_object_or_404(Goal, slug=goal_slug)
-        proposal = get_object_or_404(Proposal, slug=proposal_slug)
         member = Member.objects.filter(user=request.user).first()
-        reviews = Review.objects.filter(version__proposal=proposal)
+        proposal = get_object_or_404(Proposal, slug=proposal_slug)
+        all_reviews = Review.objects.filter(version__proposal=proposal)
         review = (
-            reviews.filter(owner=member).first() if member
+            all_reviews.filter(owner=member).first() if member
             else None
         )
 
+        if request.method == 'POST':
+            form = ReviewForm(request.POST)
+            if form.is_valid():
+                self.__publish_review(
+                    member,
+                    proposal,
+                    form.cleaned_data['rating'],
+                    form.cleaned_data['description'],
+                    existing_review=review
+                )
+                return self.__on_save(goal.slug, proposal.slug)
+        else:
+            form = ReviewForm(review) if review else ReviewForm()
+
+        other_reviews = all_reviews.filter(~Q(pk=review.pk if review else -1))
         context = {
             'goal': goal,
             'proposal': proposal,
+            'version': proposal.get_current_version(),
             'member': member,
             'review': review,
-            'reviews': reviews,
+            'form': form,
+            'other_reviews': other_reviews,
         }
         return render(request, 'proposal/proposal.html', context)

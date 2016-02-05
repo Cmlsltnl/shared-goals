@@ -8,30 +8,42 @@ from goal.templates.dominate_tags import *
 from proposal.templates.dominate_tags import *
 
 
+with django_block("head") as head:
+    script(
+        src="{% static 'proposal/proposal.js' %}",
+        type="text/javascript"
+    )
+
+
 #
 @form(method="post", action=".", id="review_form", _class="big-gap-above")
 def review_form():
     django_csrf_token()
     with p():
-        text("{{ form.title.errors }}")
         input_(
             id="id_rating",
             type="hidden",
             name="rating",
-            maxlength="3",
             value="{{ form.rating.value }}",
             _class="form-field"
         )
 
     with p():
-        text("{{ form.description.errors }}")
         with label(
             _for="{{ form.description.id_for_label }}",
             _class="form-label"
         ):
             text("Rate this proposal and give feedback")
 
-        div(_class="rateit")
+        text("{{ form.rating.errors }}")
+        div(
+            id="rateit-review",
+            _class="rateit",
+            data_rateit_resetable="false",
+            data_rateit_value="{{ form.rating.value }}"
+        )
+
+        text("{{ form.description.errors }}")
         with textarea(
             name="description",
             form="proposal_form",
@@ -68,8 +80,10 @@ with django_block("content") as content:
                     review_form()
 
 print("{% extends 'base.html' %}\n")
+print("{% load staticfiles %}")
 print("{% load markdown_deux_tags %}")
 
+print(head)
 print(content)
 
 # done
