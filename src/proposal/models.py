@@ -52,7 +52,7 @@ class Review(models.Model):
     owner = models.ForeignKey(Member)
     version = models.ForeignKey(Version, related_name="reviews")
     rating = models.DecimalField(max_digits=2, decimal_places=1, default=0)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     is_draft = models.BooleanField(default=True)
 
     def __str__(self):

@@ -80,8 +80,13 @@ def other_review():
             )
         with column(6):
             with h5():
+                with django_if("other_review.description"):
+                    text("Reviewed by ")
+                    with django_else():
+                        text("Rated by ")
+
                 text(
-                    "Reviewed by {{ other_review.owner.user.get_full_name }}, "
+                    "{{ other_review.owner.user.get_full_name }}, "
                     "{{ other_review.pub_date|naturaltime }}"
                 )
 
