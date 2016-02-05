@@ -2,6 +2,7 @@
 
 {% load staticfiles %}
 {% load markdown_deux_tags %}
+{% load humanize %}
 
 {% block head %}
 <script src="{% static 'proposal/proposal.js' %}" type="text/javascript"></script>
@@ -29,7 +30,7 @@
       </div>
     </div>
   </div>
-  <div class="row">
+  <div class="row small-gap-below">
     <div class="col-md-2"></div>
     <div class="col-md-8">{{ proposal.get_current_version.description|markdown }}
       <form action="." class="big-gap-above" enctype="multipart/form-data" id="review_form" method="post">
@@ -50,5 +51,27 @@
     </div>
   </div>
 
-{% endblock %}
+{% for other_review in other_reviews %}
 
+    <div class="row">
+      <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-2">
+          <div class="rateit" data-rateit-readonly="true" data-rateit-resetable="false" data-rateit-value="{{ other_review.rating }}" id="rateit-review" style="padding-top:8px"></div>
+        </div>
+        <div class="col-md-6">
+          <h5>Reviewed by {{ other_review.owner.user.get_full_name }}, {{ other_review.pub_date|naturaltime }}</h5>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+          <p>{{ other_review.description }}</p>
+        </div>
+      </div>
+    </div>
+
+{% endfor %}
+
+
+{% endblock %}

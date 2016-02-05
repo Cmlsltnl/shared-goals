@@ -64,30 +64,65 @@ def review_form():
         )
         button("Cancel", id="cancel-submit", name="submit", value="cancel")
 
+
+@div(_class="row")
+def other_review():
+    with div(_class="row"):
+        column(2)
+        with column(2):
+            div(
+                id="rateit-review",
+                _class="rateit",
+                style="padding-top:8px",
+                data_rateit_readonly="true",
+                data_rateit_resetable="false",
+                data_rateit_value="{{ other_review.rating }}"
+            )
+        with column(6):
+            with h5():
+                text(
+                    "Reviewed by {{ other_review.owner.user.get_full_name }}, "
+                    "{{ other_review.pub_date|naturaltime }}"
+                )
+
+    with div(_class="row"):
+        column(2)
+        with column(8):
+            with p():
+                text("{{ other_review.description }}")
+
+
+@div(
+    _class="proposal--photo",
+    style="background-image:url({{ proposal.image.url }});",
+    href="{% url 'proposal' goal.slug proposal.slug %}"
+)
+def proposal_image():
+    div(_class="proposal--gradient")
+    with h3(_class="proposal--title"):
+        text("{{ proposal.get_current_version.title }}")
+
 with django_block("content") as content:
     goal_header()
 
     with div(_class="row small-gap-below"):
         column(4)
         with column(4):
-            with div(
-                _class="proposal--photo",
-                style="background-image:url({{ proposal.image.url }});",
-                href="{% url 'proposal' goal.slug proposal.slug %}"
-            ):
-                div(_class="proposal--gradient")
-                with h3(_class="proposal--title"):
-                    text("{{ proposal.get_current_version.title }}")
+            proposal_image()
 
-    with div(_class="row"):
+    with div(_class="row small-gap-below"):
         column(2)
         with column(8):
             text("{{ proposal.get_current_version.description|markdown }}")
             review_form()
 
+    with django_for("other_review in other_reviews"):
+        other_review()
+
 print("{% extends 'base.html' %}\n")
 print("{% load staticfiles %}")
 print("{% load markdown_deux_tags %}")
+print("{% load humanize %}")
 
 print(head)
 print(content)

@@ -56,4 +56,4 @@ class Review(models.Model):
     is_draft = models.BooleanField(default=True)
 
     def __str__(self):
-        return "Review for %s" % self.proposal.title
+        return "Review by %s for %s" % (self.owner, self.version)
