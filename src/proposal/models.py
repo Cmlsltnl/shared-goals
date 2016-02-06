@@ -1,4 +1,7 @@
+import os
 import re
+import shutil
+import urllib
 
 from django.conf import settings
 from django.db import models
@@ -8,8 +11,6 @@ from goal.models import Goal, Member
 from image_cropping import ImageRatioField
 from image_cropping.templatetags.cropping import cropped_thumbnail
 
-from sorl.thumbnail import ImageField
-
 
 class Proposal(models.Model):
     goal = models.ForeignKey(Goal)
@@ -17,7 +18,7 @@ class Proposal(models.Model):
         max_digits=2, decimal_places=1, default=0.0)
     owner = models.ForeignKey(Member)
     is_draft = models.BooleanField(default=True)
-    image = ImageField(
+    image = models.ImageField(
         upload_to="proposals", blank=True)
     cropping = ImageRatioField('image', '360x200')
     slug = models.SlugField('slug', max_length=60, blank=True, unique=True)
@@ -28,11 +29,19 @@ class Proposal(models.Model):
     def get_current_version(self):
         return self.versions.latest('pub_date')
 
-    def apply_cropping_to_image(self):
+    def apply_cropping_to_image(self, replace_original=False):
         def rel_url(url):
             return re.sub("^%s" % settings.MEDIA_URL, "", url)
-        self.image = rel_url(
-            cropped_thumbnail(None, self, "cropping"))
+
+        new_image_url = rel_url(cropped_thumbnail(None, self, "cropping"))
+        new_image_path = urllib.parse.unquote(new_image_url)
+        if replace_original:
+            shutil.move(
+                os.path.join(settings.MEDIA_ROOT, new_image_path),
+                self.image.file.name
+            )
+        else:
+            self.image = new_image_path
 
 
 class Version(models.Model):

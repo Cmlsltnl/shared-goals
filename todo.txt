@@ -4,7 +4,9 @@
 - https://github.com/HonzaKral/django-threadedcomments
 - https://github.com/trentm/django-markdown-deux
 
+- slug should only be unique per goal
 - when updating a review, delete all comments
+- allow to change image when editing a proposal
 - move col function to a central location
 - Make upload automatic when you change the image in the new proposal form
 - Check that url for the goal/profile is not used

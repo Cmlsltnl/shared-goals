@@ -5,10 +5,20 @@ from image_cropping import ImageCroppingMixin
 from .models import Proposal, Version, Review
 
 
-class MyModelAdmin(ImageCroppingMixin, admin.ModelAdmin):
-    pass
+def apply_cropping_to_image(modeladmin, request, queryset):
+    for item in queryset:
+        item.apply_cropping_to_image(replace_original=True)
+apply_cropping_to_image.short_description = "Apply cropping to image"
 
 
-admin.site.register(Proposal, MyModelAdmin)
-admin.site.register(Version, MyModelAdmin)
-admin.site.register(Review, MyModelAdmin)
+class ModelWithImageAdmin(ImageCroppingMixin, admin.ModelAdmin):
+    actions = [apply_cropping_to_image]
+
+
+class VersionAdmin(admin.ModelAdmin):
+    list_filter = ('proposal',)
+
+
+admin.site.register(Proposal, ModelWithImageAdmin)
+admin.site.register(Review, ModelWithImageAdmin)
+admin.site.register(Version, VersionAdmin)

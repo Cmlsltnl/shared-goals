@@ -61,7 +61,7 @@ class EditProposalView(View):
 
             if is_version_form_valid and request.POST['submit'] == 'save':
                 proposal.slug = slugify(proposal.get_current_version().title)
-                proposal.apply_cropping_to_image()
+                proposal.apply_cropping_to_image(replace_original=True)
                 proposal.is_draft = False
 
             proposal.save()
