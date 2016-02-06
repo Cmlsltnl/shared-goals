@@ -1,4 +1,5 @@
-check process update_html with pidfile /home/maarten/code/shared_goals/bin/update_html.pid
-   group shared_goals
-   start program = "/home/maarten/code/shared_goals/bin/update_html.sh start"
-   stop program = "/home/maarten/code/shared_goals/bin/update_html.sh stop"
+# check process update_html with pidfile /home/maarten/code/shared_goals/bin/update_html.pid
+# group shared_goals
+# start program = "/home/maarten/code/shared_goals/bin/update_html.sh start"
+# stop program = "/home/maarten/code/shared_goals/bin/update_html.sh stop"
+

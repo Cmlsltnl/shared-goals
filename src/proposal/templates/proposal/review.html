@@ -27,4 +27,20 @@
     <div class="col-md-2"></div>
     <div class="col-md-8">{{ version.description|markdown }}</div>
   </div>
+  <div class="row small-gap-below">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+      <form action="." class="big-gap-above" enctype="multipart/form-data" id="comment_form" method="post">
+        {% csrf_token %}
+        <p>{{ form.body.errors }}
+          <label class="form-label" for="{{ form.body.id_for_label }}">Comment on this review</label>
+          <textarea class="form-field" form="comment_form" name="body">{{ form.body.value }}</textarea>
+        </p>
+        <div>
+          <button id="save-submit" name="submit" value="save">Submit</button>
+          <button id="cancel-submit" name="submit" value="cancel">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
 {% endblock %}

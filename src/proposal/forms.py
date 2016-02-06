@@ -1,6 +1,6 @@
 from django import forms
 from image_cropping import ImageCropWidget
-from .models import Proposal, Review
+from .models import Comment, Proposal, Review
 
 
 class VersionForm(forms.Form):
@@ -28,3 +28,9 @@ class ReviewForm(forms.ModelForm):
             if not data >= 1 and data <= 5:
                 raise forms.ValidationError("Please choose a rating")
             return data
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('body',)

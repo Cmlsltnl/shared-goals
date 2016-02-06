@@ -8,6 +8,40 @@ from goal.templates.dominate_tags import *
 from proposal.templates.dominate_tags import *
 
 
+@form(
+    method="post",
+    action=".",
+    id="comment_form",
+    enctype="multipart/form-data",
+    _class="big-gap-above"
+)
+def comment_form():
+    django_csrf_token()
+
+    with p():
+        text("{{ form.body.errors }}")
+        with label(
+            _for="{{ form.body.id_for_label }}",
+            _class="form-label"
+        ):
+            text("Comment on this review")
+        with textarea(
+            name="body",
+            form="comment_form",
+            _class="form-field"
+        ):
+            text("{{ form.body.value }}")
+
+    with div():
+        button(
+            "Submit",
+            id="save-submit",
+            name="submit",
+            value="save"
+        )
+        button("Cancel", id="cancel-submit", name="submit", value="cancel")
+
+
 def result():
     with django_block("head") as head:
         script(
@@ -27,6 +61,11 @@ def result():
             column(2)
             with column(8):
                 text("{{ version.description|markdown }}")
+
+        with div(_class="row small-gap-below"):
+            column(2)
+            with column(8):
+                comment_form()
 
     return (
         "{% extends 'base.html' %}\n",

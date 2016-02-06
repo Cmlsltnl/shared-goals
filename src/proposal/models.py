@@ -4,6 +4,8 @@ import shutil
 import urllib
 
 from django.conf import settings
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
 from goal.models import Goal, Member
@@ -66,3 +68,18 @@ class Review(models.Model):
 
     def __str__(self):
         return "Review by %s for %s" % (self.owner, self.version)
+
+
+class Comment(models.Model):
+    pub_date = models.DateTimeField('date published', auto_now_add=True)
+    owner = models.ForeignKey(Member)
+
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    target = GenericForeignKey('content_type', 'object_id')
+
+    body = models.TextField(blank=True)
+    is_draft = models.BooleanField(default=True)
+
+    def __str__(self):
+        return "Comment by %s on %s" % (self.owner, self.target)

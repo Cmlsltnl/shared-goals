@@ -8,8 +8,8 @@ from django.template.defaultfilters import slugify
 from django.views.generic import View
 from goal.models import Goal, Member
 
-from proposal.forms import VersionForm, ProposalForm, ReviewForm
-from proposal.models import Proposal, Review, Version
+from proposal.forms import CommentForm, VersionForm, ProposalForm, ReviewForm
+from proposal.models import Comment, Proposal, Review, Version
 
 
 class EditProposalView(View):
@@ -115,8 +115,9 @@ class EditProposalView(View):
             get_object_or_404(Proposal, slug=proposal_slug) if proposal_slug
             else self.__get_or_create_draft(member, goal)
         )
+        is_posting = request.method == 'POST'
 
-        if request.method == 'POST':
+        if is_posting:
             if proposal_slug:
                 should_accept_data = request.POST['submit'] == 'cancel' or \
                     self.__create_new_version(proposal, request)
@@ -128,10 +129,6 @@ class EditProposalView(View):
                 return self.__on_cancel(goal.slug)
             elif request.POST['submit'] == 'save' and should_accept_data:
                 return self.__on_save(goal.slug, proposal.slug)
-
-        is_posting = (
-            request.method == 'POST' and request.POST['submit'] == 'save'
-        )
 
         version_form, proposal_form = (
             self.__get_posted_forms(request) if is_posting else
@@ -202,15 +199,16 @@ class ProposalView(View):
         version = proposal.get_current_version()
         all_reviews = Review.objects.filter(version__proposal=proposal)
         review = self.__get_or_create_review(member, version, all_reviews)
+        is_posting = request.method == 'POST'
 
-        if request.method == 'POST':
+        if is_posting:
             is_data_valid = self.__update_review_and_save(review, request)
             try_again = request.POST['submit'] == 'save' and not is_data_valid
             if not try_again:
                 return self.__on_cancel_or_save(goal.slug, proposal.slug)
 
         form = (
-            ReviewForm(request.POST, request.FILES) if request.method == 'POST'
+            ReviewForm(request.POST, request.FILES) if is_posting
             else ReviewForm(initial=review.__dict__)
         )
 
@@ -254,10 +252,44 @@ class ProposalView(View):
 
 
 class ReviewView(View):
+    def __get_or_create_draft(self, member, review):
+        draft = Comment.objects.filter(
+            is_draft=True, owner=member, target=review
+        ).first()
+
+        if not draft:
+            draft = Comment()
+            draft.owner = member
+            draft.target = review
+            draft.save()
+
+        return draft
+
     def get(self, request, goal_slug, proposal_slug, review_pk):
+        return self.handle(request, goal_slug, proposal_slug, review_pk)
+
+    def post(self, request, goal_slug, proposal_slug, review_pk):
+        return self.handle(request, goal_slug, proposal_slug, review_pk)
+
+    def handle(self, request, goal_slug, proposal_slug, review_pk):
         goal = get_object_or_404(Goal, slug=goal_slug)
         member = Member.objects.filter(user=request.user).first()
         review = get_object_or_404(Review, pk=review_pk)
+
+        draft = self.__get_or_create_draft(member, review)
+        is_posting = request.method == 'POST'
+
+        if is_posting:
+            is_data_valid = self.__update_comment_and_save(draft, request)
+            try_again = request.POST['submit'] == 'save' and not is_data_valid
+            if not try_again:
+                return self.__on_cancel_or_save(
+                    goal_slug, proposal_slug, review_pk)
+
+        form = (
+            CommentForm(request.POST, request.FILES) if is_posting
+            else CommentForm(initial=draft.__dict__)
+        )
 
         context = {
             'goal': goal,
@@ -265,5 +297,6 @@ class ReviewView(View):
             'member': member,
             'review': review,
             'version': review.version,
+            'form': form
         }
         return render(request, 'proposal/review.html', context)
