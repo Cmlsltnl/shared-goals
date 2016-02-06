@@ -65,7 +65,7 @@ def review_form():
         button("Cancel", id="cancel-submit", name="submit", value="cancel")
 
 
-other_version_href = \
+other_review_href = \
     "{% url 'review' goal.slug proposal.slug other_review.pk %}"
 
 
@@ -86,7 +86,7 @@ def other_review():
             with django_if("other_review.version.pk == version.pk"):
                 with django_else():
                     text("A ")
-                    with a(href=other_version_href):
+                    with a(href=other_review_href):
                         text("previous version")
                     text(" was ")
 
@@ -99,16 +99,6 @@ def other_review():
                 text("{{ other_review.description }}")
 
 
-@div(
-    _class="proposal--photo",
-    style="background-image:url({{ proposal.image.url }});",
-    href="{% url 'proposal' goal.slug proposal.slug %}"
-)
-def proposal_image():
-    div(_class="proposal--gradient")
-    with h3(_class="proposal--title"):
-        text("{{ proposal.get_current_version.title }}")
-
 with django_block("content") as content:
     goal_header()
 
@@ -120,7 +110,7 @@ with django_block("content") as content:
     with div(_class="row small-gap-below"):
         column(2)
         with column(8):
-            text("{{ proposal.get_current_version.description|markdown }}")
+            text("{{ version.description|markdown }}")
             review_form()
 
     with django_for("other_review in other_reviews"):
@@ -129,9 +119,8 @@ with django_block("content") as content:
 print("{% extends 'base.html' %}\n")
 print("{% load staticfiles %}")
 print("{% load markdown_deux_tags %}")
-print("{% load humanize %}")
 
 print(head)
 print(content)
 
-# done
+# done1234

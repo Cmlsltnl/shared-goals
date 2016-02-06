@@ -2,7 +2,6 @@
 
 {% load staticfiles %}
 {% load markdown_deux_tags %}
-{% load humanize %}
 
 {% block head %}
 <script src="{% static 'proposal/proposal.js' %}" type="text/javascript"></script>
@@ -26,13 +25,13 @@
     <div class="col-md-4">
       <div class="proposal--photo" href="{% url 'proposal' goal.slug proposal.slug %}" style="background-image:url({{ proposal.image.url }});">
         <div class="proposal--gradient"></div>
-        <h3 class="proposal--title">{{ proposal.get_current_version.title }}</h3>
+        <h3 class="proposal--title">{{ version.title }}</h3>
       </div>
     </div>
   </div>
   <div class="row small-gap-below">
     <div class="col-md-2"></div>
-    <div class="col-md-8">{{ proposal.get_current_version.description|markdown }}
+    <div class="col-md-8">{{ version.description|markdown }}
       <form action="." class="big-gap-above" enctype="multipart/form-data" id="review_form" method="post">
         {% csrf_token %}
         <p>

@@ -261,6 +261,7 @@ class ReviewView(View):
 
         context = {
             'goal': goal,
+            'proposal': review.version.proposal,
             'member': member,
             'review': review,
             'version': review.version,

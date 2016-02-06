@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+{% load markdown_deux_tags %}
+
+{% block head %}
+<script src="{% static 'proposal/proposal.js' %}" type="text/javascript"></script>
+{% endblock %}
+
+
+{% block content %}
+
+  <div class="row big-gap-below">
+    <div class="text-center">
+      <h1>{{ goal.title }}</h1>
+      <div class="button-grp">
+        <button class="btn btn-default" onclick="location.href='{% url 'goal' goal.slug %}';">Top Proposals</button>
+        <button class="btn btn-default">Members</button>
+        <button class="btn btn-default" onclick="location.href='{% url 'profile' goal.slug %}';">My Profile</button>
+      </div>
+    </div>
+  </div>
+  <div class="row small-gap-below">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+      <div class="proposal--photo" href="{% url 'proposal' goal.slug proposal.slug %}" style="background-image:url({{ proposal.image.url }});">
+        <div class="proposal--gradient"></div>
+        <h3 class="proposal--title">{{ version.title }}</h3>
+      </div>
+    </div>
+  </div>
+  <div class="row small-gap-below">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">{{ version.description|markdown }}</div>
+  </div>
+
+{% endblock %}
