@@ -42,6 +42,22 @@ def comment_form():
         button("Cancel", id="cancel-submit", name="submit", value="cancel")
 
 
+@span(_class="small-gap-below")
+def review():
+    with div(_class="row"):
+        column(2)
+        with column(2):
+            readonly_rateit("{{ review.rating }}")
+        with column(6):
+            text("{{ review.header }}")
+
+    with div(_class="row"):
+        column(2)
+        with column(8):
+            with p():
+                text("{{ review.description }}")
+
+
 def result():
     with django_block("head") as head:
         script(
@@ -62,7 +78,9 @@ def result():
             with column(8):
                 text("{{ version.description|markdown }}")
 
-        with div(_class="row small-gap-below"):
+        review()
+
+        with div(_class="row"):
             column(2)
             with column(8):
                 comment_form()

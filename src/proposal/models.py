@@ -5,6 +5,7 @@ import urllib
 
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.fields import GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
@@ -58,18 +59,6 @@ class Version(models.Model):
         return "%s_%d" % (self.proposal.slug, self.pk)
 
 
-class Review(models.Model):
-    pub_date = models.DateTimeField('date published', auto_now_add=True)
-    owner = models.ForeignKey(Member)
-    version = models.ForeignKey(Version, related_name="reviews")
-    rating = models.DecimalField(max_digits=2, decimal_places=1, default=0)
-    description = models.TextField(blank=True)
-    is_draft = models.BooleanField(default=True)
-
-    def __str__(self):
-        return "Review by %s for %s" % (self.owner, self.version)
-
-
 class Comment(models.Model):
     pub_date = models.DateTimeField('date published', auto_now_add=True)
     owner = models.ForeignKey(Member)
@@ -83,3 +72,16 @@ class Comment(models.Model):
 
     def __str__(self):
         return "Comment by %s on %s" % (self.owner, self.target)
+
+
+class Review(models.Model):
+    pub_date = models.DateTimeField('date published', auto_now_add=True)
+    owner = models.ForeignKey(Member)
+    version = models.ForeignKey(Version, related_name="reviews")
+    rating = models.DecimalField(max_digits=2, decimal_places=1, default=0)
+    description = models.TextField(blank=True)
+    is_draft = models.BooleanField(default=True)
+    comments = GenericRelation(Comment)
+
+    def __str__(self):
+        return "Review by %s for %s" % (self.owner, self.version)

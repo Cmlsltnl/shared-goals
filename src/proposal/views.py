@@ -253,9 +253,7 @@ class ProposalView(View):
 
 class ReviewView(View):
     def __get_or_create_draft(self, member, review):
-        draft = Comment.objects.filter(
-            is_draft=True, owner=member, target=review
-        ).first()
+        draft = review.comments.filter(is_draft=True, owner=member).first()
 
         if not draft:
             draft = Comment()
@@ -264,6 +262,14 @@ class ReviewView(View):
             draft.save()
 
         return draft
+
+    def __inject_header_text(self, review):
+        header = \
+            "Reviewed by " + review.owner.user.get_full_name() \
+            + ", %s" % naturaltime(review.pub_date)
+
+        setattr(review, 'header', header)
+        return review
 
     def get(self, request, goal_slug, proposal_slug, review_pk):
         return self.handle(request, goal_slug, proposal_slug, review_pk)
@@ -290,6 +296,8 @@ class ReviewView(View):
             CommentForm(request.POST, request.FILES) if is_posting
             else CommentForm(initial=draft.__dict__)
         )
+
+        self.__inject_header_text(review)
 
         context = {
             'goal': goal,

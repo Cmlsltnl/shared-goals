@@ -67,14 +67,7 @@ def other_review():
     with div(_class="row"):
         column(2)
         with column(2):
-            div(
-                id="rateit-review",
-                _class="rateit",
-                style="padding-top:8px",
-                data_rateit_readonly="true",
-                data_rateit_resetable="false",
-                data_rateit_value="{{ other_review.rating }}"
-            )
+            readonly_rateit("{{ other_review.rating }}")
         with column(6):
             with django_if("other_review.version.pk == version.pk"):
                 with django_else():
