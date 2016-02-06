@@ -51,9 +51,12 @@ def top_right_div():
                     text("{% trans 'Log in' %}")
 
 
-with django_block("header") as header:
-    top_right_div()
+def result():
+    with django_block("header") as header:
+        top_right_div()
 
-print("{% extends 'base_base.html' %}\n")
-print("{% load i18n %}\n")
-print(header)
+    return (
+        "{% extends 'base_base.html' %}\n",
+        "{% load i18n %}\n",
+        header,
+    )

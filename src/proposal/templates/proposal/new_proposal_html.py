@@ -68,13 +68,17 @@ def proposal_form():
         button("Submit", id="save-submit", name="submit", value="save")
         button("Cancel", id="cancel-submit", name="submit", value="cancel")
 
-print("{% extends 'base.html' %}\n")
 
-with django_block("head") as head:
-    text("{{ proposal_form.media }}")
-print(head)
+def result():
+    with django_block("head") as head:
+        text("{{ proposal_form.media }}")
 
-with django_block("content") as content:
-    goal_header()
-    proposal_form()
-print(content)
+    with django_block("content") as content:
+        goal_header()
+        proposal_form()
+
+    return (
+        "{% extends 'base.html' %}\n",
+        head,
+        content,
+    )

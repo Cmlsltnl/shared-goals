@@ -1,5 +1,3 @@
-import os
-
 from dominate.tags import html_tag
 
 
@@ -19,9 +17,9 @@ class django_tag(html_tag):
             rendered.pop()
             del rendered[from_index]
         rendered[from_index] = (
-            os.linesep + self.get_opening_tag(tag_inner) + os.linesep
+            self.get_opening_tag(tag_inner)
         )
-        rendered[-1] = os.linesep + self.closing_tag + os.linesep
+        rendered[-1] = self.closing_tag
         return rendered
 
 

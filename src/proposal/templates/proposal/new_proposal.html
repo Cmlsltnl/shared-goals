@@ -1,13 +1,7 @@
 {% extends 'base.html' %}
 
-
-{% block head %}
-{{ proposal_form.media }}
-{% endblock %}
-
-
+{% block head %}{{ proposal_form.media }}{% endblock %}
 {% block content %}
-
   <div class="row big-gap-below">
     <div class="text-center">
       <h1>{{ goal.title }}</h1>
@@ -39,6 +33,4 @@
       <button id="cancel-submit" name="submit" value="cancel">Cancel</button>
     </div>
   </form>
-
 {% endblock %}
-

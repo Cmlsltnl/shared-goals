@@ -8,13 +8,6 @@ from goal.templates.dominate_tags import *
 from proposal.templates.dominate_tags import *
 
 
-with django_block("head") as head:
-    script(
-        src="{% static 'proposal/proposal.js' %}",
-        type="text/javascript"
-    )
-
-
 #
 @form(
     method="post",
@@ -99,28 +92,36 @@ def other_review():
                 text("{{ other_review.description }}")
 
 
-with django_block("content") as content:
-    goal_header()
+def result():
+    with django_block("head") as head:
+        script(
+            src="{% static 'proposal/proposal.js' %}",
+            type="text/javascript"
+        )
 
-    with div(_class="row small-gap-below"):
-        column(4)
-        with column(4):
-            proposal_image()
+    with django_block("content") as content:
+        goal_header()
 
-    with div(_class="row small-gap-below"):
-        column(2)
-        with column(8):
-            text("{{ version.description|markdown }}")
-            review_form()
+        with div(_class="row small-gap-below"):
+            column(4)
+            with column(4):
+                proposal_image()
 
-    with django_for("other_review in other_reviews"):
-        other_review()
+        with div(_class="row small-gap-below"):
+            column(2)
+            with column(8):
+                text("{{ version.description|markdown }}")
+                review_form()
 
-print("{% extends 'base.html' %}\n")
-print("{% load staticfiles %}")
-print("{% load markdown_deux_tags %}")
+        with django_for("other_review in other_reviews"):
+            other_review()
 
-print(head)
-print(content)
+    return (
+        "{% extends 'base.html' %}\n",
+        "{% load staticfiles %}",
+        "{% load markdown_deux_tags %}",
+        head,
+        content
+    )
 
 # done1234

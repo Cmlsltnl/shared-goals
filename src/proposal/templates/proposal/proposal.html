@@ -2,14 +2,8 @@
 
 {% load staticfiles %}
 {% load markdown_deux_tags %}
-
-{% block head %}
-<script src="{% static 'proposal/proposal.js' %}" type="text/javascript"></script>
-{% endblock %}
-
-
+{% block head %}<script src="{% static 'proposal/proposal.js' %}" type="text/javascript"></script>{% endblock %}
 {% block content %}
-
   <div class="row big-gap-below">
     <div class="text-center">
       <h1>{{ goal.title }}</h1>
@@ -49,9 +43,7 @@
       </form>
     </div>
   </div>
-
-{% for other_review in other_reviews %}
-
+  {% for other_review in other_reviews %}
     <div class="row">
       <div class="row">
         <div class="col-md-2"></div>
@@ -59,14 +51,10 @@
           <div class="rateit" data-rateit-readonly="true" data-rateit-resetable="false" data-rateit-value="{{ other_review.rating }}" id="rateit-review" style="padding-top:8px"></div>
         </div>
         <div class="col-md-6">
-
-{% if other_review.version.pk == version.pk %}
-
+          {% if other_review.version.pk == version.pk %}
             {% else %}A
               <a href="{% url 'review' goal.slug proposal.slug other_review.pk %}">previous version</a> was
-
-{% endif %}
-{{ other_review.header }}</div>
+          {% endif %}{{ other_review.header }}</div>
       </div>
       <div class="row">
         <div class="col-md-2"></div>
@@ -75,8 +63,5 @@
         </div>
       </div>
     </div>
-
-{% endfor %}
-
-
+  {% endfor %}
 {% endblock %}

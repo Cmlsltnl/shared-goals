@@ -7,22 +7,26 @@ from goal.templates.dominate_tags import *
 
 from proposal.templates.dominate_tags import *
 
+
 # 12
-with django_block("content") as content:
-    goal_header()
+def result():
+    with django_block("content") as content:
+        goal_header()
 
-    with div(_class="row"):
-        with column(4):
-            with h3(_class="small-gap-below"):
-                text("Your proposals:")
-
-    with django_for("proposal_list in proposal_lists"):
         with div(_class="row"):
-            with django_for("proposal in proposal_list"):
-                with column(4):
-                    proposal_list_item()
-        with django_empty():
-            h5("You have not created any proposals yet")
+            with column(4):
+                with h3(_class="small-gap-below"):
+                    text("Your proposals:")
 
-print("{% extends 'base.html' %}\n")
-print(content)
+        with django_for("proposal_list in proposal_lists"):
+            with div(_class="row"):
+                with django_for("proposal in proposal_list"):
+                    with column(4):
+                        proposal_list_item()
+            with django_empty():
+                h5("You have not created any proposals yet")
+
+    return (
+        "{% extends 'base.html' %}\n",
+        content,
+    )

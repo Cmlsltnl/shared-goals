@@ -4,16 +4,14 @@
 - https://github.com/HonzaKral/django-threadedcomments
 - https://github.com/trentm/django-markdown-deux
 
-- change VersionView to ReviewView, that shows one version of a proposal and one review of that version
-- show in Proposal template if members' review of a Proposal is of an older version
-- slug should only be unique per goal
+- In Review template, include a link to the latest version of the proposal
 - when updating a review, delete all comments
 - allow to change image when editing a proposal
 - move col function to a central location
 - Make upload automatic when you change the image in the new proposal form
 - Check that url for the goal/profile is not used
+- slug should only be unique per goal
 - Advise member that their profile is totally public
 - Use now() timestamp from the db server
-- Show which Proposal version the Review applies to
 - When leaving a Goal as a member, confirm that all Proposals are deleted
 
