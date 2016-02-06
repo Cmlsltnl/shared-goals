@@ -17,40 +17,43 @@ from goal.templates.dominate_tags import *
 def proposal_form():
     django_csrf_token()
     with p():
-        text("{{ image_form.cropping.errors }}")
+        text("{{ proposal_form.cropping.errors }}")
         label(
-            _for="{{ image_form.cropping.id_for_label }}",
+            _for="{{ proposal_form.cropping.id_for_label }}",
             _class="form-label"
         )
-        text("{{ image_form.cropping }}")
+        text("{{ proposal_form.cropping }}")
 
     with p():
-        text("{{ image_form.image.errors }}")
+        text("{{ proposal_form.image.errors }}")
         with label(
-            _for="{{ image_form.image.id_for_label }}",
+            _for="{{ proposal_form.image.id_for_label }}",
             _class="form-label"
         ):
             text("Image")
-        text("{{ image_form.image }}")
+        text("{{ proposal_form.image }}")
         button("Upload", id="upload-submit", name="submit", value="upload")
 
     with p():
-        text("{{ form.title.errors }}")
-        with label(_for="{{ form.title.id_for_label }}", _class="form-label"):
+        text("{{ version_form.title.errors }}")
+        with label(
+            _for="{{ version_form.title.id_for_label }}",
+            _class="form-label"
+        ):
             text("Title")
         input_(
             id="id_title",
             type="text",
             name="title",
             maxlength="100",
-            value="{{ form.title.value }}",
+            value="{{ version_form.title.value }}",
             _class="form-field"
         )
 
     with p():
-        text("{{ form.description.errors }}")
+        text("{{ version_form.description.errors }}")
         with label(
-            _for="{{ form.description.id_for_label }}",
+            _for="{{ version_form.description.id_for_label }}",
             _class="form-label"
         ):
             text("Describe your proposal")
@@ -59,7 +62,7 @@ def proposal_form():
             form="proposal_form",
             _class="form-field"
         ):
-            text("{{ form.description.value }}")
+            text("{{ version_form.description.value }}")
 
     with div():
         button("Submit", id="save-submit", name="submit", value="save")
@@ -68,7 +71,7 @@ def proposal_form():
 print("{% extends 'base.html' %}\n")
 
 with django_block("head") as head:
-    text("{{ image_form.media }}")
+    text("{{ proposal_form.media }}")
 print(head)
 
 with django_block("content") as content:

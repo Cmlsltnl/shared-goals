@@ -107,7 +107,8 @@ def proposal_image():
     with h3(_class="proposal--title"):
         text("{{ proposal.get_current_version.title }}")
 
-url_edit_proposal = "location.href='{% url 'new-proposal' goal.slug %}';"
+url_edit_proposal = \
+    "location.href='{% url 'edit-proposal' goal.slug proposal.slug %}';"
 
 with django_block("content") as content:
     with django_if("proposal.owner == member"):

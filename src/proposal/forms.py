@@ -3,12 +3,12 @@ from image_cropping import ImageCropWidget
 from .models import Proposal, Review
 
 
-class ProposalForm(forms.Form):
+class VersionForm(forms.Form):
     title = forms.CharField(label='Title', max_length=100)
     description = forms.CharField(label='Description')
 
 
-class ProposalImageForm(forms.ModelForm):
+class ProposalForm(forms.ModelForm):
     class Meta:
         widgets = {
             'image': ImageCropWidget,

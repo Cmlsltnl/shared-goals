@@ -4,9 +4,8 @@
 - https://github.com/HonzaKral/django-threadedcomments
 - https://github.com/trentm/django-markdown-deux
 
-- check that a rating was given when posting a review
+- when updating a review, delete all comments
 - move col function to a central location
-- use "x days ago" format to show when proposal was created
 - Make upload automatic when you change the image in the new proposal form
 - Check that url for the goal/profile is not used
 - Advise member that their profile is totally public

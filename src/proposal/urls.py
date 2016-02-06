@@ -5,8 +5,13 @@ from . import views
 urlpatterns = [
     url(
         r'^new-proposal/$',
-        views.NewProposalView.as_view(),
+        views.EditProposalView.as_view(),
         name='new-proposal'
+    ),
+    url(
+        r'^edit-proposal/(?P<proposal_slug>[\-\w]+)/$',
+        views.EditProposalView.as_view(),
+        name='edit-proposal'
     ),
     url(
         r'^by/(?P<proposal_slug>[\-\w]+)/$',

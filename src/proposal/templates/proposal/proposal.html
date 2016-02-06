@@ -14,7 +14,7 @@
 
 {% if proposal.owner == member %}
 
-    <button class="btn btn-danger" id="btn-edit-proposal" onclick="location.href='{% url 'new-proposal' goal.slug %}';">Edit Proposal</button>
+    <button class="btn btn-danger" id="btn-edit-proposal" onclick="location.href='{% url 'edit-proposal' goal.slug proposal.slug %}';">Edit Proposal</button>
 
 {% endif %}
 

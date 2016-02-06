@@ -6,6 +6,7 @@ bootstrap.txt
 /bin/*.pid
 /media/
 minimal-django-file-upload-example
+foo.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

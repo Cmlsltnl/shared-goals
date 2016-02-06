@@ -8,11 +8,11 @@ from django.views.generic import View
 
 from goal.models import Goal, Member
 
-from proposal.forms import ProposalForm, ProposalImageForm, ReviewForm
+from proposal.forms import VersionForm, ProposalForm, ReviewForm
 from proposal.models import Proposal, Review, Version
 
 
-class NewProposalView(View):
+class EditProposalView(View):
     def __get_or_create_draft(self, member, goal):
         draft = Proposal.objects.filter(
             is_draft=True, owner=member
@@ -31,42 +31,54 @@ class NewProposalView(View):
 
     def __get_posted_forms(self, request):
         return (
-            ProposalForm(request.POST, request.FILES),
-            ProposalImageForm(request.POST, request.FILES)
+            VersionForm(request.POST, request.FILES),
+            ProposalForm(request.POST, request.FILES)
         )
 
     def __get_populated_forms(self, request, draft):
         return (
-            ProposalForm(initial=draft.get_current_version().__dict__),
-            ProposalImageForm(
+            VersionForm(initial=draft.get_current_version().__dict__),
+            ProposalForm(
                 initial=draft.__dict__,
                 files=dict(image=draft.image)
             )
         )
 
-    def __update_draft_and_save(self, draft, request):
-        form, image_form = self.__get_posted_forms(request)
-        is_form_valid = form.is_valid()
-        is_image_form_valid = image_form.is_valid()
+    def __update_proposal_and_save(self, proposal, request):
+        version_form, proposal_form = self.__get_posted_forms(request)
+        is_version_form_valid = version_form.is_valid()
+        is_proposal_form_valid = proposal_form.is_valid()
 
-        current_version = draft.get_current_version()
-        current_version.title = form['title'].value()
-        current_version.description = form['description'].value()
+        current_version = proposal.get_current_version()
+        current_version.title = version_form['title'].value()
+        current_version.description = version_form['description'].value()
         current_version.save()
 
-        if is_image_form_valid:
+        if is_proposal_form_valid:
             if 'image' in request.FILES:
-                draft.image = image_form.cleaned_data['image']
-            draft.cropping = image_form.cleaned_data['cropping']
+                proposal.image = proposal_form.cleaned_data['image']
+            proposal.cropping = proposal_form.cleaned_data['cropping']
 
-            if is_form_valid and request.POST['submit'] == 'save':
-                draft.slug = slugify(draft.get_current_version().title)
-                draft.apply_cropping_to_image()
-                draft.is_draft = False
+            if is_version_form_valid and request.POST['submit'] == 'save':
+                proposal.slug = slugify(proposal.get_current_version().title)
+                proposal.apply_cropping_to_image()
+                proposal.is_draft = False
 
-            draft.save()
+            proposal.save()
 
-        return is_form_valid and is_image_form_valid
+        return is_version_form_valid and is_proposal_form_valid
+
+    def __create_new_version(self, proposal, request):
+        version_form, proposal_form = self.__get_posted_forms(request)
+        is_version_form_valid = version_form.is_valid()
+        if is_version_form_valid:
+            version = Version()
+            version.title = version_form['title'].value()
+            version.description = version_form['description'].value()
+            version.proposal = proposal
+            version.save()
+
+        return is_version_form_valid
 
     def __on_cancel(self, goal_slug):
         # todo redirect to previous page
@@ -90,41 +102,47 @@ class NewProposalView(View):
             )
         )
 
-    def get(self, request, goal_slug):
-        return self.handle(request, goal_slug)
+    def get(self, request, goal_slug, proposal_slug=""):
+        return self.handle(request, goal_slug, proposal_slug)
 
-    def post(self, request, goal_slug):
-        return self.handle(request, goal_slug)
+    def post(self, request, goal_slug, proposal_slug=""):
+        return self.handle(request, goal_slug, proposal_slug)
 
-    def handle(self, request, goal_slug):
+    def handle(self, request, goal_slug, proposal_slug):
         goal = get_object_or_404(Goal, slug=goal_slug)
         member = get_object_or_404(Member, user=request.user)
-        draft = self.__get_or_create_draft(member, goal)
+        proposal = (
+            get_object_or_404(Proposal, slug=proposal_slug) if proposal_slug
+            else self.__get_or_create_draft(member, goal)
+        )
 
         if request.method == 'POST':
-            is_data_valid = self.__update_draft_and_save(draft, request)
+            if proposal_slug:
+                should_accept_data = request.POST['submit'] == 'cancel' or \
+                    self.__create_new_version(proposal, request)
+            else:
+                should_accept_data = \
+                    self.__update_proposal_and_save(proposal, request)
 
             if request.POST['submit'] == 'cancel':
                 return self.__on_cancel(goal.slug)
-            elif request.POST['submit'] == 'save' and is_data_valid:
-                return self.__on_save(goal.slug, draft.slug)
+            elif request.POST['submit'] == 'save' and should_accept_data:
+                return self.__on_save(goal.slug, proposal.slug)
 
         is_posting = (
             request.method == 'POST' and request.POST['submit'] == 'save'
         )
 
-        form, image_form = (
+        version_form, proposal_form = (
             self.__get_posted_forms(request) if is_posting else
-            self.__get_populated_forms(request, draft)
+            self.__get_populated_forms(request, proposal)
         )
 
         context = {
             'goal': goal,
             'member': member,
-            'form': form,
-
-
-            'image_form': image_form,
+            'version_form': version_form,
+            'proposal_form': proposal_form,
         }
         return render(request, 'proposal/new_proposal.html', context)
 
