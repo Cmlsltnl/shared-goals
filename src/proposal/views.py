@@ -1,3 +1,4 @@
+from django.contrib.humanize.templatetags.humanize import naturaltime
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http import HttpResponseRedirect
@@ -5,7 +6,6 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.template.defaultfilters import slugify
 from django.views.generic import View
-
 from goal.models import Goal, Member
 
 from proposal.forms import VersionForm, ProposalForm, ReviewForm
@@ -214,9 +214,31 @@ class ProposalView(View):
             else ReviewForm(initial=review.__dict__)
         )
 
-        other_reviews = all_reviews.filter(
-            ~Q(pk=review.pk) & Q(is_draft=False)
-        )
+        def inject_header_text(review, current_version):
+            def upperfirst(x):
+                return x[0].upper() + x[1:]
+
+            header = \
+                "reviewed by " if review.description \
+                else "rated by "
+            header += review.owner.user.get_full_name()
+            header += ", %s" % naturaltime(review.pub_date)
+
+            setattr(
+                review,
+                'header',
+                upperfirst(header) if review.version_id == current_version.pk
+                else header
+            )
+
+            return review
+
+        current_version = proposal.get_current_version()
+        other_reviews = [
+            inject_header_text(x, current_version) for x in all_reviews.filter(
+                ~Q(pk=review.pk) & Q(is_draft=False)
+            )
+        ]
 
         context = {
             'goal': goal,
@@ -229,3 +251,18 @@ class ProposalView(View):
             'other_reviews': other_reviews,
         }
         return render(request, 'proposal/proposal.html', context)
+
+
+class ReviewView(View):
+    def get(self, request, goal_slug, proposal_slug, review_pk):
+        goal = get_object_or_404(Goal, slug=goal_slug)
+        member = Member.objects.filter(user=request.user).first()
+        review = get_object_or_404(Review, pk=review_pk)
+
+        context = {
+            'goal': goal,
+            'member': member,
+            'review': review,
+            'version': review.version,
+        }
+        return render(request, 'proposal/review.html', context)

@@ -11,13 +11,6 @@
 
 {% block content %}
 
-
-{% if proposal.owner == member %}
-
-    <button class="btn btn-danger" id="btn-edit-proposal" onclick="location.href='{% url 'edit-proposal' goal.slug proposal.slug %}';">Edit Proposal</button>
-
-{% endif %}
-
   <div class="row big-gap-below">
     <div class="text-center">
       <h1>{{ goal.title }}</h1>
@@ -67,15 +60,14 @@
           <div class="rateit" data-rateit-readonly="true" data-rateit-resetable="false" data-rateit-value="{{ other_review.rating }}" id="rateit-review" style="padding-top:8px"></div>
         </div>
         <div class="col-md-6">
-          <h5>
 
-{% if other_review.description %}
-Reviewed by
-              {% else %}Rated by
+{% if other_review.version.pk == version.pk %}
+
+            {% else %}A
+              <a href="{% url 'review' goal.slug proposal.slug other_review.pk %}">previous version</a> was
 
 {% endif %}
-{{ other_review.owner.user.get_full_name }}, {{ other_review.pub_date|naturaltime }}</h5>
-        </div>
+{{ other_review.header }}</div>
       </div>
       <div class="row">
         <div class="col-md-2"></div>

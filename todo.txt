@@ -4,6 +4,8 @@
 - https://github.com/HonzaKral/django-threadedcomments
 - https://github.com/trentm/django-markdown-deux
 
+- change VersionView to ReviewView, that shows one version of a proposal and one review of that version
+- show in Proposal template if members' review of a Proposal is of an older version
 - slug should only be unique per goal
 - when updating a review, delete all comments
 - allow to change image when editing a proposal

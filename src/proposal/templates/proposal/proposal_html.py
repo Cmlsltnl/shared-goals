@@ -65,6 +65,10 @@ def review_form():
         button("Cancel", id="cancel-submit", name="submit", value="cancel")
 
 
+other_version_href = \
+    "{% url 'review' goal.slug proposal.slug other_review.pk %}"
+
+
 @div(_class="row")
 def other_review():
     with div(_class="row"):
@@ -79,16 +83,14 @@ def other_review():
                 data_rateit_value="{{ other_review.rating }}"
             )
         with column(6):
-            with h5():
-                with django_if("other_review.description"):
-                    text("Reviewed by ")
-                    with django_else():
-                        text("Rated by ")
+            with django_if("other_review.version.pk == version.pk"):
+                with django_else():
+                    text("A ")
+                    with a(href=other_version_href):
+                        text("previous version")
+                    text(" was ")
 
-                text(
-                    "{{ other_review.owner.user.get_full_name }}, "
-                    "{{ other_review.pub_date|naturaltime }}"
-                )
+            text("{{ other_review.header }}")
 
     with div(_class="row"):
         column(2)
@@ -107,18 +109,7 @@ def proposal_image():
     with h3(_class="proposal--title"):
         text("{{ proposal.get_current_version.title }}")
 
-url_edit_proposal = \
-    "location.href='{% url 'edit-proposal' goal.slug proposal.slug %}';"
-
 with django_block("content") as content:
-    with django_if("proposal.owner == member"):
-        button(
-            "Edit Proposal",
-            id="btn-edit-proposal",
-            _class="btn btn-danger",
-            onclick=url_edit_proposal
-        )
-
     goal_header()
 
     with div(_class="row small-gap-below"):

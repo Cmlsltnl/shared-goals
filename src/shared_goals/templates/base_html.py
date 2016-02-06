@@ -21,6 +21,8 @@ def top_right_menu():
                 text("{% trans 'Change password' %}")
 
 
+url_edit_proposal = \
+    "location.href='{% url 'edit-proposal' goal.slug proposal.slug %}';"
 url_new_proposal = "location.href='{% url 'new-proposal' goal.slug %}';"
 
 
@@ -30,6 +32,14 @@ def top_right_div():
         with django_if("user.is_authenticated"):
             with django_if("member"):
                 with div(id="top-right-div-inner", _class="btn-group"):
+                    with django_if("proposal and proposal.owner == member"):
+                        button(
+                            "Edit Proposal",
+                            id="btn-edit-proposal",
+                            _class="btn btn-danger",
+                            onclick=url_edit_proposal
+                        )
+
                     button(
                         "New Proposal",
                         _class="btn",
