@@ -11,7 +11,7 @@ class RevisionForm(forms.Form):
     title = forms.CharField(label='Title', max_length=100)
     description = forms.CharField(label='Description')
 
-    def clean_rating(self):
+    def clean_title(self):
         if self.is_duplicate_title(self.cleaned_data['title']):
             raise forms.ValidationError(
                 "Sorry, this title is already used, please choose another"

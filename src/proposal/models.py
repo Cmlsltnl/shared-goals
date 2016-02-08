@@ -17,7 +17,7 @@ from image_cropping.templatetags.cropping import cropped_thumbnail
 
 
 class Proposal(models.Model):
-    goal = models.ForeignKey(Goal)
+    goal = models.ForeignKey(Goal, related_name="proposals")
     avg_rating = models.DecimalField(
         max_digits=2, decimal_places=1, default=0.0)
     owner = models.ForeignKey(Member)
