@@ -29,8 +29,8 @@ class Proposal(models.Model):
     def __str__(self):
         return self.slug + ("(draft)" if self.is_draft else "")
 
-    def get_current_version(self):
-        return self.versions.latest('pub_date')
+    def get_current_revision(self):
+        return self.revisions.latest('pub_date')
 
     def apply_cropping_to_image(self, replace_original=False):
         def rel_url(url):
@@ -47,13 +47,13 @@ class Proposal(models.Model):
             self.image = new_image_path
 
 
-class Version(models.Model):
+class Revision(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
     pub_date = models.DateTimeField(
         'date published', blank=True, auto_now=True)
     proposal = models.ForeignKey(
-        Proposal, blank=True, null=True, related_name="versions")
+        Proposal, blank=True, null=True, related_name="revisions")
 
     def __str__(self):
         return "%s_%d" % (self.proposal.slug, self.pk)
@@ -67,7 +67,7 @@ class Comment(models.Model):
     object_id = models.PositiveIntegerField()
     target = GenericForeignKey('content_type', 'object_id')
 
-    body = models.TextField(blank=True)
+    body = models.TextField()
     is_draft = models.BooleanField(default=True)
 
     def __str__(self):
@@ -77,11 +77,11 @@ class Comment(models.Model):
 class Review(models.Model):
     pub_date = models.DateTimeField('date published', auto_now_add=True)
     owner = models.ForeignKey(Member)
-    version = models.ForeignKey(Version, related_name="reviews")
+    revision = models.ForeignKey(Revision, related_name="revisions", null=True)
     rating = models.DecimalField(max_digits=2, decimal_places=1, default=0)
     description = models.TextField(blank=True)
     is_draft = models.BooleanField(default=True)
     comments = GenericRelation(Comment)
 
     def __str__(self):
-        return "Review by %s for %s" % (self.owner, self.version)
+        return "Review by %s for %s" % (self.owner, self.revision)

@@ -3,7 +3,7 @@ from image_cropping import ImageCropWidget
 from .models import Comment, Proposal, Review
 
 
-class VersionForm(forms.Form):
+class RevisionForm(forms.Form):
     title = forms.CharField(label='Title', max_length=100)
     description = forms.CharField(label='Description')
 

@@ -24,7 +24,8 @@ class Goal(models.Model):
 
 class Member(models.Model):
     user = models.ForeignKey(User)
-    join_date = models.DateTimeField('date joined')
+    goal = models.ForeignKey(Goal, related_name="members")
+    join_date = models.DateTimeField('date joined', auto_now_add=True)
     image = SorlImageField(blank=True, upload_to='members')
     cropping = ImageRatioField('image', '360x430')
 

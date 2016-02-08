@@ -8,8 +8,8 @@ from django.template.defaultfilters import slugify
 from django.views.generic import View
 from goal.models import Goal, Member
 
-from proposal.forms import CommentForm, VersionForm, ProposalForm, ReviewForm
-from proposal.models import Comment, Proposal, Review, Version
+from proposal.forms import CommentForm, RevisionForm, ProposalForm, ReviewForm
+from proposal.models import Comment, Proposal, Review, Revision
 
 
 class EditProposalView(View):
@@ -24,20 +24,20 @@ class EditProposalView(View):
             draft.goal = goal
             draft.save()
 
-            version = Version()
-            version.proposal = draft
-            version.save()
+            revision = Revision()
+            revision.proposal = draft
+            revision.save()
         return draft
 
     def __get_posted_forms(self, request):
         return (
-            VersionForm(request.POST, request.FILES),
+            RevisionForm(request.POST, request.FILES),
             ProposalForm(request.POST, request.FILES)
         )
 
     def __get_populated_forms(self, request, draft):
         return (
-            VersionForm(initial=draft.get_current_version().__dict__),
+            RevisionForm(initial=draft.get_current_revision().__dict__),
             ProposalForm(
                 initial=draft.__dict__,
                 files=dict(image=draft.image)
@@ -45,40 +45,40 @@ class EditProposalView(View):
         )
 
     def __update_proposal_and_save(self, proposal, request):
-        version_form, proposal_form = self.__get_posted_forms(request)
-        is_version_form_valid = version_form.is_valid()
+        revision_form, proposal_form = self.__get_posted_forms(request)
+        is_revision_form_valid = revision_form.is_valid()
         is_proposal_form_valid = proposal_form.is_valid()
 
-        current_version = proposal.get_current_version()
-        current_version.title = version_form['title'].value()
-        current_version.description = version_form['description'].value()
-        current_version.save()
+        current_revision = proposal.get_current_revision()
+        current_revision.title = revision_form['title'].value()
+        current_revision.description = revision_form['description'].value()
+        current_revision.save()
 
         if is_proposal_form_valid:
             if 'image' in request.FILES:
                 proposal.image = proposal_form.cleaned_data['image']
             proposal.cropping = proposal_form.cleaned_data['cropping']
 
-            if is_version_form_valid and request.POST['submit'] == 'save':
-                proposal.slug = slugify(proposal.get_current_version().title)
+            if is_revision_form_valid and request.POST['submit'] == 'save':
+                proposal.slug = slugify(proposal.get_current_revision().title)
                 proposal.apply_cropping_to_image(replace_original=True)
                 proposal.is_draft = False
 
             proposal.save()
 
-        return is_version_form_valid and is_proposal_form_valid
+        return is_revision_form_valid and is_proposal_form_valid
 
-    def __create_new_version(self, proposal, request):
-        version_form, proposal_form = self.__get_posted_forms(request)
-        is_version_form_valid = version_form.is_valid()
-        if is_version_form_valid:
-            version = Version()
-            version.title = version_form['title'].value()
-            version.description = version_form['description'].value()
-            version.proposal = proposal
-            version.save()
+    def __create_new_revision(self, proposal, request):
+        revision_form, proposal_form = self.__get_posted_forms(request)
+        is_revision_form_valid = revision_form.is_valid()
+        if is_revision_form_valid:
+            revision = Revision()
+            revision.title = revision_form['title'].value()
+            revision.description = revision_form['description'].value()
+            revision.proposal = proposal
+            revision.save()
 
-        return is_version_form_valid
+        return is_revision_form_valid
 
     def __on_cancel(self, goal_slug):
         # todo redirect to previous page
@@ -120,7 +120,7 @@ class EditProposalView(View):
         if is_posting:
             if proposal_slug:
                 should_accept_data = request.POST['submit'] == 'cancel' or \
-                    self.__create_new_version(proposal, request)
+                    self.__create_new_revision(proposal, request)
             else:
                 should_accept_data = \
                     self.__update_proposal_and_save(proposal, request)
@@ -130,7 +130,7 @@ class EditProposalView(View):
             elif request.POST['submit'] == 'save' and should_accept_data:
                 return self.__on_save(goal.slug, proposal.slug)
 
-        version_form, proposal_form = (
+        revision_form, proposal_form = (
             self.__get_posted_forms(request) if is_posting else
             self.__get_populated_forms(request, proposal)
         )
@@ -138,7 +138,7 @@ class EditProposalView(View):
         context = {
             'goal': goal,
             'member': member,
-            'version_form': version_form,
+            'revision_form': revision_form,
             'proposal_form': proposal_form,
         }
         return render(request, 'proposal/new_proposal.html', context)
@@ -162,12 +162,12 @@ class ProposalView(View):
             )
         )
 
-    def __get_or_create_review(self, member, version, all_reviews):
+    def __get_or_create_review(self, member, revision, all_reviews):
         review = all_reviews.filter(owner=member).first()
         if not review:
             review = Review()
             review.owner = member
-            review.version = version
+            review.revision = revision
             review.save()
 
         return review
@@ -196,9 +196,9 @@ class ProposalView(View):
         goal = get_object_or_404(Goal, slug=goal_slug)
         member = Member.objects.filter(user=request.user).first()
         proposal = get_object_or_404(Proposal, slug=proposal_slug)
-        version = proposal.get_current_version()
-        all_reviews = Review.objects.filter(version__proposal=proposal)
-        review = self.__get_or_create_review(member, version, all_reviews)
+        revision = proposal.get_current_revision()
+        all_reviews = Review.objects.filter(revision__proposal=proposal)
+        review = self.__get_or_create_review(member, revision, all_reviews)
         is_posting = request.method == 'POST'
 
         if is_posting:
@@ -212,7 +212,7 @@ class ProposalView(View):
             else ReviewForm(initial=review.__dict__)
         )
 
-        def inject_header_text(review, current_version):
+        def inject_header_text(review, current_revision):
             def upperfirst(x):
                 return x[0].upper() + x[1:]
 
@@ -225,23 +225,22 @@ class ProposalView(View):
             setattr(
                 review,
                 'header',
-                upperfirst(header) if review.version_id == current_version.pk
+                upperfirst(header) if review.revision_id == current_revision.pk
                 else header
             )
 
             return review
 
-        current_version = proposal.get_current_version()
+        current_revision = proposal.get_current_revision()
         other_reviews = [
-            inject_header_text(x, current_version) for x in all_reviews.filter(
-                ~Q(pk=review.pk) & Q(is_draft=False)
-            )
+            inject_header_text(x, current_revision)
+            for x in all_reviews.filter(~Q(pk=review.pk) & Q(is_draft=False))
         ]
 
         context = {
             'goal': goal,
             'proposal': proposal,
-            'version': version,
+            'revision': revision,
             'member': member,
             'review': review,
             'post_button_label': "Submit" if review.is_draft else "Update",
@@ -265,11 +264,34 @@ class ReviewView(View):
 
     def __inject_header_text(self, review):
         header = \
-            "Reviewed by " + review.owner.user.get_full_name() \
+            "Review by " + review.owner.user.get_full_name() \
             + ", %s" % naturaltime(review.pub_date)
 
         setattr(review, 'header', header)
         return review
+
+    def __update_comment_and_save(self, comment, request):
+        form = CommentForm(request.POST, request.FILES)
+        is_form_valid = form.is_valid()
+        if is_form_valid:
+            comment.body = form.cleaned_data['body']
+            if request.POST['submit'] == 'save':
+                comment.is_draft = False
+            comment.save()
+
+        return is_form_valid
+
+    def __on_cancel_or_save(self, goal_slug, proposal_slug, review_pk):
+        return HttpResponseRedirect(
+            reverse(
+                'review',
+                kwargs=dict(
+                    goal_slug=goal_slug,
+                    proposal_slug=proposal_slug,
+                    review_pk=review_pk
+                )
+            )
+        )
 
     def get(self, request, goal_slug, proposal_slug, review_pk):
         return self.handle(request, goal_slug, proposal_slug, review_pk)
@@ -301,10 +323,11 @@ class ReviewView(View):
 
         context = {
             'goal': goal,
-            'proposal': review.version.proposal,
+            'proposal': review.revision.proposal,
             'member': member,
             'review': review,
-            'version': review.version,
+            'comments': [x for x in review.comments.filter(is_draft=False)],
+            'revision': review.revision,
             'form': form
         }
         return render(request, 'proposal/review.html', context)

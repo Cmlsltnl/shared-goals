@@ -11,7 +11,6 @@ from proposal.templates.dominate_tags import *
 #
 @form(
     method="post",
-    action=".",
     id="review_form",
     enctype="multipart/form-data",
     _class="big-gap-above"
@@ -69,7 +68,7 @@ def other_review():
         with column(2):
             readonly_rateit("{{ other_review.rating }}")
         with column(6):
-            with django_if("other_review.version.pk == version.pk"):
+            with django_if("other_review.revision.pk == revision.pk"):
                 with django_else():
                     text("A ")
                     with a(href=other_review_href):
@@ -103,7 +102,7 @@ def result():
         with div(_class="row small-gap-below"):
             column(2)
             with column(8):
-                text("{{ version.description|markdown }}")
+                text("{{ revision.description|markdown }}")
                 review_form()
 
         with django_for("other_review in other_reviews"):

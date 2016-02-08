@@ -10,7 +10,6 @@ from proposal.templates.dominate_tags import *
 
 @form(
     method="post",
-    action=".",
     id="comment_form",
     enctype="multipart/form-data",
     _class="big-gap-above"
@@ -58,6 +57,21 @@ def review():
                 text("{{ review.description }}")
 
 
+@span(_class="small-gap-below")
+def comment():
+    with div(_class="row"):
+        column(2)
+        with column(8):
+            text("{{ comment.owner.user.get_full_name }}, ")
+            text("{{ comment.pub_date|naturaltime }}")
+
+    with div(_class="row"):
+        column(2)
+        with column(8):
+            with p():
+                text("{{ comment.body }}")
+
+
 def result():
     with django_block("head") as head:
         script(
@@ -76,9 +90,12 @@ def result():
         with div(_class="row small-gap-below"):
             column(2)
             with column(8):
-                text("{{ version.description|markdown }}")
+                text("{{ revision.description|markdown }}")
 
         review()
+
+        with django_for("comment in comments"):
+            comment()
 
         with div(_class="row"):
             column(2)
@@ -88,6 +105,7 @@ def result():
     return (
         "{% extends 'base.html' %}\n",
         "{% load staticfiles %}",
+        "{% load humanize %}",
         "{% load markdown_deux_tags %}",
         head,
         content,

@@ -16,7 +16,7 @@ def column(k, **argv):
 def proposal_list_item():
     div(_class="proposal--gradient")
     with h3(_class="proposal--title"):
-        text("{{ proposal.get_current_version.title }}")
+        text("{{ proposal.get_current_revision.title }}")
 
 
 @div(
@@ -27,14 +27,12 @@ def proposal_list_item():
 def proposal_image():
     div(_class="proposal--gradient")
     with h3(_class="proposal--title"):
-        text("{{ version.title }}")
+        text("{{ revision.title }}")
 
 
 def readonly_rateit(rating):
     return div(
-        id="rateit-review",
-        _class="rateit",
-        style="padding-top:8px",
+        _class="rateit readonly-rateit",
         data_rateit_readonly="true",
         data_rateit_resetable="false",
         data_rateit_value=rating

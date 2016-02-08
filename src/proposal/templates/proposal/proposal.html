@@ -19,14 +19,14 @@
     <div class="col-md-4">
       <div class="proposal--photo" href="{% url 'proposal' goal.slug proposal.slug %}" style="background-image:url({{ proposal.image.url }});">
         <div class="proposal--gradient"></div>
-        <h3 class="proposal--title">{{ version.title }}</h3>
+        <h3 class="proposal--title">{{ revision.title }}</h3>
       </div>
     </div>
   </div>
   <div class="row small-gap-below">
     <div class="col-md-2"></div>
-    <div class="col-md-8">{{ version.description|markdown }}
-      <form action="." class="big-gap-above" enctype="multipart/form-data" id="review_form" method="post">
+    <div class="col-md-8">{{ revision.description|markdown }}
+      <form class="big-gap-above" enctype="multipart/form-data" id="review_form" method="post">
         {% csrf_token %}
         <p>
           <label class="form-label" for="{{ form.rating.id_for_label }}">Rate this proposal and give feedback</label>{{ form.rating.errors }}
@@ -48,12 +48,12 @@
       <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-2">
-          <div class="rateit" data-rateit-readonly="true" data-rateit-resetable="false" data-rateit-value="{{ other_review.rating }}" id="rateit-review" style="padding-top:8px"></div>
+          <div class="rateit readonly-rateit" data-rateit-readonly="true" data-rateit-resetable="false" data-rateit-value="{{ other_review.rating }}"></div>
         </div>
         <div class="col-md-6">
-          {% if other_review.version.pk == version.pk %}
-            {% else %}A
-              <a href="{% url 'review' goal.slug proposal.slug other_review.pk %}">previous version</a> was
+          {% if other_review.revision.pk == revision.pk %}
+            {% else %}A 
+              <a href="{% url 'review' goal.slug proposal.slug other_review.pk %}">previous version</a> was 
           {% endif %}{{ other_review.header }}</div>
       </div>
       <div class="row">

@@ -1,3 +1,12 @@
+.form-label {
+    display: block;
+}
+
+.form-field {
+    display: block;
+    width: 100%;
+}
+
 .top-right-div {
   padding-top: 16px;
 }
@@ -41,4 +50,8 @@
 .proposal--stars {
     height: 20px;
     width: 100px;
+}
+
+.readonly-rateit {
+    padding-top : 4px
 }

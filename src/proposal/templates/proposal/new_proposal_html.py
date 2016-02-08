@@ -10,7 +10,6 @@ from goal.templates.dominate_tags import *
 # 123
 @form(
     method="post",
-    action=".",
     id="proposal_form",
     enctype="multipart/form-data"
 )
@@ -35,9 +34,9 @@ def proposal_form():
         button("Upload", id="upload-submit", name="submit", value="upload")
 
     with p():
-        text("{{ version_form.title.errors }}")
+        text("{{ revision_form.title.errors }}")
         with label(
-            _for="{{ version_form.title.id_for_label }}",
+            _for="{{ revision_form.title.id_for_label }}",
             _class="form-label"
         ):
             text("Title")
@@ -46,14 +45,14 @@ def proposal_form():
             type="text",
             name="title",
             maxlength="100",
-            value="{{ version_form.title.value }}",
+            value="{{ revision_form.title.value }}",
             _class="form-field"
         )
 
     with p():
-        text("{{ version_form.description.errors }}")
+        text("{{ revision_form.description.errors }}")
         with label(
-            _for="{{ version_form.description.id_for_label }}",
+            _for="{{ revision_form.description.id_for_label }}",
             _class="form-label"
         ):
             text("Describe your proposal")
@@ -62,7 +61,7 @@ def proposal_form():
             form="proposal_form",
             _class="form-field"
         ):
-            text("{{ version_form.description.value }}")
+            text("{{ revision_form.description.value }}")
 
     with div():
         button("Submit", id="save-submit", name="submit", value="save")

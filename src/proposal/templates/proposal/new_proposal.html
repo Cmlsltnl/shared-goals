@@ -12,7 +12,7 @@
       </div>
     </div>
   </div>
-  <form action="." enctype="multipart/form-data" id="proposal_form" method="post">
+  <form enctype="multipart/form-data" id="proposal_form" method="post">
     {% csrf_token %}
     <p>{{ proposal_form.cropping.errors }}
       <label class="form-label" for="{{ proposal_form.cropping.id_for_label }}"></label>{{ proposal_form.cropping }}</p>
@@ -20,13 +20,13 @@
       <label class="form-label" for="{{ proposal_form.image.id_for_label }}">Image</label>{{ proposal_form.image }}
       <button id="upload-submit" name="submit" value="upload">Upload</button>
     </p>
-    <p>{{ version_form.title.errors }}
-      <label class="form-label" for="{{ version_form.title.id_for_label }}">Title</label>
-      <input class="form-field" id="id_title" maxlength="100" name="title" type="text" value="{{ version_form.title.value }}">
+    <p>{{ revision_form.title.errors }}
+      <label class="form-label" for="{{ revision_form.title.id_for_label }}">Title</label>
+      <input class="form-field" id="id_title" maxlength="100" name="title" type="text" value="{{ revision_form.title.value }}">
     </p>
-    <p>{{ version_form.description.errors }}
-      <label class="form-label" for="{{ version_form.description.id_for_label }}">Describe your proposal</label>
-      <textarea class="form-field" form="proposal_form" name="description">{{ version_form.description.value }}</textarea>
+    <p>{{ revision_form.description.errors }}
+      <label class="form-label" for="{{ revision_form.description.id_for_label }}">Describe your proposal</label>
+      <textarea class="form-field" form="proposal_form" name="description">{{ revision_form.description.value }}</textarea>
     </p>
     <div>
       <button id="save-submit" name="submit" value="save">Submit</button>

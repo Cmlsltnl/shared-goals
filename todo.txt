@@ -4,15 +4,16 @@
 - https://github.com/HonzaKral/django-threadedcomments
 - https://github.com/trentm/django-markdown-deux
 
-- proposal --> proposition?
+- Generic solution to printing a Members name (don't rely on get_full_name)
+- Comment.owner should be a SGUser, not Member
+- Use ImageCropField
 - In Review template, include a link to the latest version of the proposal
 - when updating a review, delete all comments
 - allow to change image when editing a proposal
-- move col function to a central location
 - Make upload automatic when you change the image in the new proposal form
 - Check that url for the goal/profile is not used
 - slug should only be unique per goal
 - Advise member that their profile is totally public
 - Use now() timestamp from the db server
-- When leaving a Goal as a member, confirm that all Proposals are deleted
+- When leaving a Goal as a member, confirm that all Proposals are deleted (or make them orphans that can be adopted?)
 

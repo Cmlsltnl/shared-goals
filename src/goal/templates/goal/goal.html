@@ -17,13 +17,13 @@
         <div class="col-md-4">
           <a class="proposal--photo" href="{% url 'proposal' goal.slug proposal.slug %}" style="background-image:url({{ proposal.image.url }});">
             <div class="proposal--gradient"></div>
-            <h3 class="proposal--title">{{ proposal.get_current_version.title }}</h3>
+            <h3 class="proposal--title">{{ proposal.get_current_revision.title }}</h3>
           </a>
         </div>
       {% endfor %}
     </div>
     {% empty %}
       <h5>There are no proposals yet</h5>
-
+    
   {% endfor %}
 {% endblock %}
