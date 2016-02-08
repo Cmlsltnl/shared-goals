@@ -165,7 +165,7 @@ class EditProposalView(View):
                 "Save draft" if proposal.is_draft else "Cancel"
         }
 
-        return render(request, 'proposal/new_proposal.html', context)
+        return render(request, 'proposal/edit_proposal.html', context)
 
 
 class ProposalView(View):
