@@ -29,21 +29,23 @@
     <div class="col-md-2"></div>
     <div class="col-md-8">
       <h5>Published by {{ proposal.owner.global_user.name }}, {{ proposal.pub_date|naturaltime }}</h5>{{ revision.description|markdown }}
-      <form class="big-gap-above" enctype="multipart/form-data" id="review_form" method="post">
-        {% csrf_token %}
-        <p>
-          <label class="form-label" for="{{ form.rating.id_for_label }}">{{ post_button_header }}</label>{{ form.rating.errors }}
-          <input class="form-field" id="id_rating" name="rating" type="hidden" value="{{ form.rating.value }}">
-          <div class="rateit" data-rateit-resetable="false" data-rateit-value="{{ form.rating.value }}" id="rateit-review"></div>
-        </p>
-        <p>{{ form.description.errors }}
-          <textarea class="form-field" form="review_form" name="description">{{ form.description.value }}</textarea>
-        </p>
-        <div>
-          <button id="save-submit" name="submit" value="save">{{ post_button_label }}</button>
-          <button id="cancel-submit" name="submit" value="cancel">Save draft</button>
-        </div>
-      </form>
+      {% if review_form %}
+        <form class="big-gap-above" enctype="multipart/form-data" id="review_form" method="post">
+          {% csrf_token %}
+          <p>
+            <label class="form-label" for="{{ form.rating.id_for_label }}">{{ post_button_header }}</label>{{ form.rating.errors }}
+            <input class="form-field" id="id_rating" name="rating" type="hidden" value="{{ form.rating.value }}">
+            <div class="rateit" data-rateit-resetable="false" data-rateit-value="{{ form.rating.value }}" id="rateit-review"></div>
+          </p>
+          <p>{{ form.description.errors }}
+            <textarea class="form-field" form="review_form" name="description">{{ form.description.value }}</textarea>
+          </p>
+          <div>
+            <button id="save-submit" name="submit" value="save">{{ post_button_label }}</button>
+            <button id="cancel-submit" name="submit" value="cancel">{{ cancel_button_label }}</button>
+          </div>
+        </form>
+      {% endif %}
     </div>
   </div>
   {% for published_review in published_reviews %}
@@ -56,7 +58,7 @@
         <div class="col-md-6">
           {% if published_review.revision.pk == revision.pk %}{{ published_review.header }}
             {% else %}A 
-              <a href="{% url 'revision' published_review.request.goal.slug proposal.slug published_review.revision.pk %}">previous version</a> was {{ published_review.header|lowerfirst }}
+              <a href="{% url 'revision' request.goal.slug proposal.slug published_review.revision.pk %}">previous version</a> was {{ published_review.header|lowerfirst }}
           {% endif %}
         </div>
       </div>
@@ -93,7 +95,7 @@
         </p>
         <div>
           <button id="save-submit" name="submit" value="save">Submit</button>
-          <button id="cancel-submit" name="submit" value="cancel">Save draft</button>
+          <button id="cancel-submit" name="submit" value="cancel">Cancel</button>
         </div>
       </form>
     </div>

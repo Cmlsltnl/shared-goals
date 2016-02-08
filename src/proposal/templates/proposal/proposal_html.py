@@ -54,7 +54,12 @@ def review_form():
             name="submit",
             value="save"
         )
-        button("Save draft", id="cancel-submit", name="submit", value="cancel")
+        button(
+            "{{ cancel_button_label }}",
+            id="cancel-submit",
+            name="submit",
+            value="cancel"
+        )
 
 
 @form(
@@ -87,7 +92,7 @@ def comment_form():
             name="submit",
             value="save"
         )
-        button("Save draft", id="cancel-submit", name="submit", value="cancel")
+        button("Cancel", id="cancel-submit", name="submit", value="cancel")
 
 
 @span(_class="small-gap-below")
@@ -106,7 +111,7 @@ def comment():
 
 
 revision_href = (
-    "{% url 'revision' published_review.request.goal.slug "
+    "{% url 'revision' request.goal.slug "
     "proposal.slug published_review.revision.pk %}"
 )
 
@@ -159,7 +164,8 @@ def result():
                     "{{ proposal.pub_date|naturaltime }}"
                 )
                 text("{{ revision.description|markdown }}")
-                review_form()
+                with django_if("review_form"):
+                    review_form()
 
         with django_for("published_review in published_reviews"):
             published_review()

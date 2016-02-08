@@ -3,7 +3,6 @@ from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
-from django.template import RequestContext
 from django.template.defaultfilters import slugify
 from django.views.generic import View
 
@@ -140,10 +139,12 @@ class EditProposalView(View):
             self.__get_populated_forms(request, proposal)
         )
 
-        context = RequestContext(request, {
+        context = {
             'revision_form': revision_form,
             'proposal_form': proposal_form,
-        })
+            'cancel_button_label':
+                "Save draft" if proposal.is_draft else "Cancel"
+        }
 
         return render(request, 'proposal/new_proposal.html', context)
 
@@ -226,9 +227,12 @@ class ProposalView(View):
             if not try_again:
                 return self.__on_cancel_or_save(proposal)
 
-        form = (
-            ReviewForm(request.POST, request.FILES) if is_posting
-            else ReviewForm(initial=review.__dict__)
+        review_form = (
+            None if proposal.owner == request.member
+            else (
+                ReviewForm(request.POST, request.FILES) if is_posting
+                else ReviewForm(initial=review.__dict__)
+            )
         )
 
         published_reviews = \
@@ -242,7 +246,9 @@ class ProposalView(View):
                 "Rate this proposal and give feedback" if review.is_draft
                 else "Update your review of this proposal"),
             'post_button_label': "Submit" if review.is_draft else "Update",
-            'form': form,
+            'cancel_button_label':
+                "Save draft" if review.is_draft else "Cancel",
+            'review_form': review_form,
             'published_reviews': published_reviews,
         }
         return render(request, 'proposal/proposal.html', context)

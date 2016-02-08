@@ -35,6 +35,9 @@ class Proposal(models.Model):
         return self.revisions.latest('pub_date')
 
     def apply_cropping_to_image(self, replace_original=False):
+        if not self.image.name:
+            return
+
         def rel_url(url):
             return re.sub("^%s" % settings.MEDIA_URL, "", url)
 
