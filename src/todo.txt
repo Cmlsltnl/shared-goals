@@ -2,7 +2,6 @@
 - https://github.com/edoburu/django-fluent-comments/
 - https://github.com/HonzaKral/django-threadedcomments
 
-- hide form fields to change the image when editing a proposal
 - handle posting comments in the ProposalView
 - when updating a review, delete all comments
 - Advise member that their profile is totally public

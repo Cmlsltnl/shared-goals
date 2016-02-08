@@ -88,8 +88,7 @@ class EditProposalView(View):
         return is_revision_form_valid and is_proposal_form_valid
 
     def __create_new_revision(self, proposal, request):
-        revision_form, proposal_form = \
-            self.__get_posted_forms(request, proposal)
+        revision_form, _ = self.__get_posted_forms(request, proposal)
 
         is_revision_form_valid = revision_form.is_valid()
         if is_revision_form_valid:
@@ -160,9 +159,11 @@ class EditProposalView(View):
 
         context = {
             'revision_form': revision_form,
-            'proposal_form': proposal_form,
+            'proposal_form': proposal_form if proposal.is_draft else None,
             'cancel_button_label':
-                "Save draft" if proposal.is_draft else "Cancel"
+                "Save draft" if proposal.is_draft else "Cancel",
+            'post_button_label':
+                "Submit" if proposal.is_draft else "Update",
         }
 
         return render(request, 'proposal/edit_proposal.html', context)

@@ -16,23 +16,24 @@ from proposal.templates.dominate_tags import *
 )
 def proposal_form():
     django_csrf_token()
-    with p():
-        text("{{ proposal_form.cropping.errors }}")
-        label(
-            _for="{{ proposal_form.cropping.id_for_label }}",
-            _class="form-label"
-        )
-        text("{{ proposal_form.cropping }}")
+    with django_if("proposal_form"):
+        with p():
+            text("{{ proposal_form.cropping.errors }}")
+            label(
+                _for="{{ proposal_form.cropping.id_for_label }}",
+                _class="form-label"
+            )
+            text("{{ proposal_form.cropping }}")
 
-    with p():
-        text("{{ proposal_form.image.errors }}")
-        with label(
-            _for="{{ proposal_form.image.id_for_label }}",
-            _class="form-label"
-        ):
-            text("Image")
-        text("{{ proposal_form.image }}")
-        button("Upload", id="upload-submit", name="submit", value="upload")
+        with p():
+            text("{{ proposal_form.image.errors }}")
+            with label(
+                _for="{{ proposal_form.image.id_for_label }}",
+                _class="form-label"
+            ):
+                text("Image")
+            text("{{ proposal_form.image }}")
+            button("Upload", id="upload-submit", name="submit", value="upload")
 
     with p():
         text("{{ revision_form.title.errors }}")
@@ -66,7 +67,12 @@ def proposal_form():
             text("{{ revision_form.description.value }}")
 
     with div():
-        button("Submit", id="save-submit", name="submit", value="save")
+        button(
+            "{{ post_button_label }}",
+            id="save-submit",
+            name="submit",
+            value="save"
+        )
         button(
             "{{ cancel_button_label }}",
             id="cancel-submit",
