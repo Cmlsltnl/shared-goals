@@ -2,6 +2,7 @@
 
 {% load staticfiles %}
 {% load markdown_deux_tags %}
+{% load case_utils %}
 {% block head %}<script src="{% static 'proposal/proposal.js' %}" type="text/javascript"></script>{% endblock %}
 {% block content %}
   <div class="row big-gap-below">
@@ -43,23 +44,24 @@
       </form>
     </div>
   </div>
-  {% for other_review in other_reviews %}
+  {% for published_review in published_reviews %}
     <div class="row">
       <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-2">
-          <div class="rateit readonly-rateit" data-rateit-readonly="true" data-rateit-resetable="false" data-rateit-value="{{ other_review.rating }}"></div>
+          <div class="rateit readonly-rateit" data-rateit-readonly="true" data-rateit-resetable="false" data-rateit-value="{{ published_review.rating }}"></div>
         </div>
         <div class="col-md-6">
-          {% if other_review.revision.pk == revision.pk %}
+          {% if published_review.revision.pk == revision.pk %}{{ published_review.header }}
             {% else %}A 
-              <a href="{% url 'review' goal.slug proposal.slug other_review.pk %}">previous version</a> was 
-          {% endif %}{{ other_review.header }}</div>
+              <a href="{% url 'review' goal.slug proposal.slug published_review.pk %}">previous version</a> was {{ published_review.header|lowerfirst }}
+          {% endif %}
+        </div>
       </div>
       <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-8">
-          <p>{{ other_review.description }}</p>
+          <p>{{ published_review.description }}</p>
         </div>
       </div>
     </div>

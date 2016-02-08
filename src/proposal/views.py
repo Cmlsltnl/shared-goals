@@ -1,6 +1,4 @@
-from django.contrib.humanize.templatetags.humanize import naturaltime
 from django.core.urlresolvers import reverse
-from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
@@ -212,30 +210,8 @@ class ProposalView(View):
             else ReviewForm(initial=review.__dict__)
         )
 
-        def inject_header_text(review, current_revision):
-            def upperfirst(x):
-                return x[0].upper() + x[1:]
-
-            header = \
-                "reviewed by " if review.description \
-                else "rated by "
-            header += review.owner.user.get_full_name()
-            header += ", %s" % naturaltime(review.pub_date)
-
-            setattr(
-                review,
-                'header',
-                upperfirst(header) if review.revision_id == current_revision.pk
-                else header
-            )
-
-            return review
-
-        current_revision = proposal.get_current_revision()
-        other_reviews = [
-            inject_header_text(x, current_revision)
-            for x in all_reviews.filter(~Q(pk=review.pk) & Q(is_draft=False))
-        ]
+        published_reviews = \
+            all_reviews.filter(is_draft=False).order_by('-pub_date')
 
         context = {
             'goal': goal,
@@ -245,7 +221,7 @@ class ProposalView(View):
             'review': review,
             'post_button_label': "Submit" if review.is_draft else "Update",
             'form': form,
-            'other_reviews': other_reviews,
+            'published_reviews': published_reviews,
         }
         return render(request, 'proposal/proposal.html', context)
 
@@ -261,14 +237,6 @@ class ReviewView(View):
             draft.save()
 
         return draft
-
-    def __inject_header_text(self, review):
-        header = \
-            "Review by " + review.owner.user.get_full_name() \
-            + ", %s" % naturaltime(review.pub_date)
-
-        setattr(review, 'header', header)
-        return review
 
     def __update_comment_and_save(self, comment, request):
         form = CommentForm(request.POST, request.FILES)
@@ -319,14 +287,12 @@ class ReviewView(View):
             else CommentForm(initial=draft.__dict__)
         )
 
-        self.__inject_header_text(review)
-
         context = {
             'goal': goal,
             'proposal': review.revision.proposal,
             'member': member,
             'review': review,
-            'comments': [x for x in review.comments.filter(is_draft=False)],
+            # 'comments': [x for x in review.comments.filter(is_draft=False)],
             'revision': review.revision,
             'form': form
         }

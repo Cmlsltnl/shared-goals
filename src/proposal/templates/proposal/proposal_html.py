@@ -57,31 +57,30 @@ def review_form():
         button("Cancel", id="cancel-submit", name="submit", value="cancel")
 
 
-other_review_href = \
-    "{% url 'review' goal.slug proposal.slug other_review.pk %}"
+published_review_href = \
+    "{% url 'review' goal.slug proposal.slug published_review.pk %}"
 
 
 @div(_class="row")
-def other_review():
+def published_review():
     with div(_class="row"):
         column(2)
         with column(2):
-            readonly_rateit("{{ other_review.rating }}")
+            readonly_rateit("{{ published_review.rating }}")
         with column(6):
-            with django_if("other_review.revision.pk == revision.pk"):
+            with django_if("published_review.revision.pk == revision.pk"):
+                text("{{ published_review.header }}")
                 with django_else():
                     text("A ")
-                    with a(href=other_review_href):
+                    with a(href=published_review_href):
                         text("previous version")
-                    text(" was ")
-
-            text("{{ other_review.header }}")
+                    text(" was {{ published_review.header|lowerfirst }}")
 
     with div(_class="row"):
         column(2)
         with column(8):
             with p():
-                text("{{ other_review.description }}")
+                text("{{ published_review.description }}")
 
 
 def result():
@@ -105,13 +104,14 @@ def result():
                 text("{{ revision.description|markdown }}")
                 review_form()
 
-        with django_for("other_review in other_reviews"):
-            other_review()
+        with django_for("published_review in published_reviews"):
+            published_review()
 
     return (
         "{% extends 'base.html' %}\n",
         "{% load staticfiles %}",
         "{% load markdown_deux_tags %}",
+        "{% load case_utils %}",
         head,
         content
     )

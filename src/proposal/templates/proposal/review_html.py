@@ -94,7 +94,7 @@ def result():
 
         review()
 
-        with django_for("comment in comments"):
+        with django_for("comment in review.published_comments"):
             comment()
 
         with div(_class="row"):
