@@ -57,6 +57,54 @@ def review_form():
         button("Cancel", id="cancel-submit", name="submit", value="cancel")
 
 
+@form(
+    method="post",
+    id="comment_form",
+    enctype="multipart/form-data",
+    _class="big-gap-above"
+)
+def comment_form():
+    django_csrf_token()
+
+    with p():
+        text("{{ form.body.errors }}")
+        with label(
+            _for="{{ form.body.id_for_label }}",
+            _class="form-label"
+        ):
+            text("Comment on this review")
+        with textarea(
+            name="body",
+            form="comment_form",
+            _class="form-field"
+        ):
+            text("{{ form.body.value }}")
+
+    with div():
+        button(
+            "Submit",
+            id="save-submit",
+            name="submit",
+            value="save"
+        )
+        button("Cancel", id="cancel-submit", name="submit", value="cancel")
+
+
+@span(_class="small-gap-below")
+def comment():
+    with div(_class="row"):
+        column(4)
+        with column(4):
+            text("{{ comment.owner.user.get_full_name }}, ")
+            text("{{ comment.pub_date|naturaltime }}")
+
+    with div(_class="row"):
+        column(4)
+        with column(4):
+            with p():
+                text("{{ comment.body }}")
+
+
 published_review_href = \
     "{% url 'review' goal.slug proposal.slug published_review.pk %}"
 
@@ -81,6 +129,9 @@ def published_review():
         with column(8):
             with p():
                 text("{{ published_review.description }}")
+
+    with django_for("comment in published_review.published_comments"):
+        comment()
 
 
 def result():
@@ -107,10 +158,16 @@ def result():
         with django_for("published_review in published_reviews"):
             published_review()
 
+        with div(_class="row"):
+            column(2)
+            with column(8):
+                comment_form()
+
     return (
         "{% extends 'base.html' %}\n",
         "{% load staticfiles %}",
         "{% load markdown_deux_tags %}",
+        "{% load humanize %}",
         "{% load case_utils %}",
         head,
         content

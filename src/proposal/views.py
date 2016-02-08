@@ -292,7 +292,6 @@ class ReviewView(View):
             'proposal': review.revision.proposal,
             'member': member,
             'review': review,
-            # 'comments': [x for x in review.comments.filter(is_draft=False)],
             'revision': review.revision,
             'form': form
         }

@@ -28,49 +28,4 @@
     <div class="col-md-2"></div>
     <div class="col-md-8">{{ revision.description|markdown }}</div>
   </div>
-  <span class="small-gap-below">
-    <div class="row">
-      <div class="col-md-2"></div>
-      <div class="col-md-2">
-        <div class="rateit readonly-rateit" data-rateit-readonly="true" data-rateit-resetable="false" data-rateit-value="{{ review.rating }}"></div>
-      </div>
-      <div class="col-md-6">{{ review.header }}</div>
-    </div>
-    <div class="row">
-      <div class="col-md-2"></div>
-      <div class="col-md-8">
-        <p>{{ review.description }}</p>
-      </div>
-    </div>
-  </span>
-  {% for comment in review.published_comments %}
-    <span class="small-gap-below">
-      <div class="row">
-        <div class="col-md-2"></div>
-        <div class="col-md-8">{{ comment.owner.user.get_full_name }}, {{ comment.pub_date|naturaltime }}</div>
-      </div>
-      <div class="row">
-        <div class="col-md-2"></div>
-        <div class="col-md-8">
-          <p>{{ comment.body }}</p>
-        </div>
-      </div>
-    </span>
-  {% endfor %}
-  <div class="row">
-    <div class="col-md-2"></div>
-    <div class="col-md-8">
-      <form class="big-gap-above" enctype="multipart/form-data" id="comment_form" method="post">
-        {% csrf_token %}
-        <p>{{ form.body.errors }}
-          <label class="form-label" for="{{ form.body.id_for_label }}">Comment on this review</label>
-          <textarea class="form-field" form="comment_form" name="body">{{ form.body.value }}</textarea>
-        </p>
-        <div>
-          <button id="save-submit" name="submit" value="save">Submit</button>
-          <button id="cancel-submit" name="submit" value="cancel">Cancel</button>
-        </div>
-      </form>
-    </div>
-  </div>
 {% endblock %}
