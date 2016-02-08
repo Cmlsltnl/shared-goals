@@ -11,7 +11,7 @@ def column(k, **argv):
 @a(
     _class="proposal--photo",
     style="background-image:url({{ proposal.image.url }});",
-    href="{% url 'proposal' goal.slug proposal.slug %}"
+    href="{% url 'proposal' request.goal.slug proposal.slug %}"
 )
 def proposal_list_item():
     div(_class="proposal--gradient")
@@ -22,7 +22,7 @@ def proposal_list_item():
 @div(
     _class="proposal--photo",
     style="background-image:url({{ proposal.image.url }});",
-    href="{% url 'proposal' goal.slug proposal.slug %}"
+    href="{% url 'proposal' request.goal.slug proposal.slug %}"
 )
 def proposal_image():
     div(_class="proposal--gradient")

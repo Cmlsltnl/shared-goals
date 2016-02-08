@@ -8,7 +8,7 @@ from goal.templates.dominate_tags import *
 from proposal.templates.dominate_tags import *
 
 
-proposal_url = "{% url 'proposal' goal.slug proposal.slug %}"
+proposal_url = "{% url 'proposal' request.goal.slug proposal.slug %}"
 
 
 def result():

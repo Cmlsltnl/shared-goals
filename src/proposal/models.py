@@ -25,7 +25,7 @@ class Proposal(models.Model):
     image = models.ImageField(
         upload_to="proposals", blank=True)
     cropping = ImageRatioField('image', '360x200')
-    slug = models.SlugField('slug', max_length=60, unique=True)
+    slug = models.SlugField('slug', max_length=60)
     pub_date = models.DateTimeField('date published', auto_now=True)
 
     def __str__(self):
@@ -52,8 +52,7 @@ class Proposal(models.Model):
 class Revision(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
-    pub_date = models.DateTimeField(
-        'date published', blank=True, auto_now=True)
+    pub_date = models.DateTimeField('date published', auto_now=True)
     proposal = models.ForeignKey(Proposal, related_name="revisions")
 
     def __str__(self):

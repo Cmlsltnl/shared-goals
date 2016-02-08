@@ -59,6 +59,8 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'goal.middleware.ExtractGoalMiddleware'
 ]
 
 ROOT_URLCONF = 'shared_goals.urls'

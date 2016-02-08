@@ -1,8 +1,5 @@
-from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.views.generic import View
-
-from .models import Goal, Member
 
 
 def chunks(l, n):
@@ -13,17 +10,11 @@ def chunks(l, n):
 
 class GoalView(View):
     def get(self, request, goal_slug):
-        goal = get_object_or_404(Goal, slug=goal_slug)
-        member = get_object_or_404(
-            Member, global_user__user_id=request.user.id)
-
-        proposals = goal.proposal_set.filter(
+        proposals = request.goal.proposal_set.filter(
             is_draft=False
         ).order_by('-avg_rating')
 
         context = {
-            'goal': goal,
-            'member': member,
             'proposal_lists': chunks(proposals, 3)
         }
         return render(request, 'goal/goal.html', context)
@@ -31,17 +22,12 @@ class GoalView(View):
 
 class ProfileView(View):
     def get(self, request, goal_slug):
-        goal = get_object_or_404(Goal, slug=goal_slug)
-        member = get_object_or_404(
-            Member, global_user__user_id=request.user.id)
-        proposals = goal.proposal_set.filter(
-            owner=member,
+        proposals = request.goal.proposal_set.filter(
+            owner=request.member,
             is_draft=False
         ).order_by('-avg_rating')
 
         context = {
-            'goal': goal,
-            'member': member,
             'proposal_lists': chunks(proposals, 3)
         }
         return render(request, 'goal/profile.html', context)

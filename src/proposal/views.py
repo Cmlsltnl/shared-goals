@@ -1,25 +1,26 @@
 from django.core.urlresolvers import reverse
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
+from django.template import RequestContext
 from django.template.defaultfilters import slugify
 from django.views.generic import View
-from goal.models import Goal, Member
 
 from proposal.forms import CommentForm, RevisionForm, ProposalForm, ReviewForm
 from proposal.models import Comment, Proposal, Review, Revision
 
 
 class EditProposalView(View):
-    def __get_or_create_draft(self, member, goal):
+    def __get_or_create_draft(self, request):
         draft = Proposal.objects.filter(
-            is_draft=True, owner=member
+            is_draft=True, owner=request.member
         ).first()
 
         if not draft:
             draft = Proposal()
-            draft.owner = member
-            draft.goal = goal
+            draft.owner = request.member
+            draft.goal = request.goal
             draft.save()
 
             revision = Revision()
@@ -27,11 +28,16 @@ class EditProposalView(View):
             revision.save()
         return draft
 
-    def __get_posted_forms(self, request):
-        return (
-            RevisionForm(request.POST, request.FILES),
-            ProposalForm(request.POST, request.FILES)
-        )
+    def __get_posted_forms(self, request, proposal):
+        def is_duplicate_title(title):
+            return proposal.goal.proposals.filter(
+                Q(slug=slugify(title)) & ~Q(pk=proposal.pk)
+            ).exists()
+
+        revision_form = RevisionForm(request.POST, request.FILES)
+        revision_form.is_duplicate_title = is_duplicate_title
+
+        return (revision_form, ProposalForm(request.POST, request.FILES))
 
     def __get_populated_forms(self, request, draft):
         return (
@@ -43,7 +49,8 @@ class EditProposalView(View):
         )
 
     def __update_proposal_and_save(self, proposal, request):
-        revision_form, proposal_form = self.__get_posted_forms(request)
+        revision_form, proposal_form = \
+            self.__get_posted_forms(request, proposal)
         is_revision_form_valid = revision_form.is_valid()
         is_proposal_form_valid = proposal_form.is_valid()
 
@@ -67,7 +74,9 @@ class EditProposalView(View):
         return is_revision_form_valid and is_proposal_form_valid
 
     def __create_new_revision(self, proposal, request):
-        revision_form, proposal_form = self.__get_posted_forms(request)
+        revision_form, proposal_form = \
+            self.__get_posted_forms(request, proposal)
+
         is_revision_form_valid = revision_form.is_valid()
         if is_revision_form_valid:
             revision = Revision()
@@ -107,12 +116,9 @@ class EditProposalView(View):
         return self.handle(request, goal_slug, proposal_slug)
 
     def handle(self, request, goal_slug, proposal_slug):
-        goal = get_object_or_404(Goal, slug=goal_slug)
-        member = get_object_or_404(
-            Member, global_user__user_id=request.user.id)
         proposal = (
             get_object_or_404(Proposal, slug=proposal_slug) if proposal_slug
-            else self.__get_or_create_draft(member, goal)
+            else self.__get_or_create_draft(request)
         )
         is_posting = request.method == 'POST'
 
@@ -125,47 +131,40 @@ class EditProposalView(View):
                     self.__update_proposal_and_save(proposal, request)
 
             if request.POST['submit'] == 'cancel':
-                return self.__on_cancel(goal.slug)
+                return self.__on_cancel(request.goal.slug)
             elif request.POST['submit'] == 'save' and should_accept_data:
-                return self.__on_save(goal.slug, proposal.slug)
+                return self.__on_save(request.goal.slug, proposal.slug)
 
         revision_form, proposal_form = (
             self.__get_posted_forms(request) if is_posting else
             self.__get_populated_forms(request, proposal)
         )
 
-        context = {
-            'goal': goal,
-            'member': member,
+        context = RequestContext(request, {
             'revision_form': revision_form,
             'proposal_form': proposal_form,
-        }
+        })
+
         return render(request, 'proposal/new_proposal.html', context)
 
 
 class ProposalView(View):
-    def __publish_review(
-        self, member, proposal, rating, description, existing_review
-    ):
-        if existing_review:
-            existing_review.delete()
-
-    def __on_cancel_or_save(self, goal_slug, proposal_slug):
+    def __on_cancel_or_save(self, proposal):
         return HttpResponseRedirect(
             reverse(
                 'proposal',
                 kwargs=dict(
-                    goal_slug=goal_slug,
-                    proposal_slug=proposal_slug
+                    goal_slug=proposal.goal.slug,
+                    proposal_slug=proposal.slug
                 )
             )
         )
 
-    def __get_or_create_review(self, member, revision, all_reviews):
-        review = all_reviews.filter(owner=member).first()
+    def __get_or_create_review(self, request, revision, all_reviews):
+        review = all_reviews.filter(owner=request.member).first()
         if not review:
             review = Review()
-            review.owner = member
+            review.owner = request.member
             review.revision = revision
             review.save()
 
@@ -215,20 +214,17 @@ class ProposalView(View):
         return self.handle(request, goal_slug, proposal_slug)
 
     def handle(self, request, goal_slug, proposal_slug):
-        goal = get_object_or_404(Goal, slug=goal_slug)
-        member = Member.objects.filter(
-            global_user__user_id=request.user.id).first()
         proposal = get_object_or_404(Proposal, slug=proposal_slug)
         revision = proposal.get_current_revision()
         all_reviews = Review.objects.filter(revision__proposal=proposal)
-        review = self.__get_or_create_review(member, revision, all_reviews)
+        review = self.__get_or_create_review(request, revision, all_reviews)
         is_posting = request.method == 'POST'
 
         if is_posting:
             is_data_valid = self.__update_review_and_save(review, request)
             try_again = request.POST['submit'] == 'save' and not is_data_valid
             if not try_again:
-                return self.__on_cancel_or_save(goal.slug, proposal.slug)
+                return self.__on_cancel_or_save(proposal)
 
         form = (
             ReviewForm(request.POST, request.FILES) if is_posting
@@ -239,10 +235,8 @@ class ProposalView(View):
             all_reviews.filter(is_draft=False).order_by('-pub_date')
 
         context = {
-            'goal': goal,
             'proposal': proposal,
             'revision': revision,
-            'member': member,
             'review': review,
             'post_button_header': (
                 "Rate this proposal and give feedback" if review.is_draft
@@ -256,15 +250,10 @@ class ProposalView(View):
 
 class RevisionView(View):
     def get(self, request, goal_slug, proposal_slug, revision_pk):
-        goal = get_object_or_404(Goal, slug=goal_slug)
-        member = Member.objects.filter(
-            global_user__user_id=request.user.id).first()
         revision = get_object_or_404(Revision, pk=revision_pk)
 
         context = {
-            'goal': goal,
             'proposal': revision.proposal,
-            'member': member,
             'revision': revision,
         }
         return render(request, 'proposal/revision.html', context)

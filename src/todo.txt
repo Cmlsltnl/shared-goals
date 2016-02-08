@@ -2,11 +2,11 @@
 - https://github.com/edoburu/django-fluent-comments/
 - https://github.com/HonzaKral/django-threadedcomments
 
-- In Revision template, include a link to the latest version of the proposal
-- Use middleware to extract the current member
+- Check that url for the goal/proposal is not used, don't crash
+- Improve layout of new proposal page
+- respond correctly to logged-in users, members and anonymous users
 - when updating a review, delete all comments
 - allow to change image when editing a proposal
-- Check that url for the goal/profile is not used, don't crash
 - slug should only be unique per goal
 - Advise member that their profile is totally public
 - Use now() timestamp from the db server

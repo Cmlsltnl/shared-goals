@@ -23,7 +23,7 @@ class GlobalUser(models.Model):
 class Goal(models.Model):
     title = models.CharField(max_length=100, unique=True)
     pub_date = models.DateTimeField('date published', auto_now_add=True)
-    slug = models.SlugField('slug', max_length=60, blank=True, unique=True)
+    slug = models.SlugField('slug', max_length=60, unique=True)
     image = models.ImageField(blank=True, upload_to='goals')
     cropping = ImageRatioField('image', '430x360')
     owner = models.ForeignKey(GlobalUser)

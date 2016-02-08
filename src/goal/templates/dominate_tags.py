@@ -11,11 +11,13 @@ def goal_header():
             button(
                 "Top Proposals",
                 _class="btn btn-default",
-                onclick="location.href='{% url 'goal' goal.slug %}';"
+                onclick="location.href='{% url 'goal' request.goal.slug %}';"
             )
             button("Members", _class="btn btn-default")
             button(
                 "My Profile",
                 _class="btn btn-default",
-                onclick="location.href='{% url 'profile' goal.slug %}';"
+                onclick=(
+                    "location.href='{% url 'profile' request.goal.slug %}';"
+                )
             )

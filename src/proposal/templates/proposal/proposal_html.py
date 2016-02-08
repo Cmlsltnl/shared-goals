@@ -105,8 +105,10 @@ def comment():
                 text("{{ comment.body }}")
 
 
-revision_href = \
-    "{% url 'revision' goal.slug proposal.slug published_review.revision.pk %}"
+revision_href = (
+    "{% url 'revision' published_review.request.goal.slug "
+    "proposal.slug published_review.revision.pk %}"
+)
 
 
 @div(_class="row")
@@ -177,4 +179,4 @@ def result():
         content
     )
 
-# done1234
+# done123
