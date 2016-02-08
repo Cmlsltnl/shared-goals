@@ -108,7 +108,8 @@ class EditProposalView(View):
 
     def handle(self, request, goal_slug, proposal_slug):
         goal = get_object_or_404(Goal, slug=goal_slug)
-        member = get_object_or_404(Member, user=request.user)
+        member = get_object_or_404(
+            Member, global_user__user_id=request.user.id)
         proposal = (
             get_object_or_404(Proposal, slug=proposal_slug) if proposal_slug
             else self.__get_or_create_draft(member, goal)
@@ -214,7 +215,8 @@ class ProposalView(View):
 
     def handle(self, request, goal_slug, proposal_slug):
         goal = get_object_or_404(Goal, slug=goal_slug)
-        member = Member.objects.filter(user=request.user).first()
+        member = Member.objects.filter(
+            global_user__user_id=request.user.id).first()
         proposal = get_object_or_404(Proposal, slug=proposal_slug)
         revision = proposal.get_current_revision()
         all_reviews = Review.objects.filter(revision__proposal=proposal)
@@ -248,16 +250,17 @@ class ProposalView(View):
         return render(request, 'proposal/proposal.html', context)
 
 
-class ReviewView(View):
-    def get(self, request, goal_slug, proposal_slug, review_pk):
+class RevisionView(View):
+    def get(self, request, goal_slug, proposal_slug, revision_pk):
         goal = get_object_or_404(Goal, slug=goal_slug)
-        member = Member.objects.filter(user=request.user).first()
-        review = get_object_or_404(Review, pk=review_pk)
+        member = Member.objects.filter(
+            global_user__user_id=request.user.id).first()
+        revision = get_object_or_404(Revision, pk=revision_pk)
 
         context = {
             'goal': goal,
-            'proposal': review.revision.proposal,
+            'proposal': revision.proposal,
             'member': member,
-            'revision': review.revision,
+            'revision': revision,
         }
-        return render(request, 'proposal/review.html', context)
+        return render(request, 'proposal/revision.html', context)

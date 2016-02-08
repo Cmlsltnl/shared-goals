@@ -95,7 +95,7 @@ def comment():
     with div(_class="row"):
         column(4)
         with column(4):
-            text("{{ comment.owner.user.get_full_name }}, ")
+            text("{{ comment.owner.global_user.user.get_full_name }}, ")
             text("{{ comment.pub_date|naturaltime }}")
 
     with div(_class="row"):
@@ -105,8 +105,8 @@ def comment():
                 text("{{ comment.body }}")
 
 
-published_review_href = \
-    "{% url 'review' goal.slug proposal.slug published_review.pk %}"
+revision_href = \
+    "{% url 'revision' goal.slug proposal.slug published_review.revision.pk %}"
 
 
 @div(_class="row")
@@ -120,7 +120,7 @@ def published_review():
                 text("{{ published_review.header }}")
                 with django_else():
                     text("A ")
-                    with a(href=published_review_href):
+                    with a(href=revision_href):
                         text("previous version")
                     text(" was {{ published_review.header|lowerfirst }}")
 

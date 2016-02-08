@@ -1,10 +1,11 @@
 import time
 
+from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.core import management
 from django.contrib.auth.models import User
 
-from goal.models import Member, Goal
+from goal.models import GlobalUser, Member, Goal
 from proposal.models import Comment, Proposal, Review, Revision
 
 from .yoga_acrobatics import text as yoga_acrobatics_content
@@ -25,9 +26,26 @@ class Command(BaseCommand):
         pass
 
     def __migrate(self):
-        management.call_command('migrate', '--run-syncdb')
-        management.call_command('makemigrations', 'goal proposal')
-        management.call_command('migrate', '--fake-initial')
+        if settings.DATABASES['default']['NAME'] == ":memory:":
+            management.call_command('migrate', '--run-syncdb')
+        else:
+            management.call_command('migrate', '--run-syncdb')
+            management.call_command(
+                'makemigrations', 'goal', 'proposal')
+            management.call_command('migrate', '--fake-initial')
+
+    def __make_global_user(self, username, password, first_name, last_name):
+        user = User.objects.get_or_create(username=username)[0]
+        user.set_password(password)
+        user.first_name = first_name
+        user.last_name = last_name
+        user.save()
+
+        global_user = GlobalUser()
+        global_user.user = user
+        global_user.save()
+
+        return global_user
 
     def __create_superuser(self):
         management.call_command(
@@ -37,44 +55,35 @@ class Command(BaseCommand):
             email='hallomaarten@yahoo.com'
         )
 
-        self.user_mnieber = User.objects.get(username='mnieber')
-        self.user_mnieber.set_password('***REMOVED***')
-        self.user_mnieber.first_name = "Maarten"
-        self.user_mnieber.last_name = "Nieber"
-        self.user_mnieber.save()
+        self.user_mnieber = self.__make_global_user(
+            'mnieber', '***REMOVED***', 'Maarten', 'Nieber')
 
     def __create_users(self):
+        self.user_anders_om = self.__make_global_user(
+            "andersom", "***REMOVED***", "Anders", "Om")
 
-        self.user_anders_om = User()
-        self.user_anders_om.username = "andersom"
-        self.user_anders_om.first_name = "Anders"
-        self.user_anders_om.last_name = "Om"
-        self.user_anders_om.save()
-
-        self.user_marie_houana = User()
-        self.user_marie_houana.username = "mhouana"
-        self.user_marie_houana.first_name = "Maria"
-        self.user_marie_houana.last_name = "Houana"
-        self.user_marie_houana.save()
+        self.user_marie_houana = self.__make_global_user(
+            "mhouana", "***REMOVED***", "Maria", "Houana")
 
     def __create_goal(self):
         self.become_a_yogi = Goal()
+        self.become_a_yogi.owner = self.user_marie_houana
         self.become_a_yogi.title = "Become a yogi"
         self.become_a_yogi.save()
 
     def __create_members(self):
         self.yogi_mnieber = Member()
-        self.yogi_mnieber.user = self.user_mnieber
+        self.yogi_mnieber.global_user = self.user_mnieber
         self.yogi_mnieber.goal = self.become_a_yogi
         self.yogi_mnieber.save()
 
         self.yogi_anders_om = Member()
-        self.yogi_anders_om.user = self.user_anders_om
+        self.yogi_anders_om.global_user = self.user_anders_om
         self.yogi_anders_om.goal = self.become_a_yogi
         self.yogi_anders_om.save()
 
         self.yogi_marie_houana = Member()
-        self.yogi_marie_houana.user = self.user_marie_houana
+        self.yogi_marie_houana.global_user = self.user_marie_houana
         self.yogi_marie_houana.goal = self.become_a_yogi
         self.yogi_marie_houana.save()
 
@@ -176,6 +185,7 @@ class Command(BaseCommand):
         self.comment_2.save()
 
     def handle(self, *args, **options):
+        import pudb; pudb.set_trace()
         self.__migrate()
         self.__create_superuser()
         self.__create_users()

@@ -14,7 +14,8 @@ def chunks(l, n):
 class GoalView(View):
     def get(self, request, goal_slug):
         goal = get_object_or_404(Goal, slug=goal_slug)
-        member = get_object_or_404(Member, user=request.user)
+        member = get_object_or_404(
+            Member, global_user__user_id=request.user.id)
 
         proposals = goal.proposal_set.filter(
             is_draft=False
@@ -31,7 +32,8 @@ class GoalView(View):
 class ProfileView(View):
     def get(self, request, goal_slug):
         goal = get_object_or_404(Goal, slug=goal_slug)
-        member = get_object_or_404(Member, user=request.user)
+        member = get_object_or_404(
+            Member, global_user__user_id=request.user.id)
         proposals = goal.proposal_set.filter(
             owner=member,
             is_draft=False

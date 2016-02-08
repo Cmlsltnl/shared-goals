@@ -5,9 +5,10 @@
 - https://github.com/trentm/django-markdown-deux
 
 - Generic solution to printing a Members name (don't rely on get_full_name)
-- Comment.owner should be a SGUser, not Member
+- Show proposal owner in the Proposal page
+- Comment.owner should be a GlobalUser, not Member
 - Use ImageCropField
-- In Review template, include a link to the latest version of the proposal
+- In Revision template, include a link to the latest version of the proposal
 - when updating a review, delete all comments
 - allow to change image when editing a proposal
 - Make upload automatic when you change the image in the new proposal form

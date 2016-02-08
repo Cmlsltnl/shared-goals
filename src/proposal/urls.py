@@ -19,8 +19,8 @@ urlpatterns = [
         name='proposal'
     ),
     url(
-        r'^by/(?P<proposal_slug>[\-\w]+)/review/(?P<review_pk>[\d]+)$',
-        views.ReviewView.as_view(),
-        name='review'
+        r'^by/(?P<proposal_slug>[\-\w]+)/revision/(?P<revision_pk>[\d]+)$',
+        views.RevisionView.as_view(),
+        name='revision'
     ),
 ]

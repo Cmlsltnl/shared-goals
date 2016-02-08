@@ -91,7 +91,7 @@ class Review(models.Model):
         header = \
             "Reviewed by " if self.description \
             else "Rated by "
-        header += self.owner.user.get_full_name()
+        header += self.owner.global_user.user.get_full_name()
         header += ", %s" % naturaltime(self.pub_date)
         return header
 
