@@ -218,7 +218,10 @@ class ProposalView(View):
         proposal = get_object_or_404(Proposal, slug=proposal_slug)
         revision = proposal.get_current_revision()
         all_reviews = Review.objects.filter(revision__proposal=proposal)
-        review = self.__get_or_create_review(request, revision, all_reviews)
+        review = (
+            None if not request.member
+            else self.__get_or_create_review(request, revision, all_reviews)
+        )
         is_posting = request.method == 'POST'
 
         if is_posting:
@@ -228,11 +231,16 @@ class ProposalView(View):
                 return self.__on_cancel_or_save(proposal)
 
         review_form = (
-            None if proposal.owner == request.member
+            None if (not request.member or proposal.owner == request.member)
             else (
                 ReviewForm(request.POST, request.FILES) if is_posting
                 else ReviewForm(initial=review.__dict__)
             )
+        )
+
+        comment_form = (
+            None if (not request.global_user)
+            else CommentForm()
         )
 
         published_reviews = \
@@ -243,12 +251,24 @@ class ProposalView(View):
             'revision': revision,
             'review': review,
             'post_button_header': (
-                "Rate this proposal and give feedback" if review.is_draft
-                else "Update your review of this proposal"),
-            'post_button_label': "Submit" if review.is_draft else "Update",
-            'cancel_button_label':
-                "Save draft" if review.is_draft else "Cancel",
+                None if not review
+                else (
+                    "Rate this proposal and give feedback" if review.is_draft
+                    else "Update your review of this proposal"
+                )
+            ),
+            'post_button_label': (
+                None if not review
+                else (
+                    "Submit" if review.is_draft else "Update"
+                )
+            ),
+            'cancel_button_label': (
+                None if not review
+                else ("Save draft" if review.is_draft else "Cancel")
+            ),
             'review_form': review_form,
+            'comment_form': comment_form,
             'published_reviews': published_reviews,
         }
         return render(request, 'proposal/proposal.html', context)

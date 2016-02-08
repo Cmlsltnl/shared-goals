@@ -11,7 +11,7 @@ from proposal.templates.dominate_tags import *
 #
 @form(
     method="post",
-    id="review_form",
+    id="review-form",
     enctype="multipart/form-data",
     _class="big-gap-above"
 )
@@ -42,7 +42,7 @@ def review_form():
         text("{{ form.description.errors }}")
         with textarea(
             name="description",
-            form="review_form",
+            form="review-form",
             rows="10",
             _class="form-field"
         ):
@@ -65,7 +65,7 @@ def review_form():
 
 @form(
     method="post",
-    id="comment_form",
+    id="comment-form",
     enctype="multipart/form-data",
     _class="big-gap-above"
 )
@@ -73,18 +73,18 @@ def comment_form():
     django_csrf_token()
 
     with p():
-        text("{{ form.body.errors }}")
+        text("{{ comment_form.body.errors }}")
         with label(
-            _for="{{ form.body.id_for_label }}",
+            _for="{{ comment_form.body.id_for_label }}",
             _class="form-label"
         ):
             text("Comment on this review")
         with textarea(
             name="body",
-            form="comment_form",
+            form="comment-form",
             _class="form-field"
         ):
-            text("{{ form.body.value }}")
+            text("{{ comment_form.body.value }}")
 
     with div():
         button(
@@ -171,10 +171,11 @@ def result():
         with django_for("published_review in published_reviews"):
             published_review()
 
-        with div(_class="row"):
-            column(2)
-            with column(8):
-                comment_form()
+        with django_if("comment_form"):
+            with div(_class="row"):
+                column(2)
+                with column(8):
+                    comment_form()
 
     return (
         "{% extends 'base.html' %}\n",

@@ -6,7 +6,7 @@ from dominate.tags import *
 @div(_class="row big-gap-below")
 def goal_header():
     with div(_class="text-center"):
-        h1("{{ goal.title }}")
+        h1("{{ request.goal.title }}")
         with div(_class="button-grp"):
             button(
                 "Top Proposals",
@@ -14,10 +14,12 @@ def goal_header():
                 onclick="location.href='{% url 'goal' request.goal.slug %}';"
             )
             button("Members", _class="btn btn-default")
-            button(
-                "My Profile",
-                _class="btn btn-default",
-                onclick=(
-                    "location.href='{% url 'profile' request.goal.slug %}';"
+            with django_if("request.member"):
+                button(
+                    "My Profile",
+                    _class="btn btn-default",
+                    onclick=(
+                        "location.href='"
+                        "{% url 'profile' request.goal.slug %}';"
+                    )
                 )
-            )
