@@ -47,6 +47,9 @@
             <button id="cancel-submit" name="submit" value="cancel">{{ cancel_button_label }}</button>
           </div>
         </form>
+        {% if review.published_comments|length %}
+          <h5>Note: updating will remove any comments that were made on your existing review</h5>
+        {% endif %}
       {% endif %}
     </div>
   </div>

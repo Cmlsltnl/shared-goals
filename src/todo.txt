@@ -2,11 +2,9 @@
 - https://github.com/edoburu/django-fluent-comments/
 - https://github.com/HonzaKral/django-threadedcomments
 
-- Check that url for the goal/proposal is not used, don't crash
+- hide form fields to change the image when editing a proposal
 - handle posting comments in the ProposalView
-- require is_authorized and is_member decorators for post handlers
 - when updating a review, delete all comments
-- allow to change image when editing a proposal
 - Advise member that their profile is totally public
 - Use now() timestamp from the db server
 - Make upload automatic when you change the image in the new proposal form

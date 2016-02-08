@@ -10,7 +10,7 @@ def chunks(l, n):
 
 class GoalView(View):
     def get(self, request, goal_slug):
-        proposals = request.goal.proposal_set.filter(
+        proposals = request.goal.proposals.filter(
             is_draft=False
         ).order_by('-avg_rating')
 
@@ -22,7 +22,7 @@ class GoalView(View):
 
 class ProfileView(View):
     def get(self, request, goal_slug):
-        proposals = request.goal.proposal_set.filter(
+        proposals = request.goal.proposals.filter(
             owner=request.member,
             is_draft=False
         ).order_by('-avg_rating')

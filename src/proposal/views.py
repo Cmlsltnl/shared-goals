@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http import HttpResponseRedirect
@@ -5,9 +6,23 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.template.defaultfilters import slugify
 from django.views.generic import View
+from django.utils.decorators import method_decorator
 
 from proposal.forms import CommentForm, RevisionForm, ProposalForm, ReviewForm
 from proposal.models import Comment, Proposal, Review, Revision
+
+
+def membership_required(view):
+    def _wrapper(request, *args, **kw):
+        if not request.member:
+            return HttpResponseRedirect(
+                reverse(
+                    'register',
+                    kwargs=dict(goal_slug=request.goal.slug)
+                )
+            )
+        return view(request, *args, **kw)
+    return _wrapper
 
 
 class EditProposalView(View):
@@ -108,9 +123,13 @@ class EditProposalView(View):
             )
         )
 
+    @method_decorator(membership_required)
+    @method_decorator(login_required)
     def get(self, request, goal_slug, proposal_slug=""):
         return self.handle(request, goal_slug, proposal_slug)
 
+    @method_decorator(membership_required)
+    @method_decorator(login_required)
     def post(self, request, goal_slug, proposal_slug=""):
         return self.handle(request, goal_slug, proposal_slug)
 
@@ -211,6 +230,8 @@ class ProposalView(View):
     def get(self, request, goal_slug, proposal_slug):
         return self.handle(request, goal_slug, proposal_slug)
 
+    @method_decorator(membership_required)
+    @method_decorator(login_required)
     def post(self, request, goal_slug, proposal_slug):
         return self.handle(request, goal_slug, proposal_slug)
 

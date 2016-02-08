@@ -168,6 +168,12 @@ def result():
                 with django_if("review_form"):
                     review_form()
 
+                    with django_if("review.published_comments|length"):
+                        h5(
+                            "Note: updating will remove any comments that "
+                            "were made on your existing review"
+                        )
+
         with django_for("published_review in published_reviews"):
             published_review()
 
