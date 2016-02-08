@@ -4,7 +4,6 @@
 - https://github.com/HonzaKral/django-threadedcomments
 - https://github.com/trentm/django-markdown-deux
 
-- Generic solution to printing a Members name (don't rely on get_full_name)
 - Show proposal owner in the Proposal page
 - Comment.owner should be a GlobalUser, not Member
 - Use ImageCropField

@@ -185,7 +185,6 @@ class Command(BaseCommand):
         self.comment_2.save()
 
     def handle(self, *args, **options):
-        import pudb; pudb.set_trace()
         self.__migrate()
         self.__create_superuser()
         self.__create_users()

@@ -12,8 +12,12 @@ class GlobalUser(models.Model):
     image = SorlImageField(blank=True, upload_to='members')
     cropping = ImageRatioField('image', '360x430')
 
-    def __str__(self):
+    @property
+    def name(self):
         return self.user.username
+
+    def __str__(self):
+        return self.name
 
 
 class Goal(models.Model):

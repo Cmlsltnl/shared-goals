@@ -95,7 +95,7 @@ def comment():
     with div(_class="row"):
         column(4)
         with column(4):
-            text("{{ comment.owner.global_user.user.get_full_name }}, ")
+            text("{{ comment.owner.global_user.name }}, ")
             text("{{ comment.pub_date|naturaltime }}")
 
     with div(_class="row"):
@@ -152,6 +152,10 @@ def result():
         with div(_class="row small-gap-below"):
             column(2)
             with column(8):
+                h5(
+                    "Published by {{ proposal.owner.global_user.name }}, "
+                    "{{ proposal.pub_date|naturaltime }}"
+                )
                 text("{{ revision.description|markdown }}")
                 review_form()
 

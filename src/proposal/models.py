@@ -25,7 +25,8 @@ class Proposal(models.Model):
     image = models.ImageField(
         upload_to="proposals", blank=True)
     cropping = ImageRatioField('image', '360x200')
-    slug = models.SlugField('slug', max_length=60, blank=True, unique=True)
+    slug = models.SlugField('slug', max_length=60, unique=True)
+    pub_date = models.DateTimeField('date published', auto_now=True)
 
     def __str__(self):
         return self.slug + ("(draft)" if self.is_draft else "")
@@ -53,8 +54,7 @@ class Revision(models.Model):
     description = models.TextField()
     pub_date = models.DateTimeField(
         'date published', blank=True, auto_now=True)
-    proposal = models.ForeignKey(
-        Proposal, blank=True, null=True, related_name="revisions")
+    proposal = models.ForeignKey(Proposal, related_name="revisions")
 
     def __str__(self):
         return "%s_%d" % (self.proposal.slug, self.pk)
@@ -87,11 +87,12 @@ class Review(models.Model):
     def __str__(self):
         return "Review by %s for %s" % (self.owner, self.revision)
 
+    @property
     def header(self):
         header = \
             "Reviewed by " if self.description \
             else "Rated by "
-        header += self.owner.global_user.user.get_full_name()
+        header += self.owner.global_user.name
         header += ", %s" % naturaltime(self.pub_date)
         return header
 
