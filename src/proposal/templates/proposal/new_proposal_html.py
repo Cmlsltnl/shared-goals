@@ -5,6 +5,7 @@ from dominate.tags import *
 from dominate.util import text
 
 from goal.templates.dominate_tags import *
+from proposal.templates.dominate_tags import *
 
 
 # 123
@@ -59,6 +60,7 @@ def proposal_form():
         with textarea(
             name="description",
             form="proposal_form",
+            rows="20",
             _class="form-field"
         ):
             text("{{ revision_form.description.value }}")
@@ -79,7 +81,10 @@ def result():
 
     with django_block("content") as content:
         goal_header()
-        proposal_form()
+
+        column(2)
+        with column(8):
+            proposal_form()
 
     return (
         "{% extends 'base.html' %}\n",

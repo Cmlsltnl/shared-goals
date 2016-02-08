@@ -43,6 +43,7 @@ def review_form():
         with textarea(
             name="description",
             form="review_form",
+            rows="10",
             _class="form-field"
         ):
             text("{{ form.description.value }}")
