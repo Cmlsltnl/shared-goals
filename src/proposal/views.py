@@ -184,6 +184,28 @@ class ProposalView(View):
 
         return is_form_valid
 
+    def __get_or_create_comment(self, member, review):
+        draft = review.comments.filter(is_draft=True, owner=member).first()
+
+        if not draft:
+            draft = Comment()
+            draft.owner = member
+            draft.target = review
+            draft.save()
+
+        return draft
+
+    def __update_comment_and_save(self, comment, request):
+        form = CommentForm(request.POST, request.FILES)
+        is_form_valid = form.is_valid()
+        if is_form_valid:
+            comment.body = form.cleaned_data['body']
+            if request.POST['submit'] == 'save':
+                comment.is_draft = False
+            comment.save()
+
+        return is_form_valid
+
     def get(self, request, goal_slug, proposal_slug):
         return self.handle(request, goal_slug, proposal_slug)
 
@@ -227,72 +249,15 @@ class ProposalView(View):
 
 
 class ReviewView(View):
-    def __get_or_create_draft(self, member, review):
-        draft = review.comments.filter(is_draft=True, owner=member).first()
-
-        if not draft:
-            draft = Comment()
-            draft.owner = member
-            draft.target = review
-            draft.save()
-
-        return draft
-
-    def __update_comment_and_save(self, comment, request):
-        form = CommentForm(request.POST, request.FILES)
-        is_form_valid = form.is_valid()
-        if is_form_valid:
-            comment.body = form.cleaned_data['body']
-            if request.POST['submit'] == 'save':
-                comment.is_draft = False
-            comment.save()
-
-        return is_form_valid
-
-    def __on_cancel_or_save(self, goal_slug, proposal_slug, review_pk):
-        return HttpResponseRedirect(
-            reverse(
-                'review',
-                kwargs=dict(
-                    goal_slug=goal_slug,
-                    proposal_slug=proposal_slug,
-                    review_pk=review_pk
-                )
-            )
-        )
-
     def get(self, request, goal_slug, proposal_slug, review_pk):
-        return self.handle(request, goal_slug, proposal_slug, review_pk)
-
-    def post(self, request, goal_slug, proposal_slug, review_pk):
-        return self.handle(request, goal_slug, proposal_slug, review_pk)
-
-    def handle(self, request, goal_slug, proposal_slug, review_pk):
         goal = get_object_or_404(Goal, slug=goal_slug)
         member = Member.objects.filter(user=request.user).first()
         review = get_object_or_404(Review, pk=review_pk)
-
-        draft = self.__get_or_create_draft(member, review)
-        is_posting = request.method == 'POST'
-
-        if is_posting:
-            is_data_valid = self.__update_comment_and_save(draft, request)
-            try_again = request.POST['submit'] == 'save' and not is_data_valid
-            if not try_again:
-                return self.__on_cancel_or_save(
-                    goal_slug, proposal_slug, review_pk)
-
-        form = (
-            CommentForm(request.POST, request.FILES) if is_posting
-            else CommentForm(initial=draft.__dict__)
-        )
 
         context = {
             'goal': goal,
             'proposal': review.revision.proposal,
             'member': member,
-            'review': review,
             'revision': review.revision,
-            'form': form
         }
         return render(request, 'proposal/review.html', context)
