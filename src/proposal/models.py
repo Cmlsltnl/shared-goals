@@ -10,7 +10,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.humanize.templatetags.humanize import naturaltime
 from django.db import models
 
-from goal.models import Goal, Member
+from goal.models import GlobalUser, Goal, Member
 
 from image_cropping import ImageRatioField
 from image_cropping.templatetags.cropping import cropped_thumbnail
@@ -62,7 +62,7 @@ class Revision(models.Model):
 
 class Comment(models.Model):
     pub_date = models.DateTimeField('date published', auto_now_add=True)
-    owner = models.ForeignKey(Member)
+    owner = models.ForeignKey(GlobalUser)
 
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()

@@ -185,12 +185,13 @@ class ProposalView(View):
 
         return is_form_valid
 
-    def __get_or_create_comment(self, member, review):
-        draft = review.comments.filter(is_draft=True, owner=member).first()
+    def __get_or_create_comment(self, global_user, review):
+        draft = review.comments.filter(
+            is_draft=True, owner=global_user).first()
 
         if not draft:
             draft = Comment()
-            draft.owner = member
+            draft.owner = global_user
             draft.target = review
             draft.save()
 
@@ -243,6 +244,9 @@ class ProposalView(View):
             'revision': revision,
             'member': member,
             'review': review,
+            'post_button_header': (
+                "Rate this proposal and give feedback" if review.is_draft
+                else "Update your review of this proposal"),
             'post_button_label': "Submit" if review.is_draft else "Update",
             'form': form,
             'published_reviews': published_reviews,

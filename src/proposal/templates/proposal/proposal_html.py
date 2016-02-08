@@ -22,7 +22,7 @@ def review_form():
             _for="{{ form.rating.id_for_label }}",
             _class="form-label"
         ):
-            text("Rate this proposal and give feedback")
+            text("{{ post_button_header }}")
         text("{{ form.rating.errors }}")
         input_(
             id="id_rating",
@@ -54,7 +54,7 @@ def review_form():
             name="submit",
             value="save"
         )
-        button("Cancel", id="cancel-submit", name="submit", value="cancel")
+        button("Save draft", id="cancel-submit", name="submit", value="cancel")
 
 
 @form(
@@ -87,7 +87,7 @@ def comment_form():
             name="submit",
             value="save"
         )
-        button("Cancel", id="cancel-submit", name="submit", value="cancel")
+        button("Save draft", id="cancel-submit", name="submit", value="cancel")
 
 
 @span(_class="small-gap-below")
@@ -95,7 +95,7 @@ def comment():
     with div(_class="row"):
         column(4)
         with column(4):
-            text("{{ comment.owner.global_user.name }}, ")
+            text("{{ comment.owner.name }}, ")
             text("{{ comment.pub_date|naturaltime }}")
 
     with div(_class="row"):

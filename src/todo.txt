@@ -1,19 +1,16 @@
 - http://stackoverflow.com/questions/641055/diff-to-html-diff2html-program
-- http://rateit.codeplex.com/downloads/get/169043
 - https://github.com/edoburu/django-fluent-comments/
 - https://github.com/HonzaKral/django-threadedcomments
-- https://github.com/trentm/django-markdown-deux
 
-- Show proposal owner in the Proposal page
-- Comment.owner should be a GlobalUser, not Member
-- Use ImageCropField
 - In Revision template, include a link to the latest version of the proposal
+- Use middleware to extract the current member
 - when updating a review, delete all comments
 - allow to change image when editing a proposal
-- Make upload automatic when you change the image in the new proposal form
-- Check that url for the goal/profile is not used
+- Check that url for the goal/profile is not used, don't crash
 - slug should only be unique per goal
 - Advise member that their profile is totally public
 - Use now() timestamp from the db server
+- Make upload automatic when you change the image in the new proposal form
 - When leaving a Goal as a member, confirm that all Proposals are deleted (or make them orphans that can be adopted?)
+- Use ImageCropField
 

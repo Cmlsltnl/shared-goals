@@ -8,6 +8,9 @@ from goal.templates.dominate_tags import *
 from proposal.templates.dominate_tags import *
 
 
+proposal_url = "{% url 'proposal' goal.slug proposal.slug %}"
+
+
 def result():
     with django_block("head") as head:
         script(
@@ -26,6 +29,10 @@ def result():
         with div(_class="row small-gap-below"):
             column(2)
             with column(8):
+                with p():
+                    text("This is a previous version of a ")
+                    a("proposal", href=proposal_url)
+                    text(" by {{ proposal.owner.name }}")
                 text("{{ revision.description|markdown }}")
 
     return (

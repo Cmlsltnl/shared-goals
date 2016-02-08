@@ -32,7 +32,7 @@
       <form class="big-gap-above" enctype="multipart/form-data" id="review_form" method="post">
         {% csrf_token %}
         <p>
-          <label class="form-label" for="{{ form.rating.id_for_label }}">Rate this proposal and give feedback</label>{{ form.rating.errors }}
+          <label class="form-label" for="{{ form.rating.id_for_label }}">{{ post_button_header }}</label>{{ form.rating.errors }}
           <input class="form-field" id="id_rating" name="rating" type="hidden" value="{{ form.rating.value }}">
           <div class="rateit" data-rateit-resetable="false" data-rateit-value="{{ form.rating.value }}" id="rateit-review"></div>
         </p>
@@ -41,7 +41,7 @@
         </p>
         <div>
           <button id="save-submit" name="submit" value="save">{{ post_button_label }}</button>
-          <button id="cancel-submit" name="submit" value="cancel">Cancel</button>
+          <button id="cancel-submit" name="submit" value="cancel">Save draft</button>
         </div>
       </form>
     </div>
@@ -70,7 +70,7 @@
         <span class="small-gap-below">
           <div class="row">
             <div class="col-md-4"></div>
-            <div class="col-md-4">{{ comment.owner.global_user.name }}, {{ comment.pub_date|naturaltime }}</div>
+            <div class="col-md-4">{{ comment.owner.name }}, {{ comment.pub_date|naturaltime }}</div>
           </div>
           <div class="row">
             <div class="col-md-4"></div>
@@ -93,7 +93,7 @@
         </p>
         <div>
           <button id="save-submit" name="submit" value="save">Submit</button>
-          <button id="cancel-submit" name="submit" value="cancel">Cancel</button>
+          <button id="cancel-submit" name="submit" value="cancel">Save draft</button>
         </div>
       </form>
     </div>

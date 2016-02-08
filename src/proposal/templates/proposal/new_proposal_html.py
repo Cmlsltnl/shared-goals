@@ -65,7 +65,7 @@ def proposal_form():
 
     with div():
         button("Submit", id="save-submit", name="submit", value="save")
-        button("Cancel", id="cancel-submit", name="submit", value="cancel")
+        button("Save draft", id="cancel-submit", name="submit", value="cancel")
 
 
 def result():

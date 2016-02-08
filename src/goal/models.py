@@ -44,5 +44,9 @@ class Member(models.Model):
     image = SorlImageField(blank=True, upload_to='members')
     cropping = ImageRatioField('image', '360x430')
 
+    @property
+    def name(self):
+        return self.global_user.name
+
     def __str__(self):
-        return self.global_user.user.username
+        return self.name
