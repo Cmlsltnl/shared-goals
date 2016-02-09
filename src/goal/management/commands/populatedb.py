@@ -6,7 +6,8 @@ from django.core import management
 from django.contrib.auth.models import User
 
 from goal.models import GlobalUser, Member, Goal
-from proposal.models import Comment, Proposal, Review, Revision
+from proposal.models import Proposal, Revision
+from review.models import Comment, Review
 
 from .yoga_acrobatics import text as yoga_acrobatics_content
 from .yoga_bend import text as yoga_bend_content
@@ -31,7 +32,7 @@ class Command(BaseCommand):
         else:
             management.call_command('migrate', '--run-syncdb')
             management.call_command(
-                'makemigrations', 'goal', 'proposal')
+                'makemigrations', 'goal', 'proposal', 'review')
             management.call_command('migrate', '--fake-initial')
 
     def __make_global_user(self, username, password, first_name, last_name):

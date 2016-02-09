@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'goal.apps.GoalConfig',
     'proposal.apps.ProposalConfig',
+    'review.apps.ReviewConfig',
     'django_extensions',
     'django_dominate',
     'markdown_deux',

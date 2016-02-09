@@ -2,8 +2,13 @@
 {% load staticfiles %}
 {% load markdown_deux_tags %}
 {% load humanize %}
-{% load case_utils %}
-{% block head %}<script src="{% static 'proposal/proposal.js' %}" type="text/javascript"></script>{% endblock %}
+{% block head %}<script src="{% static 'review/review.js' %}" type="text/javascript"></script><script>
+
+$(document).ready(function() {
+    $("#reviews").load("{% url 'reviews' request.goal.slug proposal.slug %}");
+});
+
+</script>{% endblock %}
 {% block content %}
   <div class="row big-gap-below">
     <div class="text-center">
@@ -29,81 +34,7 @@
   <div class="row small-gap-below">
     <div class="col-md-2"></div>
     <div class="col-md-8">
-      <h5>Published by {{ proposal.owner.global_user.name }}, {{ proposal.pub_date|naturaltime }}</h5>{{ revision.description|markdown }}
-      {% if review_form %}
-        <form class="big-gap-above" enctype="multipart/form-data" id="review-form" method="post">
-          {% csrf_token %}
-          <p>
-            <label class="form-label" for="{{ form.rating.id_for_label }}">{{ post_button_header }}</label>{{ form.rating.errors }}
-            <input class="form-field" id="id_rating" name="rating" type="hidden" value="{{ form.rating.value }}">
-            <div class="rateit" data-rateit-resetable="false" data-rateit-value="{{ form.rating.value }}" id="rateit-review"></div>
-          </p>
-          <p>{{ form.description.errors }}
-            <textarea class="form-field" form="review-form" name="description" rows="10">{{ form.description.value }}</textarea>
-          </p>
-          <div>
-            <button id="save-submit" name="submit" value="save">{{ post_button_label }}</button>
-            <button id="cancel-submit" name="submit" value="cancel">{{ cancel_button_label }}</button>
-          </div>
-        </form>
-        {% if review.published_comments|length %}
-          <h5>Note: updating will remove any comments that were made on your existing review</h5>
-        {% endif %}
-      {% endif %}
-    </div>
+      <h5>Published by {{ proposal.owner.global_user.name }}, {{ proposal.pub_date|naturaltime }}</h5>{{ revision.description|markdown }}</div>
   </div>
-  {% for published_review in published_reviews %}
-    <div class="row">
-      <div class="row">
-        <div class="col-md-2"></div>
-        <div class="col-md-2">
-          <div class="rateit readonly-rateit" data-rateit-readonly="true" data-rateit-resetable="false" data-rateit-value="{{ published_review.rating }}"></div>
-        </div>
-        <div class="col-md-6">
-          {% if published_review.revision.pk == revision.pk %}{{ published_review.header }}
-            {% else %}A 
-              <a href="{% url 'revision' request.goal.slug proposal.slug published_review.revision.pk %}">previous version</a> was {{ published_review.header|lowerfirst }}
-          {% endif %}
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-2"></div>
-        <div class="col-md-8">
-          <p>{{ published_review.description }}</p>
-        </div>
-      </div>
-      {% for comment in published_review.published_comments %}
-        <span class="small-gap-below">
-          <div class="row">
-            <div class="col-md-4"></div>
-            <div class="col-md-4">{{ comment.owner.name }}, {{ comment.pub_date|naturaltime }}</div>
-          </div>
-          <div class="row">
-            <div class="col-md-4"></div>
-            <div class="col-md-4">
-              <p>{{ comment.body }}</p>
-            </div>
-          </div>
-        </span>
-      {% endfor %}
-    </div>
-  {% endfor %}
-  {% if comment_form %}
-    <div class="row">
-      <div class="col-md-2"></div>
-      <div class="col-md-8">
-        <form class="big-gap-above" enctype="multipart/form-data" id="comment-form" method="post">
-          {% csrf_token %}
-          <p>{{ comment_form.body.errors }}
-            <label class="form-label" for="{{ comment_form.body.id_for_label }}">Comment on this review</label>
-            <textarea class="form-field" form="comment-form" name="body">{{ comment_form.body.value }}</textarea>
-          </p>
-          <div>
-            <button id="comment-submit" name="submit" value="save">Submit</button>
-            <button id="cancel-submit" name="submit" value="cancel">Cancel</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  {% endif %}
+  <div id="reviews"></div>
 {% endblock %}

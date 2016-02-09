@@ -13,6 +13,11 @@ class Command(BaseCommand):
         pass
 
     def handle(self, *args, **options):
-        os.unlink(os.path.join(settings.BASE_DIR, "db.sqlite3"))
-        shutil.rmtree(os.path.join(settings.BASE_DIR, "goal/migrations"))
-        shutil.rmtree(os.path.join(settings.BASE_DIR, "proposal/migrations"))
+        db_path = os.path.join(settings.BASE_DIR, "db.sqlite3")
+        if os.path.exists(db_path):
+            os.unlink(db_path)
+
+        for d in ("goal", "proposal", "review"):
+            path = os.path.join(settings.BASE_DIR, "%s/migrations" % d)
+            if os.path.exists(path):
+                shutil.rmtree(path)

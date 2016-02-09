@@ -1,8 +1,7 @@
 from django.contrib import admin
 from image_cropping import ImageCroppingMixin
 
-# Register your models here.
-from .models import Comment, Proposal, Revision, Review
+from .models import Proposal, Revision
 
 
 def apply_cropping_to_image(modeladmin, request, queryset):
@@ -19,7 +18,5 @@ class RevisionAdmin(admin.ModelAdmin):
     list_filter = ('proposal',)
 
 
-admin.site.register(Comment)
 admin.site.register(Proposal, ModelWithImageAdmin)
-admin.site.register(Review)
 admin.site.register(Revision, RevisionAdmin)

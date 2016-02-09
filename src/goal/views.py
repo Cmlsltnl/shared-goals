@@ -1,5 +1,20 @@
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic import View
+
+
+def membership_required(view):
+    def _wrapper(request, *args, **kw):
+        if not request.member:
+            return HttpResponseRedirect(
+                reverse(
+                    'register',
+                    kwargs=dict(goal_slug=request.goal.slug)
+                )
+            )
+        return view(request, *args, **kw)
+    return _wrapper
 
 
 def chunks(l, n):

@@ -34,9 +34,6 @@ class EventHandler(FileSystemEventHandler):
         ]
 
     def __generate_templates(self):
-        # if len(self.extra_imports):
-        #     import pudb; pudb.set_trace()
-
         current_imports = list(sys.modules.keys())
 
         for template in self.python_templates:
