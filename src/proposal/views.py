@@ -54,12 +54,15 @@ class EditProposalView(View):
         return (revision_form, ProposalForm(request.POST, request.FILES))
 
     def __get_populated_forms(self, request, proposal):
+        proposal_form = ProposalForm(
+            initial=proposal.__dict__,
+            files=dict(image=proposal.image)
+        )
+        if 'image' in proposal_form.errors:
+            del proposal_form.errors['image']
         return (
             RevisionForm(initial=proposal.get_current_revision().__dict__),
-            ProposalForm(
-                initial=proposal.__dict__,
-                files=dict(image=proposal.image)
-            )
+            proposal_form
         )
 
     def __update_proposal_and_save(self, proposal, request):
@@ -153,7 +156,8 @@ class EditProposalView(View):
                 return self.__on_save(request.goal.slug, proposal.slug)
 
         revision_form, proposal_form = (
-            self.__get_posted_forms(request, proposal) if is_posting else
+            self.__get_posted_forms(request, proposal)
+            if is_posting and request.POST['submit'] == 'save' else
             self.__get_populated_forms(request, proposal)
         )
 

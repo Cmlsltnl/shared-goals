@@ -184,7 +184,7 @@ def result():
                     comment_form()
 
     return (
-        "{% extends 'base.html' %}\n",
+        "{% extends 'base.html' %}",
         "{% load staticfiles %}",
         "{% load markdown_deux_tags %}",
         "{% load humanize %}",

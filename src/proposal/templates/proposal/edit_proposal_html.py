@@ -33,7 +33,7 @@ def proposal_form():
             ):
                 text("Image")
             text("{{ proposal_form.image }}")
-            button("Upload", id="upload-submit", name="submit", value="upload")
+            button("Upload", _class="hidden", id="upload-submit", name="submit", value="upload")
 
     with p():
         text("{{ revision_form.title.errors }}")
@@ -84,6 +84,10 @@ def proposal_form():
 def result():
     with django_block("head") as head:
         text("{{ proposal_form.media }}")
+        script(
+            src="{% static 'proposal/proposal.js' %}",
+            type="text/javascript"
+        )
 
     with django_block("content") as content:
         goal_header()
@@ -93,7 +97,8 @@ def result():
             proposal_form()
 
     return (
-        "{% extends 'base.html' %}\n",
+        "{% extends 'base.html' %}",
+        "{% load staticfiles %}",
         head,
         content,
     )

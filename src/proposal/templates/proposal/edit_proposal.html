@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
-
-{% block head %}{{ proposal_form.media }}{% endblock %}
+{% load staticfiles %}
+{% block head %}{{ proposal_form.media }}<script src="{% static 'proposal/proposal.js' %}" type="text/javascript"></script>{% endblock %}
 {% block content %}
   <div class="row big-gap-below">
     <div class="text-center">
@@ -23,7 +23,7 @@
           <label class="form-label" for="{{ proposal_form.cropping.id_for_label }}"></label>{{ proposal_form.cropping }}</p>
         <p>{{ proposal_form.image.errors }}
           <label class="form-label" for="{{ proposal_form.image.id_for_label }}">Image</label>{{ proposal_form.image }}
-          <button id="upload-submit" name="submit" value="upload">Upload</button>
+          <button class="hidden" id="upload-submit" name="submit" value="upload">Upload</button>
         </p>
       {% endif %}
       <p>{{ revision_form.title.errors }}

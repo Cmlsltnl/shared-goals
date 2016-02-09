@@ -1,7 +1,5 @@
 from django import forms
 
-from image_cropping import ImageCropWidget
-
 from .models import Comment, Proposal, Review
 
 
@@ -19,12 +17,7 @@ class RevisionForm(forms.Form):
 
 
 class ProposalForm(forms.ModelForm):
-
     class Meta:
-        widgets = {
-            'image': ImageCropWidget,
-        }
-
         model = Proposal
         fields = ('image', 'cropping')
 

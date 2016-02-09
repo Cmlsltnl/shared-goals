@@ -2,6 +2,9 @@
 - https://github.com/edoburu/django-fluent-comments/
 - https://github.com/HonzaKral/django-threadedcomments
 
+- when uploading a new image in a draft proposal, delete the previous one
+- test if making the cropping dimensions bigger affects stored image size
+- try to make image bigger in the new proposal form
 - handle posting comments in the ProposalView
 - when updating a review, delete all comments
 - Advise member that their profile is totally public
