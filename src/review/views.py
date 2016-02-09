@@ -77,6 +77,7 @@ class ReviewsView(View):
     @method_decorator(membership_required)
     @method_decorator(login_required)
     def post(self, request, goal_slug, proposal_slug):
+        import pudb; pudb.set_trace()
         return self.handle(request, goal_slug, proposal_slug)
 
     def handle(self, request, goal_slug, proposal_slug):

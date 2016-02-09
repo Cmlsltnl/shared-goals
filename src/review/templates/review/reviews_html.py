@@ -1,7 +1,7 @@
 from django_dominate.django_tags import *
 
 from dominate.tags import *
-from dominate.util import text
+from dominate.util import text, raw
 
 from goal.templates.dominate_tags import *
 
@@ -144,6 +144,38 @@ def published_review():
         comment()
 
 
+# // Get some values from elements on the page:
+# var $form = $( this ),
+#   term = $form.find( "input[name='s']" ).val(),
+#   url = $form.attr( "action" );
+
+# // Send the data using post
+# var posting = $.post( url, { s: term } );
+
+post_review_js = """
+
+$(document).ready(function() {
+    $( "#review-form" ).submit(function( event ) {
+
+      // Stop form from submitting normally
+      event.preventDefault();
+
+      // Send the data using post
+      var posting = $.post(
+        "{% url 'reviews' request.goal.slug latest_revision.proposal.slug %}",
+        $(this).serialize()
+      );
+
+      // Put the results in a div
+      posting.done(function(data) {
+        $("#reviews").html(data);
+      });
+    });
+});
+
+"""
+
+
 def result():
     with django_block("content") as content:
 
@@ -166,6 +198,9 @@ def result():
                 column(2)
                 with column(8):
                     comment_form()
+
+        with script():
+            raw(post_review_js)
 
     return (
         "{% load humanize %}",
