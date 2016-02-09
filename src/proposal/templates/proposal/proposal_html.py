@@ -11,7 +11,15 @@ from proposal.templates.dominate_tags import *
 load_reviews_js = """
 
 $(document).ready(function() {
-    $("#reviews").load("{% url 'reviews' request.goal.slug proposal.slug %}");
+    $("#reviews").load(
+        "{% url 'reviews' request.goal.slug proposal.slug %}",
+        function() {
+            $('div.rateit, span.rateit').rateit();
+            $('#rateit-review').bind('rated', function() {
+                $('#id_rating').val($(this).rateit('value'));
+            });
+        }
+    );
 });
 
 """
