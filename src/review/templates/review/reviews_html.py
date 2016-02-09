@@ -63,54 +63,6 @@ def review_form():
         )
 
 
-@form(
-    method="post",
-    id="comment-form",
-    enctype="multipart/form-data",
-    _class="big-gap-above"
-)
-def comment_form():
-    django_csrf_token()
-
-    with p():
-        text("{{ comment_form.body.errors }}")
-        with label(
-            _for="{{ comment_form.body.id_for_label }}",
-            _class="form-label"
-        ):
-            text("Comment on this review")
-        with textarea(
-            name="body",
-            form="comment-form",
-            _class="form-field"
-        ):
-            text("{{ comment_form.body.value }}")
-
-    with div():
-        button(
-            "Submit",
-            id="comment-submit",
-            name="submit",
-            value="save"
-        )
-        button("Cancel", id="cancel-submit", name="submit", value="cancel")
-
-
-@span(_class="small-gap-below")
-def comment():
-    with div(_class="row"):
-        column(4)
-        with column(4):
-            text("{{ comment.owner.name }}, ")
-            text("{{ comment.pub_date|naturaltime }}")
-
-    with div(_class="row"):
-        column(4)
-        with column(4):
-            with p():
-                text("{{ comment.body }}")
-
-
 revision_href = (
     "{% url 'revision' request.goal.slug "
     "published_review.revision.proposal.slug published_review.revision.pk %}"
@@ -140,36 +92,26 @@ def published_review():
             with p():
                 text("{{ published_review.description }}")
 
-    with django_for("comment in published_review.published_comments"):
-        comment()
-
-
-# // Get some values from elements on the page:
-# var $form = $( this ),
-#   term = $form.find( "input[name='s']" ).val(),
-#   url = $form.attr( "action" );
-
-# // Send the data using post
-# var posting = $.post( url, { s: term } );
 
 post_review_js = """
 
 $(document).ready(function() {
-    $( "#review-form" ).submit(function( event ) {
+    $("#review-form").submit(function(event) {
 
-      // Stop form from submitting normally
-      event.preventDefault();
+        // Stop form from submitting normally
+        event.preventDefault();
 
-      // Send the data using post
-      var posting = $.post(
+        // Send the data using post
+        var posting = $.post(
         "{% url 'reviews' request.goal.slug latest_revision.proposal.slug %}",
-        $(this).serialize()
-      );
+            $(this).serialize() + "&submit=" + $(document.activeElement)[0].id
+        );
 
-      // Put the results in a div
-      posting.done(function(data) {
-        $("#reviews").html(data);
-      });
+        // Put the results in a div
+        posting.done(function(data) {
+            $("#reviews").html(data);
+            $('div.rateit, span.rateit').rateit();
+        });
     });
 });
 
@@ -193,12 +135,6 @@ def result():
         with django_for("published_review in published_reviews"):
             published_review()
 
-        with django_if("comment_form"):
-            with div(_class="row"):
-                column(2)
-                with column(8):
-                    comment_form()
-
         with script():
             raw(post_review_js)
 
@@ -207,5 +143,3 @@ def result():
         "{% load case_utils %}",
         content,
     )
-
-# done123
