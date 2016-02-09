@@ -12,12 +12,6 @@ proposal_url = "{% url 'proposal' request.goal.slug proposal.slug %}"
 
 
 def result():
-    with django_block("head") as head:
-        script(
-            src="{% static 'proposal/proposal.js' %}",
-            type="text/javascript"
-        )
-
     with django_block("content") as content:
         goal_header()
 
@@ -40,7 +34,6 @@ def result():
         "{% load staticfiles %}",
         "{% load humanize %}",
         "{% load markdown_deux_tags %}",
-        head,
         content,
     )
 
