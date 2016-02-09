@@ -89,7 +89,7 @@ def comment_form():
     with div():
         button(
             "Submit",
-            id="save-submit",
+            id="comment-submit",
             name="submit",
             value="save"
         )

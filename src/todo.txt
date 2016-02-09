@@ -3,13 +3,14 @@
 - https://github.com/HonzaKral/django-threadedcomments
 
 - when uploading a new image in a draft proposal, delete the previous one
+(make sure the deleted image is not somehow used for another proposal)
+- split out code to handle posting comments in the ProposalView
+- see if a handling posts can become some kind of Template Method
+- when updating a review, delete all comments
 - test if making the cropping dimensions bigger affects stored image size
 - try to make image bigger in the new proposal form
-- handle posting comments in the ProposalView
-- when updating a review, delete all comments
 - Advise member that their profile is totally public
 - Use now() timestamp from the db server
-- Make upload automatic when you change the image in the new proposal form
 - When leaving a Goal as a member, confirm that all Proposals are deleted (or make them orphans that can be adopted?)
 - Use ImageCropField
 

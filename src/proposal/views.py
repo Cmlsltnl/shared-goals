@@ -209,19 +209,19 @@ class ProposalView(View):
 
         return is_form_valid
 
-    def __get_or_create_comment(self, global_user, review):
+    def __get_or_create_comment(self, request, review):
         draft = review.comments.filter(
-            is_draft=True, owner=global_user).first()
+            is_draft=True, owner=request.global_user).first()
 
         if not draft:
             draft = Comment()
-            draft.owner = global_user
+            draft.owner = request.global_user
             draft.target = review
             draft.save()
 
         return draft
 
-    def __update_comment_and_save(self, comment, request):
+    def __update_comment_and_save(self, request, comment):
         form = CommentForm(request.POST, request.FILES)
         is_form_valid = form.is_valid()
         if is_form_valid:
@@ -248,25 +248,42 @@ class ProposalView(View):
             None if not request.member
             else self.__get_or_create_review(request, revision, all_reviews)
         )
+        comment = (
+            None if not request.global_user
+            else self.__get_or_create_comment(request, review)
+        )
         is_posting = request.method == 'POST'
 
         if is_posting:
-            is_data_valid = self.__update_review_and_save(review, request)
-            try_again = request.POST['submit'] == 'save' and not is_data_valid
-            if not try_again:
-                return self.__on_cancel_or_save(proposal)
+            if request.POST['submit'] == 'comment':
+                is_data_valid = self.__update_comment_and_save(
+                    request, comment)
+                if is_data_valid:
+                    return self.__on_cancel_or_save(proposal)
+
+            else:
+                is_data_valid = self.__update_review_and_save(review, request)
+                try_again = \
+                    request.POST['submit'] == 'save' and not is_data_valid
+                if not try_again:
+                    return self.__on_cancel_or_save(proposal)
 
         review_form = (
             None if (not request.member or proposal.owner == request.member)
             else (
-                ReviewForm(request.POST, request.FILES) if is_posting
-                else ReviewForm(initial=review.__dict__)
+                ReviewForm(request.POST, request.FILES)
+                if is_posting and not request.POST['submit'] == 'comment' else
+                ReviewForm(initial=review.__dict__)
             )
         )
 
         comment_form = (
             None if (not request.global_user)
-            else CommentForm()
+            else (
+                CommentForm(request.POST, request.FILES)
+                if is_posting and request.POST['submit'] == 'comment' else
+                CommentForm(initial=comment.__dict__)
+            )
         )
 
         published_reviews = \
