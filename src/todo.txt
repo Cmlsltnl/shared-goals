@@ -2,15 +2,16 @@
 - https://github.com/edoburu/django-fluent-comments/
 - https://github.com/HonzaKral/django-threadedcomments
 
+- use data attribute in init_review_form for post url
+- make sgreviews a function that you can apply as $("#reviews").sgreviews()
+- test if making the cropping dimensions bigger affects stored image size
+- try to make image bigger in the new proposal form
 - when uploading a new image in a draft proposal, delete the previous one
 (make sure the deleted image is not somehow used for another proposal)
-- make sgreviews a function that you can apply as $("#reviews").sgreviews()
 - below the form to update your review, add a link to scroll down to the comments
 - add I'm doing it button using ajax
 - when updating a review, delete all comments
-- test if making the cropping dimensions bigger affects stored image size
-- try to make image bigger in the new proposal form
 - Advise member that their profile is totally public
 - Use now() timestamp from the db server
 - When leaving a Goal as a member, confirm that all Proposals are deleted (or make them orphans that can be adopted?)
-- hrs in comment-block are not spreaded correctly
+- hrs in comment-block are not spread correctly

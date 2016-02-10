@@ -17,7 +17,7 @@
         <div class="col-md-2"></div>
         <div class="col-md-8">
           <div style="text-indent: {{ comment.indent }}px;">{{ comment.body }}
-            <a class="comment-reply-link" id="reply-comment-{{ comment.id }}">reply</a>
+            <a class="comment-reply-link" data-ajax-url="{% url 'reply_comment' request.goal.slug review.id comment.id %}">reply</a>
             <div class="comment-reply-div"></div>
           </div>
         </div>

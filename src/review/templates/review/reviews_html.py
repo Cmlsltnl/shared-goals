@@ -94,7 +94,12 @@ def published_review():
             with p():
                 text("{{ published_review.description }}")
 
-    div(id="comments-{{ published_review.pk }}", _class="comment-block")
+    div(
+        _class="comment-block",
+        data_ajax_url=(
+            "{% url 'comments' request.goal.slug published_review.pk %}"
+        )
+    )
 
 
 def result():

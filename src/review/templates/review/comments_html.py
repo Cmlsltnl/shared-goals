@@ -53,6 +53,9 @@ def comment():
 
                 text(", {{ comment.pub_date|naturaltime }}")
 
+    comment_form_url = \
+        "{% url 'reply_comment' request.goal.slug review.id comment.id %}"
+
     with div(_class="row"):
         column(2)
         with column(8):
@@ -60,8 +63,8 @@ def comment():
                 text("{{ comment.body }}")
                 a(
                     "reply",
-                    id="reply-comment-{{ comment.id }}",
-                    _class="comment-reply-link"
+                    _class="comment-reply-link",
+                    data_ajax_url=comment_form_url
                 )
                 div(_class="comment-reply-div")
 

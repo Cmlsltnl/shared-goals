@@ -44,7 +44,7 @@
           <p>{{ published_review.description }}</p>
         </div>
       </div>
-      <div class="comment-block" id="comments-{{ published_review.pk }}"></div>
+      <div class="comment-block" data-ajax-url="{% url 'comments' request.goal.slug published_review.pk %}"></div>
     </div>
   {% endfor %}<script>
 // review/init_review_form.js
