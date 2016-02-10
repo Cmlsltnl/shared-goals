@@ -2,7 +2,6 @@
 - https://github.com/edoburu/django-fluent-comments/
 - https://github.com/HonzaKral/django-threadedcomments
 
-- use data attribute in init_review_form for post url
 - make sgreviews a function that you can apply as $("#reviews").sgreviews()
 - test if making the cropping dimensions bigger affects stored image size
 - try to make image bigger in the new proposal form

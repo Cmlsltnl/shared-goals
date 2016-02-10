@@ -14,6 +14,9 @@ from proposal.templates.dominate_tags import *
 @form(
     method="post",
     id="review-form",
+    data_ajax_url=(
+        "{% url 'reviews' request.goal.slug latest_revision.proposal.slug %}"
+    ),
     enctype="multipart/form-data",
     _class="big-gap-above"
 )

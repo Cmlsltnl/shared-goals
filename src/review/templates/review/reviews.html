@@ -4,7 +4,7 @@
   <div class="row small-gap-below">
     <div class="col-md-2"></div>
     <div class="col-md-8">
-      <form class="big-gap-above" enctype="multipart/form-data" id="review-form" method="post">
+      <form class="big-gap-above" data-ajax-url="{% url 'reviews' request.goal.slug latest_revision.proposal.slug %}" enctype="multipart/form-data" id="review-form" method="post">
         {% csrf_token %}
         <p>
           <label class="form-label" for="{{ form.rating.id_for_label }}">{{ post_button_header }}</label>{{ form.rating.errors }}
@@ -60,7 +60,7 @@ $(document).ready(function() {
 
         // Send the data using post
         var posting = $.post(
-        "{% url 'reviews' request.goal.slug latest_revision.proposal.slug %}",
+            $("#review-form").data("ajax-url"),
             $(this).serialize() + "&submit=" + $(document.activeElement)[0].id
         );
 

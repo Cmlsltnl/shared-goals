@@ -10,7 +10,7 @@ $(document).ready(function() {
 
         // Send the data using post
         var posting = $.post(
-        "{% url 'reviews' request.goal.slug latest_revision.proposal.slug %}",
+            $("#review-form").data("ajax-url"),
             $(this).serialize() + "&submit=" + $(document.activeElement)[0].id
         );
 
