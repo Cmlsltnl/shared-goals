@@ -53,33 +53,31 @@ def comment():
 
                 text(", {{ comment.pub_date|naturaltime }}")
 
-    href_post_comment = \
-        "{% url 'reply_comment' request.goal.slug review.id comment.id %}"
-
     with div(_class="row"):
         column(2)
         with column(8):
             with div(style="text-indent: {{ comment.indent }}px;"):
                 text("{{ comment.body }}")
-            a("reply", href=href_post_comment)
-
-    hr()
+                a(
+                    "reply",
+                    id="reply-comment-{{ comment.id }}",
+                    _class="comment-reply-link"
+                )
+                div(_class="comment-reply-div")
 
 
 @span()
 def review_comments():
-    with django_if("review.published_comments.count"):
-        hr()
     with django_for("comment in review.published_comments"):
+        with django_if("forloop.first"):
+            hr()
         comment()
+        hr()
 
 
 def result():
-    with django_block("content") as content:
-        review_comments()
-
     return (
         "{% load humanize %}",
         "{% load case_utils %}",
-        content,
+        review_comments(),
     )

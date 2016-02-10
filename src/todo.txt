@@ -13,4 +13,4 @@
 - Advise member that their profile is totally public
 - Use now() timestamp from the db server
 - When leaving a Goal as a member, confirm that all Proposals are deleted (or make them orphans that can be adopted?)
-
+- hrs in comment-block are not spreaded correctly

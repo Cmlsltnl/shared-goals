@@ -94,12 +94,11 @@ def published_review():
             with p():
                 text("{{ published_review.description }}")
 
-    div(id="comments-{{ published_review.pk }}", _class="review-comments")
+    div(id="comments-{{ published_review.pk }}", _class="comment-block")
 
 
 def result():
-    with django_block("content") as content:
-
+    with span() as reviews:
         with div(_class="row small-gap-below"):
             column(2)
             with column(8):
@@ -119,5 +118,5 @@ def result():
     return (
         "{% load humanize %}",
         "{% load case_utils %}",
-        content,
+        reviews,
     )

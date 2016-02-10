@@ -1,28 +1,28 @@
 {% load humanize %}
 {% load case_utils %}
-{% block content %}
-  <span>
-    {% if review.published_comments.count %}
+<span>
+  {% for comment in review.published_comments %}
+    {% if forloop.first %}
       <hr>
     {% endif %}
-    {% for comment in review.published_comments %}
-      <span class="">
-        <div class="row">
-          <div class="col-md-2"></div>
-          <div class="col-md-8">
-            <div style="text-indent: {{ comment.indent }}px;">{{ comment.owner.name }}
-              {% if comment.reply_to %}(=&gt; {{ comment.reply_to.owner.name }}) {% endif %}, {{ comment.pub_date|naturaltime }}</div>
+    <span class="">
+      <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+          <div style="text-indent: {{ comment.indent }}px;">{{ comment.owner.name }}
+            {% if comment.reply_to %}(=&gt; {{ comment.reply_to.owner.name }}) {% endif %}, {{ comment.pub_date|naturaltime }}</div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+          <div style="text-indent: {{ comment.indent }}px;">{{ comment.body }}
+            <a class="comment-reply-link" id="reply-comment-{{ comment.id }}">reply</a>
+            <div class="comment-reply-div"></div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-2"></div>
-          <div class="col-md-8">
-            <div style="text-indent: {{ comment.indent }}px;">{{ comment.body }}</div>
-            <a href="{% url 'reply_comment' request.goal.slug review.id comment.id %}">reply</a>
-          </div>
-        </div>
-        <hr>
-      </span>
-    {% endfor %}
-  </span>
-{% endblock %}
+      </div>
+    </span>
+    <hr>
+  {% endfor %}
+</span>

@@ -19,7 +19,7 @@ urlpatterns = [
         name='post_comment'
     ),
     url(
-        r'^ajax_reply_comment/(?P<review_id>\d+)/(?P<comment_id>\d+)/$',
+        r'^ajax_reply_comment/(?P<review_id>\d+)/(?P<reply_to_comment_id>\d+)/$',
         views.PostCommentView.as_view(),
         name='reply_comment'
     ),
