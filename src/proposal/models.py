@@ -18,7 +18,7 @@ class Proposal(models.Model):
         max_digits=2, decimal_places=1, default=0.0)
     owner = models.ForeignKey(Member)
     is_draft = models.BooleanField(default=True)
-    image = ImageCropField(upload_to="proposals")
+    image = ImageCropField(upload_to="proposals", blank=True)
     cropping = ImageRatioField('image', '360x200')
     slug = models.SlugField('slug', max_length=60)
     pub_date = models.DateTimeField('date published', auto_now=True)

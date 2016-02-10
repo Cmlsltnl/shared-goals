@@ -110,7 +110,8 @@ def result():
         with div(_class="row small-gap-below"):
             column(2)
             with column(8):
-                review_form()
+                with django_if("form"):
+                    review_form()
 
                 with django_if("review.published_comments|length"):
                     h5(

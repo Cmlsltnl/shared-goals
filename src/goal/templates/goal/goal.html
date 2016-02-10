@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <div class="row big-gap-below">
+  <div class="row small-gap-below">
     <div class="text-center">
       <h1>{{ request.goal.title }}</h1>
       <div class="button-grp">
@@ -14,7 +14,7 @@
     </div>
   </div>
   {% for proposal_list in proposal_lists %}
-    <div class="row">
+    <div class="row small-gap-above">
       {% for proposal in proposal_list %}
         <div class="col-md-4">
           <a class="proposal--photo" href="{% url 'proposal' request.goal.slug proposal.slug %}" style="background-image:url({{ proposal.image.url }});">

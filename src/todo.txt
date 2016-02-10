@@ -2,11 +2,9 @@
 - https://github.com/edoburu/django-fluent-comments/
 - https://github.com/HonzaKral/django-threadedcomments
 
-- make sgreviews a function that you can apply as $("#reviews").sgreviews()
-- test if making the cropping dimensions bigger affects stored image size
 - try to make image bigger in the new proposal form
+- beware that image names in the porposals may clash (make names unique)
 - when uploading a new image in a draft proposal, delete the previous one
-(make sure the deleted image is not somehow used for another proposal)
 - below the form to update your review, add a link to scroll down to the comments
 - add I'm doing it button using ajax
 - when updating a review, delete all comments

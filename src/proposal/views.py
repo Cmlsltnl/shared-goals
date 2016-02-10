@@ -46,8 +46,6 @@ class EditProposalView(View):
             initial=proposal.__dict__,
             files=dict(image=proposal.image)
         )
-        if 'image' in proposal_form.errors:
-            del proposal_form.errors['image']
         return (
             RevisionForm(initial=proposal.get_current_revision().__dict__),
             proposal_form

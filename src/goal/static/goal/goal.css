@@ -23,6 +23,10 @@
     padding-bottom: 28px;
 }
 
+.small-gap-above {
+    padding-top: 28px;
+}
+
 .proposal--gradient {
     height: 100%;
     width: 100%;
@@ -33,6 +37,7 @@
 .proposal--photo {
     display: block;
     height: 200px;
+    background-size: cover;
 }
 
 .proposal--title {

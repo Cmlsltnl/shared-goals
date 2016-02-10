@@ -60,12 +60,13 @@ class ReviewsView(View):
                 request.POST['submit'] == 'save-submit' and not is_data_valid
 
         review_form = (
-            None if (not request.member or proposal.owner == request.member)
-            else (
+            (
                 ReviewForm(request.POST, request.FILES)
                 if is_posting and try_again else
                 ReviewForm(initial=review.__dict__)
             )
+            if request.member and proposal.owner != request.member else
+            None
         )
 
         published_reviews = \

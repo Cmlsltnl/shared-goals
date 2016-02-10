@@ -4,21 +4,23 @@
   <div class="row small-gap-below">
     <div class="col-md-2"></div>
     <div class="col-md-8">
-      <form class="big-gap-above" data-ajax-url="{% url 'reviews' request.goal.slug latest_revision.proposal.slug %}" enctype="multipart/form-data" id="review-form" method="post">
-        {% csrf_token %}
-        <p>
-          <label class="form-label" for="{{ form.rating.id_for_label }}">{{ post_button_header }}</label>{{ form.rating.errors }}
-          <input class="form-field" id="id_rating" name="rating" type="hidden" value="{{ form.rating.value }}">
-          <div class="rateit" data-rateit-resetable="false" data-rateit-value="{{ form.rating.value }}" id="rateit-review"></div>
-        </p>
-        <p>{{ form.description.errors }}
-          <textarea class="form-field" form="review-form" name="description" rows="10">{{ form.description.value }}</textarea>
-        </p>
-        <div>
-          <button id="save-submit" name="submit" value="save">{{ post_button_label }}</button>
-          <button id="cancel-submit" name="submit" value="cancel">{{ cancel_button_label }}</button>
-        </div>
-      </form>
+      {% if form %}
+        <form class="big-gap-above" data-ajax-url="{% url 'reviews' request.goal.slug latest_revision.proposal.slug %}" enctype="multipart/form-data" id="review-form" method="post">
+          {% csrf_token %}
+          <p>
+            <label class="form-label" for="{{ form.rating.id_for_label }}">{{ post_button_header }}</label>{{ form.rating.errors }}
+            <input class="form-field" id="id_rating" name="rating" type="hidden" value="{{ form.rating.value }}">
+            <div class="rateit" data-rateit-resetable="false" data-rateit-value="{{ form.rating.value }}" id="rateit-review"></div>
+          </p>
+          <p>{{ form.description.errors }}
+            <textarea class="form-field" form="review-form" name="description" rows="10">{{ form.description.value }}</textarea>
+          </p>
+          <div>
+            <button id="save-submit" name="submit" value="save">{{ post_button_label }}</button>
+            <button id="cancel-submit" name="submit" value="cancel">{{ cancel_button_label }}</button>
+          </div>
+        </form>
+      {% endif %}
       {% if review.published_comments|length %}
         <h5>Note: updating will remove any comments that were made on your existing review</h5>
       {% endif %}
