@@ -1,4 +1,8 @@
+import os
+
 from dominate.tags import html_tag
+from dominate.tags import script
+from dominate.util import raw
 
 
 class django_tag(html_tag):
@@ -82,3 +86,16 @@ class django_empty(django_single):
 
 class django_csrf_token(django_single):
     tag = "{% csrf_token %}"
+
+
+def inline_script(base_path, script_path):
+    comment = (
+        "\n// %s\n" % script_path
+        if script_path else
+        ""
+    )
+
+    with open(os.path.join(base_path, script_path)) as ifs:
+        with script() as result:
+            raw(comment + ifs.read())
+        return result

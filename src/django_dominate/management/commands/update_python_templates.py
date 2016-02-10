@@ -15,7 +15,7 @@ from watchdog.events import FileSystemEventHandler
 
 
 def is_python_file(path):
-    return True if re.search(r'.py$', path) else False
+    return True if re.search(r'.(py|js)$', path) else False
 
 
 class EventHandler(FileSystemEventHandler):

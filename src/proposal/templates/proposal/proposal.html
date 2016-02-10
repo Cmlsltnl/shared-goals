@@ -2,21 +2,6 @@
 {% load staticfiles %}
 {% load markdown_deux_tags %}
 {% load humanize %}
-{% block head %}<script src="{% static 'review/review.js' %}" type="text/javascript"></script><script>
-
-$(document).ready(function() {
-    $("#reviews").load(
-        "{% url 'reviews' request.goal.slug proposal.slug %}",
-        function() {
-            $('div.rateit, span.rateit').rateit();
-            $('#rateit-review').bind('rated', function() {
-                $('#id_rating').val($(this).rateit('value'));
-            });
-        }
-    );
-});
-
-</script>{% endblock %}
 {% block content %}
   <div class="row big-gap-below">
     <div class="text-center">
@@ -44,5 +29,23 @@ $(document).ready(function() {
     <div class="col-md-8">
       <h5>Published by {{ proposal.owner.global_user.name }}, {{ proposal.pub_date|naturaltime }}</h5>{{ revision.description|markdown }}</div>
   </div>
-  <div id="reviews"></div>
-{% endblock %}
+  <div id="reviews"></div><script>
+// proposal/load_reviews.js
+sgreviews = function() {
+    $('div.rateit, span.rateit').rateit();
+
+    // load all comments
+    $(".review-comments").each(function(index, element) {
+        review_id = /-(\d+)$/g.exec(element.id)[1];
+        url = "{% url 'comments' request.goal.slug 12345 %}".replace("12345", review_id);
+        $(element).load(url);
+    });
+}
+
+$(document).ready(function() {
+    $("#reviews").load(
+        "{% url 'reviews' request.goal.slug proposal.slug %}",
+        sgreviews
+    );
+});
+</script>{% endblock %}

@@ -1,7 +1,9 @@
+from django.conf import settings
+
 from django_dominate.django_tags import *
 
 from dominate.tags import *
-from dominate.util import text, raw
+from dominate.util import text
 
 from goal.templates.dominate_tags import *
 
@@ -92,30 +94,7 @@ def published_review():
             with p():
                 text("{{ published_review.description }}")
 
-
-post_review_js = """
-
-$(document).ready(function() {
-    $("#review-form").submit(function(event) {
-
-        // Stop form from submitting normally
-        event.preventDefault();
-
-        // Send the data using post
-        var posting = $.post(
-        "{% url 'reviews' request.goal.slug latest_revision.proposal.slug %}",
-            $(this).serialize() + "&submit=" + $(document.activeElement)[0].id
-        );
-
-        // Put the results in a div
-        posting.done(function(data) {
-            $("#reviews").html(data);
-            $('div.rateit, span.rateit').rateit();
-        });
-    });
-});
-
-"""
+    div(id="comments-{{ published_review.pk }}", _class="review-comments")
 
 
 def result():
@@ -135,8 +114,7 @@ def result():
         with django_for("published_review in published_reviews"):
             published_review()
 
-        with script():
-            raw(post_review_js)
+        inline_script(settings.BASE_DIR, 'review/init_review_form.js')
 
     return (
         "{% load humanize %}",

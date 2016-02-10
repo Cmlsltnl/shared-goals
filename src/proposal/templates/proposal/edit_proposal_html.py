@@ -1,3 +1,5 @@
+from django.conf import settings
+
 from django_dominate.django_tags import *
 
 from dominate.tags import *
@@ -90,10 +92,6 @@ def proposal_form():
 def result():
     with django_block("head") as head:
         text("{{ proposal_form.media }}")
-        script(
-            src="{% static 'proposal/edit_proposal.js' %}",
-            type="text/javascript"
-        )
 
     with django_block("content") as content:
         goal_header()
@@ -101,6 +99,8 @@ def result():
         column(2)
         with column(8):
             proposal_form()
+
+        inline_script(settings.BASE_DIR, "proposal/init_proposal_form.js")
 
     return (
         "{% extends 'base.html' %}",

@@ -1,39 +1,16 @@
+from django.conf import settings
+
 from django_dominate.django_tags import *
 
 from dominate.tags import *
-from dominate.util import text, raw
+from dominate.util import text
 
 from goal.templates.dominate_tags import *
 
 from proposal.templates.dominate_tags import *
 
 
-load_reviews_js = """
-
-$(document).ready(function() {
-    $("#reviews").load(
-        "{% url 'reviews' request.goal.slug proposal.slug %}",
-        function() {
-            $('div.rateit, span.rateit').rateit();
-            $('#rateit-review').bind('rated', function() {
-                $('#id_rating').val($(this).rateit('value'));
-            });
-        }
-    );
-});
-
-"""
-
-
 def result():
-    with django_block("head") as head:
-        script(
-            src="{% static 'review/review.js' %}",
-            type="text/javascript"
-        )
-        with script():
-            raw(load_reviews_js)
-
     with django_block("content") as content:
         goal_header()
 
@@ -52,13 +29,13 @@ def result():
                 text("{{ revision.description|markdown }}")
 
         div(id="reviews")
+        inline_script(settings.BASE_DIR, 'proposal/load_reviews.js')
 
     return (
         "{% extends 'base.html' %}",
         "{% load staticfiles %}",
         "{% load markdown_deux_tags %}",
         "{% load humanize %}",
-        head,
         content
     )
 

@@ -1,22 +1,20 @@
 {% load humanize %}
 {% load case_utils %}
 {% block content %}
-  {% if comment_form %}
-    <div class="row">
-      <div class="col-md-2"></div>
-      <div class="col-md-8">
-        <form class="big-gap-above" enctype="multipart/form-data" id="comment-form" method="post">
-          {% csrf_token %}
-          <p>{{ comment_form.body.errors }}
-            <label class="form-label" for="{{ comment_form.body.id_for_label }}">Comment on this review</label>
-            <textarea class="form-field" form="comment-form" name="body">{{ comment_form.body.value }}</textarea>
-          </p>
-          <div>
-            <button id="comment-submit" name="submit" value="save">Submit</button>
-            <button id="cancel-submit" name="submit" value="cancel">Cancel</button>
+  <div class="row">
+    {% for comment in review.published_comments %}
+      <span class="small-gap-below">
+        <div class="row">
+          <div class="col-md-4"></div>
+          <div class="col-md-4">{{ comment.owner.name }}, {{ comment.pub_date|naturaltime }}</div>
+        </div>
+        <div class="row">
+          <div class="col-md-4"></div>
+          <div class="col-md-4">
+            <p>{{ comment.body }}</p>
           </div>
-        </form>
-      </div>
-    </div>
-  {% endif %}
+        </div>
+      </span>
+    {% endfor %}
+  </div>
 {% endblock %}

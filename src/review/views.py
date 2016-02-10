@@ -1,7 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
 from django.views.generic import View
-from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.utils.decorators import method_decorator
 
@@ -101,25 +99,17 @@ class ReviewsView(View):
 
 
 class CommentsView(View):
-    def __on_cancel_or_save(self, proposal):
-        return HttpResponseRedirect(
-            reverse(
-                'proposal',
-                kwargs=dict(
-                    goal_slug=proposal.goal.slug,
-                    proposal_slug=proposal.slug
-                )
-            )
-        )
-
     def __get_or_create_comment(self, request, review):
         draft = review.comments.filter(
-            is_draft=True, owner=request.global_user).first()
+            is_draft=True,
+            owner=request.global_user,
+            review_id=review.id
+        ).first()
 
         if not draft:
             draft = Comment()
             draft.owner = request.global_user
-            draft.target = review
+            draft.review = review
             draft.save()
 
         return draft
@@ -135,31 +125,32 @@ class CommentsView(View):
 
         return is_form_valid
 
-    def get(self, request, review_id, comment_id):
-        return self.handle(request, review_id, comment_id)
+    def get(self, request, goal_slug, review_id, reply_to_comment_id=None):
+        return self.handle(request, review_id)
 
     @method_decorator(membership_required)
     @method_decorator(login_required)
-    def post(self, request, review_id, comment_id):
-        return self.handle(request, review_id, comment_id)
+    def post(self, request, goal_slug, review_id, reply_to_comment_id=None):
+        return self.handle(request, review_id)
 
-    def handle(self, request, review_id, comment_id):
-        review = None
-        comment = None
+    def handle(self, request, review_id, reply_to_comment_id=None):
+        review = get_object_or_404(Review, pk=review_id)
+        comment = self.__get_or_create_comment(request, review)
+
         is_posting = request.method == 'POST'
 
         if is_posting:
             is_data_valid = self.__update_comment_and_save(
                 request, comment)
-            if is_data_valid:
-                return self.__on_cancel_or_save()
+            try_again = \
+                request.POST['submit'] == 'save-submit' and not is_data_valid
 
         comment_form = (
             None
             if not request.global_user
             else (
                 CommentForm(request.POST, request.FILES)
-                if is_posting and request.POST['submit'] == 'comment' else
+                if is_posting and try_again else
                 CommentForm(initial=comment.__dict__)
             )
         )

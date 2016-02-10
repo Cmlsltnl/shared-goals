@@ -1,7 +1,7 @@
 from django_dominate.django_tags import *
 
 from dominate.tags import *
-from dominate.util import text, raw
+from dominate.util import text
 
 from goal.templates.dominate_tags import *
 
@@ -56,25 +56,15 @@ def comment():
                 text("{{ comment.body }}")
 
 
-revision_href = (
-    "{% url 'revision' request.goal.slug "
-    "published_review.revision.proposal.slug published_review.revision.pk %}"
-)
-
-
 @div(_class="row")
 def review_comments():
-    with django_for("comment in published_review.published_comments"):
+    with django_for("comment in review.published_comments"):
         comment()
 
 
 def result():
     with django_block("content") as content:
-        with django_if("comment_form"):
-            with div(_class="row"):
-                column(2)
-                with column(8):
-                    comment_form()
+        review_comments()
 
     return (
         "{% load humanize %}",

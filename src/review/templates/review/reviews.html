@@ -44,10 +44,15 @@
           <p>{{ published_review.description }}</p>
         </div>
       </div>
+      <div class="review-comments" id="comments-{{ published_review.pk }}"></div>
     </div>
   {% endfor %}<script>
-
+// review/init_review_form.js
 $(document).ready(function() {
+    $('#rateit-review').bind('rated', function() {
+        $('#id_rating').val($(this).rateit('value'));
+    });
+
     $("#review-form").submit(function(event) {
 
         // Stop form from submitting normally
@@ -62,9 +67,8 @@ $(document).ready(function() {
         // Put the results in a div
         posting.done(function(data) {
             $("#reviews").html(data);
-            $('div.rateit, span.rateit').rateit();
+            sgreviews();
         });
     });
 });
-
 </script>{% endblock %}
