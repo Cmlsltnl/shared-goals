@@ -41,23 +41,31 @@ def comment_form():
         button("Cancel", id="cancel-submit", name="submit", value="cancel")
 
 
-@span(_class="small-gap-below")
+@span(_class="")
 def comment():
     with div(_class="row"):
-        column(4)
-        with column(4):
-            text("{{ comment.owner.name }}, ")
-            text("{{ comment.pub_date|naturaltime }}")
+        column(2)
+        with column(8):
+            with div(style="text-indent: {{ comment.indent }}px;"):
+                with django_if("comment.reply_to"):
+                    text("({{ comment.reply_to.owner.name }} <--) ")
+
+                text("{{ comment.owner.name }}, ")
+                text("{{ comment.pub_date|naturaltime }}")
 
     with div(_class="row"):
-        column(4)
-        with column(4):
-            with p():
+        column(2)
+        with column(8):
+            with div(style="text-indent: {{ comment.indent }}px;"):
                 text("{{ comment.body }}")
 
+    hr()
 
-@div(_class="row")
+
+@span()
 def review_comments():
+    with django_if("review.published_comments.count"):
+        hr()
     with django_for("comment in review.published_comments"):
         comment()
 

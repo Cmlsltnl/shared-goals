@@ -1,20 +1,27 @@
 {% load humanize %}
 {% load case_utils %}
 {% block content %}
-  <div class="row">
+  <span>
+    {% if review.published_comments.count %}
+      <hr>
+    {% endif %}
     {% for comment in review.published_comments %}
-      <span class="small-gap-below">
+      <span class="">
         <div class="row">
-          <div class="col-md-4"></div>
-          <div class="col-md-4">{{ comment.owner.name }}, {{ comment.pub_date|naturaltime }}</div>
-        </div>
-        <div class="row">
-          <div class="col-md-4"></div>
-          <div class="col-md-4">
-            <p>{{ comment.body }}</p>
+          <div class="col-md-2"></div>
+          <div class="col-md-8">
+            <div style="text-indent: {{ comment.indent }}px;">
+              {% if comment.reply_to %}({{ comment.reply_to.owner.name }} &lt;--) {% endif %}{{ comment.owner.name }}, {{ comment.pub_date|naturaltime }}</div>
           </div>
         </div>
+        <div class="row">
+          <div class="col-md-2"></div>
+          <div class="col-md-8">
+            <div style="text-indent: {{ comment.indent }}px;">{{ comment.body }}</div>
+          </div>
+        </div>
+        <hr>
       </span>
     {% endfor %}
-  </div>
+  </span>
 {% endblock %}

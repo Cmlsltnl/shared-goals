@@ -42,3 +42,11 @@ class Comment(models.Model):
 
     def __str__(self):
         return "Comment by %s on %s" % (self.owner, self.target)
+
+    def indent(self):
+        result = 0
+        current = self
+        while current.reply_to:
+            result += 20
+            current = current.reply_to
+        return result

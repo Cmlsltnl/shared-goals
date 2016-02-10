@@ -71,7 +71,7 @@ revision_href = (
 )
 
 
-@div(_class="row")
+@div(_class="row big-gap-above")
 def published_review():
     with div(_class="row"):
         column(2)
