@@ -99,6 +99,15 @@ class ReviewsView(View):
 
 
 class CommentsView(View):
+    def get(self, request, goal_slug, review_id):
+        review = get_object_or_404(Review, pk=review_id)
+        context = {
+            'review': review,
+        }
+        return render(request, 'review/comments.html', context)
+
+
+class PostCommentView(View):
     def __get_or_create_comment(self, request, review):
         draft = review.comments.filter(
             is_draft=True,
@@ -125,18 +134,17 @@ class CommentsView(View):
 
         return is_form_valid
 
+    @method_decorator(login_required)
     def get(self, request, goal_slug, review_id, reply_to_comment_id=None):
-        return self.handle(request, review_id)
+        return self.handle(request, review_id, reply_to_comment_id)
 
-    @method_decorator(membership_required)
     @method_decorator(login_required)
     def post(self, request, goal_slug, review_id, reply_to_comment_id=None):
-        return self.handle(request, review_id)
+        return self.handle(request, review_id, reply_to_comment_id)
 
-    def handle(self, request, review_id, reply_to_comment_id=None):
+    def handle(self, request, review_id, reply_to_comment_id):
         review = get_object_or_404(Review, pk=review_id)
         comment = self.__get_or_create_comment(request, review)
-
         is_posting = request.method == 'POST'
 
         if is_posting:
@@ -159,4 +167,4 @@ class CommentsView(View):
             'review': review,
             'comment_form': comment_form,
         }
-        return render(request, 'review/comments.html', context)
+        return render(request, 'review/post_comment.html', context)

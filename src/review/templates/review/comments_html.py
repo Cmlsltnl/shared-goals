@@ -47,17 +47,21 @@ def comment():
         column(2)
         with column(8):
             with div(style="text-indent: {{ comment.indent }}px;"):
+                text("{{ comment.owner.name }}")
                 with django_if("comment.reply_to"):
-                    text("({{ comment.reply_to.owner.name }} <--) ")
+                    text("(=> {{ comment.reply_to.owner.name }}) ")
 
-                text("{{ comment.owner.name }}, ")
-                text("{{ comment.pub_date|naturaltime }}")
+                text(", {{ comment.pub_date|naturaltime }}")
+
+    href_post_comment = \
+        "{% url 'reply_comment' request.goal.slug review.id comment.id %}"
 
     with div(_class="row"):
         column(2)
         with column(8):
             with div(style="text-indent: {{ comment.indent }}px;"):
                 text("{{ comment.body }}")
+            a("reply", href=href_post_comment)
 
     hr()
 

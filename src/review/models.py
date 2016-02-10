@@ -27,7 +27,20 @@ class Review(models.Model):
         return header
 
     def published_comments(self):
-        return self.comments.filter(is_draft=False)
+        comments = [
+            c for c in self.comments.filter(
+                is_draft=False, reply_to=None
+            ).order_by("pub_date")
+        ]
+
+        result = []
+        while len(comments):
+            comment = comments.pop()
+            result.append(comment)
+            for reply in comment.replies.order_by("pub_date"):
+                comments.append(reply)
+
+        return result
 
 
 class Comment(models.Model):
@@ -35,7 +48,8 @@ class Comment(models.Model):
     owner = models.ForeignKey(GlobalUser)
 
     review = models.ForeignKey(Review, related_name="comments")
-    reply_to = models.ForeignKey('self', blank=True, null=True)
+    reply_to = models.ForeignKey(
+        'self', blank=True, null=True, related_name="replies")
 
     body = models.TextField()
     is_draft = models.BooleanField(default=True)

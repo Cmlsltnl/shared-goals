@@ -13,4 +13,14 @@ urlpatterns = [
         views.CommentsView.as_view(),
         name='comments'
     ),
+    url(
+        r'^ajax_post_comment/(?P<review_id>\d+)/$',
+        views.PostCommentView.as_view(),
+        name='post_comment'
+    ),
+    url(
+        r'^ajax_reply_comment/(?P<review_id>\d+)/(?P<comment_id>\d+)/$',
+        views.PostCommentView.as_view(),
+        name='reply_comment'
+    ),
 ]
