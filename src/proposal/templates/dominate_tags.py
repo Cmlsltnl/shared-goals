@@ -8,26 +8,19 @@ def column(k, **argv):
     return div(_class="col-md-%d" % k, **argv)
 
 
-@a(
-    _class="proposal--photo",
-    style="background-image:url({{ proposal.image.url }});",
-    href="{% url 'proposal' request.goal.slug proposal.slug %}"
-)
+@a(href="{% url 'proposal' request.goal.slug proposal.slug %}")
 def proposal_list_item():
-    div(_class="proposal--gradient")
-    with h3(_class="proposal--title"):
-        text("{{ proposal.get_current_revision.title }}")
+    proposal_image("{{ proposal.get_current_revision.title }}")
 
 
 @div(
     _class="proposal--photo",
-    style="background-image:url({{ proposal.image.url }});",
-    href="{% url 'proposal' request.goal.slug proposal.slug %}"
+    style="background-image:url({{ proposal.image.url }});"
 )
-def proposal_image():
+def proposal_image(title):
     div(_class="proposal--gradient")
     with h3(_class="proposal--title"):
-        text("{{ revision.title }}")
+        text(title)
 
 
 def readonly_rateit(rating):

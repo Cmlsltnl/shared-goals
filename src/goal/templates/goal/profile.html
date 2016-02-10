@@ -15,16 +15,18 @@
   </div>
   <div class="row">
     <div class="col-md-4">
-      <h3 class="small-gap-below">Your proposals:</h3>
+      <h4 class="small-gap-below">My proposals:</h4>
     </div>
   </div>
   {% for proposal_list in proposal_lists %}
-    <div class="row">
+    <div class="row small-gap-above">
       {% for proposal in proposal_list %}
         <div class="col-md-4">
-          <a class="proposal--photo" href="{% url 'proposal' request.goal.slug proposal.slug %}" style="background-image:url({{ proposal.image.url }});">
-            <div class="proposal--gradient"></div>
-            <h3 class="proposal--title">{{ proposal.get_current_revision.title }}</h3>
+          <a href="{% url 'proposal' request.goal.slug proposal.slug %}">
+            <div class="proposal--photo" style="background-image:url({{ proposal.image.url }});">
+              <div class="proposal--gradient"></div>
+              <h3 class="proposal--title">{{ proposal.get_current_revision.title }}</h3>
+            </div>
           </a>
         </div>
       {% endfor %}

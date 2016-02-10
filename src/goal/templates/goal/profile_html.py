@@ -15,11 +15,11 @@ def result():
 
         with div(_class="row"):
             with column(4):
-                with h3(_class="small-gap-below"):
-                    text("Your proposals:")
+                with h4(_class="small-gap-below"):
+                    text("My proposals:")
 
         with django_for("proposal_list in proposal_lists"):
-            with div(_class="row"):
+            with div(_class="row small-gap-above"):
                 with django_for("proposal in proposal_list"):
                     with column(4):
                         proposal_list_item()

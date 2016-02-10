@@ -17,7 +17,7 @@ def result():
         with div(_class="row small-gap-below"):
             column(4)
             with column(4):
-                proposal_image()
+                proposal_image("{{ revision.title }}")
 
         with div(_class="row small-gap-below"):
             column(2)
