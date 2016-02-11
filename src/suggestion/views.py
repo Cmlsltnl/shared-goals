@@ -210,6 +210,7 @@ class RevisionView(View):
         revision = get_object_or_404(Revision, pk=revision_pk)
 
         context = {
+            'suggestion': revision.suggestion,
             'revision': revision,
         }
         return render(request, 'suggestion/revision.html', context)

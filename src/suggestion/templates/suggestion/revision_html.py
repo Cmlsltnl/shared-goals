@@ -9,7 +9,7 @@ from suggestion.templates.dominate_tags import *
 
 
 suggestion_url = \
-    "{% url 'suggestion' request.goal.slug revision.suggestion.slug %}"
+    "{% url 'suggestion' request.goal.slug suggestion.slug %}"
 
 
 def result():
@@ -27,7 +27,7 @@ def result():
                 with p():
                     text("This is a previous version of a ")
                     a("suggestion", href=suggestion_url)
-                    text(" by {{ revision.suggestion.owner.name }}")
+                    text(" by {{ suggestion.owner.name }}")
                 text("{{ revision.description|markdown }}")
 
     return (

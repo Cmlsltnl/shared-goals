@@ -40,7 +40,7 @@ def top_right_div():
                     ):
                         button(
                             "Update Suggestion",
-                            _class="btn btn-danger",
+                            _class="btn btn-info",
                             onclick=url_update_suggestion
                         )
 

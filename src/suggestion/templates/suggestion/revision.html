@@ -32,6 +32,6 @@
     <div class="col-md-2"></div>
     <div class="col-md-8">
       <p>This is a previous version of a 
-        <a href="{% url 'suggestion' request.goal.slug revision.suggestion.slug %}">suggestion</a> by {{ revision.suggestion.owner.name }}</p>{{ revision.description|markdown }}</div>
+        <a href="{% url 'suggestion' request.goal.slug suggestion.slug %}">suggestion</a> by {{ suggestion.owner.name }}</p>{{ revision.description|markdown }}</div>
   </div>
 {% endblock %}

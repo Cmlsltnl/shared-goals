@@ -28,7 +28,7 @@ class ReviewsView(View):
             review.rating = form.cleaned_data['rating']
             review.description = form.cleaned_data['description']
 
-            if request.POST['submit'] == 'save':
+            if request.POST['submit'] == 'savereview-submit':
                 review.is_draft = False
 
             review.save()
@@ -52,20 +52,20 @@ class ReviewsView(View):
             if not request.member else
             self.__get_or_create_review(request, latest_revision, all_reviews)
         )
-        is_posting = request.method == 'POST'
+        is_saving = (
+            request.method == 'POST' and
+            request.POST['submit'] == 'savereview-submit'
+        )
 
-        if is_posting:
-            is_data_valid = self.__update_review_and_save(review, request)
-            try_again = (
-                request.POST['submit'] == 'savereview-submit' and
-                not is_data_valid
-            )
+        if request.method == 'POST':
+            if is_saving or review.is_draft:
+                is_data_valid = self.__update_review_and_save(review, request)
 
         review_form = (
             (
                 ReviewForm(request.POST, request.FILES)
-                if is_posting and try_again else
-                ReviewForm(initial=review.__dict__)
+                if is_saving and not is_data_valid else
+                ReviewForm(instance=review)
             )
             if request.member and suggestion.owner != request.member else
             None
