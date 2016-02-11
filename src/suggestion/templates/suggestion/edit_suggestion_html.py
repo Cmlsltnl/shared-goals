@@ -12,15 +12,15 @@ from suggestion.templates.dominate_tags import *
 
 @form(
     method="post",
-    id="suggestion_form",
-    enctype="multipart/form-data"
+    enctype="multipart/form-data",
+    id="revision-form"
 )
-def suggestion_form():
+def revision_form():
     django_csrf_token()
     with p():
-        text("{{ revision_form.title.errors }}")
+        text("{{ form.title.errors }}")
         with label(
-            _for="{{ revision_form.title.id_for_label }}",
+            _for="{{ form.title.id_for_label }}",
             _class="form-label"
         ):
             text("Title")
@@ -29,52 +29,61 @@ def suggestion_form():
             type="text",
             name="title",
             maxlength="100",
-            value="{{ revision_form.title.value }}",
+            value="{{ form.title.value }}",
             _class="form-field"
         )
 
     with p():
-        text("{{ revision_form.description.errors }}")
+        text("{{ form.description.errors }}")
         with label(
-            _for="{{ revision_form.description.id_for_label }}",
+            _for="{{ form.description.id_for_label }}",
             _class="form-label"
         ):
             text("Describe your suggestion")
         with textarea(
             name="description",
-            form="suggestion_form",
+            form="revision-form",
             rows="20",
             _class="form-field"
         ):
-            text("{{ revision_form.description.value }}")
+            text("{{ form.description.value }}")
 
     with div():
         button(
             "{{ post_button_label }}",
-            id="save-submit",
+            id="saverevision-submit",
             name="submit",
             value="save"
         )
         button(
             "{{ cancel_button_label }}",
-            id="cancel-submit",
+            id="cancelrevision-submit",
             name="submit",
             value="cancel"
         )
 
 
+url_suggestion_image = \
+    "{% url 'new-suggestion-image' request.goal.slug draft_suggestion.id %}"
+
+
 def result():
     with django_block("head") as head:
-        text("{{ suggestion_form.media }}")
+        text("{{ form.media }}")
 
     with django_block("content") as content:
         goal_header()
 
         column(2)
         with column(8):
-            suggestion_form()
+            with django_if("show_image_form"):
+                div(
+                    id="suggestion-image-div",
+                    data_ajax_url=url_suggestion_image
+                )
+            revision_form()
 
-        inline_script(settings.BASE_DIR, "suggestion/init_suggestion_form.js")
+        inline_script(settings.BASE_DIR, "suggestion/edit_suggestion_init.js")
 
     return (
         "{% extends 'base.html' %}",

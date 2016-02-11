@@ -2,13 +2,15 @@
 - https://github.com/edoburu/django-fluent-comments/
 - https://github.com/HonzaKral/django-threadedcomments
 
-- try to make image bigger in the new proposal form
+- use ajax to upload suggestion image.
+- try to make image bigger in the new suggestion form
 - beware that image names in the porposals may clash (make names unique)
-- when uploading a new image in a draft proposal, delete the previous one
+- when uploading a new image in a draft suggestion, delete the previous one
 - below the form to update your review, add a link to scroll down to the comments
-- add I'm doing it button using ajax
+- when rating a suggestion, allow to choose "I've done this", "I'm doing this",
+"After trying I gave up", "After trying I decided against it"
 - when updating a review, delete all comments
 - Advise member that their profile is totally public
 - Use now() timestamp from the db server
-- When leaving a Goal as a member, confirm that all Proposals are deleted (or make them orphans that can be adopted?)
+- When leaving a Goal as a member, confirm that all Suggestion are deleted (or make them orphans that can be adopted?)
 - hrs in comment-block are not spread correctly

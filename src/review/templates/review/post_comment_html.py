@@ -34,11 +34,16 @@ def comment_form():
     with div():
         button(
             "Submit",
-            id="comment-submit",
+            id="savecomment-submit",
             name="submit",
             value="save"
         )
-        button("Cancel", id="cancel-submit", name="submit", value="cancel")
+        button(
+            "Cancel",
+            id="cancelcomment-submit",
+            name="submit",
+            value="cancel"
+        )
 
 
 def result():

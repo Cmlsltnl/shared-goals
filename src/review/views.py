@@ -56,8 +56,10 @@ class ReviewsView(View):
 
         if is_posting:
             is_data_valid = self.__update_review_and_save(review, request)
-            try_again = \
-                request.POST['submit'] == 'save-submit' and not is_data_valid
+            try_again = (
+                request.POST['submit'] == 'savereview-submit' and
+                not is_data_valid
+            )
 
         review_form = (
             (
@@ -151,8 +153,10 @@ class PostCommentView(View):
         if is_posting:
             is_data_valid = self.__update_comment_and_save(
                 request, comment)
-            try_again = \
-                request.POST['submit'] == 'save-submit' and not is_data_valid
+            try_again = (
+                request.POST['submit'] == 'savecomment-submit' and
+                not is_data_valid
+            )
 
         comment_form = (
             None

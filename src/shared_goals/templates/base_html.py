@@ -21,8 +21,8 @@ def top_right_menu():
                 text("{% trans 'Change password' %}")
 
 
-url_edit_suggestion = (
-    "location.href='{% url 'edit-suggestion' request.goal.slug "
+url_update_suggestion = (
+    "location.href='{% url 'update-suggestion' request.goal.slug "
     "suggestion.slug %}';"
 )
 url_new_suggestion = \
@@ -39,10 +39,9 @@ def top_right_div():
                         "suggestion and suggestion.owner == request.member"
                     ):
                         button(
-                            "Edit Suggestion",
-                            id="btn-edit-suggestion",
+                            "Update Suggestion",
                             _class="btn btn-danger",
-                            onclick=url_edit_suggestion
+                            onclick=url_update_suggestion
                         )
 
                     button(

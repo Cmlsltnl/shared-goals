@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% block head %}{{ suggestion_form.media }}{% endblock %}
+{% block head %}{{ form.media }}{% endblock %}
 {% block content %}
   <div class="row small-gap-below">
     <div class="text-center">
@@ -16,29 +16,63 @@
   </div>
   <div class="col-md-2"></div>
   <div class="col-md-8">
-    <form enctype="multipart/form-data" id="suggestion_form" method="post">
+    {% if show_image_form %}
+      <div data-ajax-url="{% url 'new-suggestion-image' request.goal.slug draft_suggestion.id %}" id="suggestion-image-div"></div>
+    {% endif %}
+    <form enctype="multipart/form-data" id="revision-form" method="post">
       {% csrf_token %}
-      <p>{{ revision_form.title.errors }}
-        <label class="form-label" for="{{ revision_form.title.id_for_label }}">Title</label>
-        <input class="form-field" id="id_title" maxlength="100" name="title" type="text" value="{{ revision_form.title.value }}">
+      <p>{{ form.title.errors }}
+        <label class="form-label" for="{{ form.title.id_for_label }}">Title</label>
+        <input class="form-field" id="id_title" maxlength="100" name="title" type="text" value="{{ form.title.value }}">
       </p>
-      <p>{{ revision_form.description.errors }}
-        <label class="form-label" for="{{ revision_form.description.id_for_label }}">Describe your suggestion</label>
-        <textarea class="form-field" form="suggestion_form" name="description" rows="20">{{ revision_form.description.value }}</textarea>
+      <p>{{ form.description.errors }}
+        <label class="form-label" for="{{ form.description.id_for_label }}">Describe your suggestion</label>
+        <textarea class="form-field" form="revision-form" name="description" rows="20">{{ form.description.value }}</textarea>
       </p>
       <div>
-        <button id="save-submit" name="submit" value="save">{{ post_button_label }}</button>
-        <button id="cancel-submit" name="submit" value="cancel">{{ cancel_button_label }}</button>
+        <button id="saverevision-submit" name="submit" value="save">{{ post_button_label }}</button>
+        <button id="cancelrevision-submit" name="submit" value="cancel">{{ cancel_button_label }}</button>
       </div>
     </form>
   </div><script>
-// suggestion/init_suggestion_form.js
-$(window).load(function() {
-    $("#suggestion-image-div").load(
-        $("#suggestion-image-div").data("ajax-url"),
-        function(){
-            $('#upload-submit').trigger('click');
-        }
-    );
+// suggestion/edit_suggestion_init.js
+$(document).ready(function() {
+    url_suggestion_image = $("#suggestion-image-div").data("ajax-url");
+
+    // load form into div
+    var on_image_form_loaded = function() {
+
+        // respond to submitting the form
+        $("#image-form").submit(function(event) {
+            // Stop form from submitting normally
+            event.preventDefault();
+
+            var data = new FormData();
+            data.append('csrfmiddlewaretoken', $("#image-form").data('token'));
+            data.append('submit', 'upload');
+            data.append('image', $("#id_image")[0].files[0]);
+
+            // Send the data using post
+            var posting = $.post({
+                url: url_suggestion_image,
+                data: data,
+                cache: false,
+                processData: false,
+                contentType: false,
+            });
+
+            // // Load the result into the image div
+            // posting.done(function(data) {
+            //     $("#suggestion-image-div").load(url_suggestion_image);
+            // });
+        });
+
+        // todo reenable automatic upload
+        // $("#id_file_input").change(function () {
+        //     $('#upload-submit').trigger('click');
+        // });
+    };
+
+    $("#suggestion-image-div").load(url_suggestion_image, on_image_form_loaded);
 });
 </script>{% endblock %}
