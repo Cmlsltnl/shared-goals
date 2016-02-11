@@ -12,13 +12,19 @@ from image_cropping import ImageCropField, ImageRatioField
 from image_cropping.templatetags.cropping import cropped_thumbnail
 
 
-class Proposal(models.Model):
-    goal = models.ForeignKey(Goal, related_name="proposals")
+class Suggestion(models.Model):
+    TYPE_CHOICES = (
+        (0, 'action'),
+        (1, 'practice'),
+    )
+
+    goal = models.ForeignKey(Goal, related_name="suggestions")
+    type = models.PositiveSmallIntegerField(choices=TYPE_CHOICES, default=0)
     avg_rating = models.DecimalField(
         max_digits=2, decimal_places=1, default=0.0)
     owner = models.ForeignKey(Member)
     is_draft = models.BooleanField(default=True)
-    image = ImageCropField(upload_to="proposals", blank=True)
+    image = ImageCropField(upload_to="suggestions", blank=True)
     cropping = ImageRatioField('image', '360x200')
     slug = models.SlugField('slug', max_length=60)
     pub_date = models.DateTimeField('date published', auto_now=True)
@@ -51,7 +57,7 @@ class Revision(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
     pub_date = models.DateTimeField('date published', auto_now=True)
-    proposal = models.ForeignKey(Proposal, related_name="revisions")
+    suggestion = models.ForeignKey(Suggestion, related_name="revisions")
 
     def __str__(self):
-        return "%s_%d" % (self.proposal.slug, self.pk)
+        return "%s_%d" % (self.suggestion.slug, self.pk)

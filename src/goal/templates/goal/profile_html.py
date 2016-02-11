@@ -5,7 +5,7 @@ from dominate.util import text
 
 from goal.templates.dominate_tags import *
 
-from proposal.templates.dominate_tags import *
+from suggestion.templates.dominate_tags import *
 
 
 # 12
@@ -16,15 +16,15 @@ def result():
         with div(_class="row"):
             with column(4):
                 with h4(_class="small-gap-below"):
-                    text("My proposals:")
+                    text("My suggestions:")
 
-        with django_for("proposal_list in proposal_lists"):
+        with django_for("suggestion_list in suggestion_lists"):
             with div(_class="row small-gap-above"):
-                with django_for("proposal in proposal_list"):
+                with django_for("suggestion in suggestion_list"):
                     with column(4):
-                        proposal_list_item()
+                        suggestion_list_item()
             with django_empty():
-                h5("You have not created any proposals yet")
+                h5("You have not created any suggestions yet")
 
     return (
         "{% extends 'base.html' %}\n",

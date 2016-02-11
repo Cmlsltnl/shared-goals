@@ -9,7 +9,7 @@ def goal_header():
         h1("{{ request.goal.title }}")
         with div(_class="button-grp"):
             button(
-                "Top Proposals",
+                "Suggestions",
                 _class="btn btn-default",
                 onclick="location.href='{% url 'goal' request.goal.slug %}';"
             )

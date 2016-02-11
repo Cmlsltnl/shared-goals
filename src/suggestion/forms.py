@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Proposal
+from .models import Suggestion
 
 
 class RevisionForm(forms.Form):
@@ -16,7 +16,7 @@ class RevisionForm(forms.Form):
             )
 
 
-class ProposalForm(forms.ModelForm):
+class SuggestionForm(forms.ModelForm):
     class Meta:
-        model = Proposal
+        model = Suggestion
         fields = ('image', 'cropping')

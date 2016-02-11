@@ -5,10 +5,10 @@ from dominate.util import text
 
 from goal.templates.dominate_tags import *
 
-from proposal.templates.dominate_tags import *
+from suggestion.templates.dominate_tags import *
 
 
-proposal_url = "{% url 'proposal' request.goal.slug proposal.slug %}"
+suggestion_url = "{% url 'suggestion' request.goal.slug suggestion.slug %}"
 
 
 def result():
@@ -18,15 +18,15 @@ def result():
         with div(_class="row small-gap-below"):
             column(4)
             with column(4):
-                proposal_image("{{ revision.title }}")
+                suggestion_image("{{ revision.title }}")
 
         with div(_class="row small-gap-below"):
             column(2)
             with column(8):
                 with p():
                     text("This is a previous version of a ")
-                    a("proposal", href=proposal_url)
-                    text(" by {{ proposal.owner.name }}")
+                    a("suggestion", href=suggestion_url)
+                    text(" by {{ suggestion.owner.name }}")
                 text("{{ revision.description|markdown }}")
 
     return (

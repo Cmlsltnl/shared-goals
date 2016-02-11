@@ -1,7 +1,7 @@
 from django.contrib import admin
 from image_cropping import ImageCroppingMixin
 
-from .models import Proposal, Revision
+from .models import Suggestion, Revision
 
 
 def apply_cropping_to_image(modeladmin, request, queryset):
@@ -15,8 +15,8 @@ class ModelWithImageAdmin(ImageCroppingMixin, admin.ModelAdmin):
 
 
 class RevisionAdmin(admin.ModelAdmin):
-    list_filter = ('proposal',)
+    list_filter = ('suggestion',)
 
 
-admin.site.register(Proposal, ModelWithImageAdmin)
+admin.site.register(Suggestion, ModelWithImageAdmin)
 admin.site.register(Revision, RevisionAdmin)

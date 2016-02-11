@@ -7,7 +7,7 @@ from django.core.management.base import BaseCommand
 
 class Command(BaseCommand):
     help = \
-        'Populates the database with example proposals'
+        'Populates the database with example suggestions'
 
     def add_arguments(self, parser):
         pass
@@ -17,7 +17,7 @@ class Command(BaseCommand):
         if os.path.exists(db_path):
             os.unlink(db_path)
 
-        for d in ("goal", "proposal", "review"):
+        for d in ("goal", "suggestion", "review"):
             path = os.path.join(settings.BASE_DIR, "%s/migrations" % d)
             if os.path.exists(path):
                 shutil.rmtree(path)

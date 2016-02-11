@@ -4,20 +4,20 @@ from dominate.tags import *
 
 from goal.templates.dominate_tags import *
 
-from proposal.templates.dominate_tags import *
+from suggestion.templates.dominate_tags import *
 
 
 def result():
     with django_block("content") as content:
         goal_header()
 
-        with django_for("proposal_list in proposal_lists"):
+        with django_for("suggestion_list in suggestion_lists"):
             with div(_class="row small-gap-above"):
-                with django_for("proposal in proposal_list"):
+                with django_for("suggestion in suggestion_list"):
                     with column(4):
-                        proposal_list_item()
+                        suggestion_list_item()
             with django_empty():
-                h5("There are no proposals yet")
+                h5("There are no suggestions yet")
 
     return (
         "{% extends 'base.html' %}\n",

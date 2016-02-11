@@ -3,7 +3,7 @@ from django.db import models
 
 from goal.models import GlobalUser, Member
 
-from proposal.models import Revision
+from suggestion.models import Revision
 
 
 class Review(models.Model):

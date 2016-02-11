@@ -7,42 +7,16 @@ from dominate.tags import *
 from dominate.util import text
 
 from goal.templates.dominate_tags import *
-from proposal.templates.dominate_tags import *
+from suggestion.templates.dominate_tags import *
 
 
-# 123
 @form(
     method="post",
-    id="proposal_form",
+    id="suggestion_form",
     enctype="multipart/form-data"
 )
-def proposal_form():
+def suggestion_form():
     django_csrf_token()
-    with django_if("proposal_form"):
-        with p():
-            text("{{ proposal_form.cropping.errors }}")
-            label(
-                _for="{{ proposal_form.cropping.id_for_label }}",
-                _class="form-label"
-            )
-            text("{{ proposal_form.cropping }}")
-
-        with p():
-            text("{{ proposal_form.image.errors }}")
-            with label(
-                _for="{{ proposal_form.image.id_for_label }}",
-                _class="form-label"
-            ):
-                text("Image")
-            text("{{ proposal_form.image }}")
-            button(
-                "Upload",
-                _class="hidden",
-                id="upload-submit",
-                name="submit",
-                value="upload"
-            )
-
     with p():
         text("{{ revision_form.title.errors }}")
         with label(
@@ -65,10 +39,10 @@ def proposal_form():
             _for="{{ revision_form.description.id_for_label }}",
             _class="form-label"
         ):
-            text("Describe your proposal")
+            text("Describe your suggestion")
         with textarea(
             name="description",
-            form="proposal_form",
+            form="suggestion_form",
             rows="20",
             _class="form-field"
         ):
@@ -91,16 +65,16 @@ def proposal_form():
 
 def result():
     with django_block("head") as head:
-        text("{{ proposal_form.media }}")
+        text("{{ suggestion_form.media }}")
 
     with django_block("content") as content:
         goal_header()
 
         column(2)
         with column(8):
-            proposal_form()
+            suggestion_form()
 
-        inline_script(settings.BASE_DIR, "proposal/init_proposal_form.js")
+        inline_script(settings.BASE_DIR, "suggestion/init_suggestion_form.js")
 
     return (
         "{% extends 'base.html' %}",

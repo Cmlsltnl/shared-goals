@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% block head %}{{ proposal_form.media }}{% endblock %}
+{% block head %}{{ suggestion_form.media }}{% endblock %}
 {% block content %}
   <div class="row small-gap-below">
     <div class="text-center">
       <h1>{{ request.goal.title }}</h1>
       <div class="button-grp">
-        <button class="btn btn-default" onclick="location.href='{% url 'goal' request.goal.slug %}';">Top Proposals</button>
+        <button class="btn btn-default" onclick="location.href='{% url 'goal' request.goal.slug %}';">Suggestions</button>
         <button class="btn btn-default">Members</button>
         {% if request.member %}
           <button class="btn btn-default" onclick="location.href='{% url 'profile' request.goal.slug %}';">My Profile</button>
@@ -16,23 +16,15 @@
   </div>
   <div class="col-md-2"></div>
   <div class="col-md-8">
-    <form enctype="multipart/form-data" id="proposal_form" method="post">
+    <form enctype="multipart/form-data" id="suggestion_form" method="post">
       {% csrf_token %}
-      {% if proposal_form %}
-        <p>{{ proposal_form.cropping.errors }}
-          <label class="form-label" for="{{ proposal_form.cropping.id_for_label }}"></label>{{ proposal_form.cropping }}</p>
-        <p>{{ proposal_form.image.errors }}
-          <label class="form-label" for="{{ proposal_form.image.id_for_label }}">Image</label>{{ proposal_form.image }}
-          <button class="hidden" id="upload-submit" name="submit" value="upload">Upload</button>
-        </p>
-      {% endif %}
       <p>{{ revision_form.title.errors }}
         <label class="form-label" for="{{ revision_form.title.id_for_label }}">Title</label>
         <input class="form-field" id="id_title" maxlength="100" name="title" type="text" value="{{ revision_form.title.value }}">
       </p>
       <p>{{ revision_form.description.errors }}
-        <label class="form-label" for="{{ revision_form.description.id_for_label }}">Describe your proposal</label>
-        <textarea class="form-field" form="proposal_form" name="description" rows="20">{{ revision_form.description.value }}</textarea>
+        <label class="form-label" for="{{ revision_form.description.id_for_label }}">Describe your suggestion</label>
+        <textarea class="form-field" form="suggestion_form" name="description" rows="20">{{ revision_form.description.value }}</textarea>
       </p>
       <div>
         <button id="save-submit" name="submit" value="save">{{ post_button_label }}</button>
@@ -40,10 +32,13 @@
       </div>
     </form>
   </div><script>
-// proposal/init_proposal_form.js
+// suggestion/init_suggestion_form.js
 $(window).load(function() {
-    $("#id_image").change( function(){
-        $('#upload-submit').trigger('click');
-    });
+    $("#suggestion-image-div").load(
+        $("#suggestion-image-div").data("ajax-url"),
+        function(){
+            $('#upload-submit').trigger('click');
+        }
+    );
 });
 </script>{% endblock %}

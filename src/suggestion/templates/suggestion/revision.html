@@ -8,7 +8,7 @@
     <div class="text-center">
       <h1>{{ request.goal.title }}</h1>
       <div class="button-grp">
-        <button class="btn btn-default" onclick="location.href='{% url 'goal' request.goal.slug %}';">Top Proposals</button>
+        <button class="btn btn-default" onclick="location.href='{% url 'goal' request.goal.slug %}';">Suggestions</button>
         <button class="btn btn-default">Members</button>
         {% if request.member %}
           <button class="btn btn-default" onclick="location.href='{% url 'profile' request.goal.slug %}';">My Profile</button>
@@ -19,10 +19,10 @@
   <div class="row small-gap-below">
     <div class="col-md-4"></div>
     <div class="col-md-4">
-      <div class="proposal--photo" style="background-image:url({{ proposal.image.url }});">
-        <div class="proposal--gradient"></div>
-        <span class="proposal--title">
-          <span class="title-caption">action</span>
+      <div class="suggestion--photo" style="background-image:url({{ suggestion.image.url }});">
+        <div class="suggestion--gradient"></div>
+        <span class="suggestion--title">
+          <span class="title-caption">{{ suggestion.get_type_display }}</span>
           <h3>{{ revision.title }}</h3>
         </span>
       </div>
@@ -32,6 +32,6 @@
     <div class="col-md-2"></div>
     <div class="col-md-8">
       <p>This is a previous version of a 
-        <a href="{% url 'proposal' request.goal.slug proposal.slug %}">proposal</a> by {{ proposal.owner.name }}</p>{{ revision.description|markdown }}</div>
+        <a href="{% url 'suggestion' request.goal.slug suggestion.slug %}">suggestion</a> by {{ suggestion.owner.name }}</p>{{ revision.description|markdown }}</div>
   </div>
 {% endblock %}

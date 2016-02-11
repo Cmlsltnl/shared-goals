@@ -7,7 +7,7 @@ from dominate.util import text
 
 from goal.templates.dominate_tags import *
 
-from proposal.templates.dominate_tags import *
+from suggestion.templates.dominate_tags import *
 
 
 #
@@ -15,7 +15,7 @@ from proposal.templates.dominate_tags import *
     method="post",
     id="review-form",
     data_ajax_url=(
-        "{% url 'reviews' request.goal.slug latest_revision.proposal.slug %}"
+        "{% url 'reviews' request.goal.slug latest_revision.suggestion.slug %}"
     ),
     enctype="multipart/form-data",
     _class="big-gap-above"
@@ -70,7 +70,7 @@ def review_form():
 
 revision_href = (
     "{% url 'revision' request.goal.slug "
-    "published_review.revision.proposal.slug published_review.revision.pk %}"
+    "published_review.revision.suggestion.slug published_review.revision.pk %}"
 )
 
 

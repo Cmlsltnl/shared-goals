@@ -7,7 +7,7 @@
     <div class="text-center">
       <h1>{{ request.goal.title }}</h1>
       <div class="button-grp">
-        <button class="btn btn-default" onclick="location.href='{% url 'goal' request.goal.slug %}';">Top Proposals</button>
+        <button class="btn btn-default" onclick="location.href='{% url 'goal' request.goal.slug %}';">Suggestions</button>
         <button class="btn btn-default">Members</button>
         {% if request.member %}
           <button class="btn btn-default" onclick="location.href='{% url 'profile' request.goal.slug %}';">My Profile</button>
@@ -18,10 +18,10 @@
   <div class="row small-gap-below">
     <div class="col-md-4"></div>
     <div class="col-md-4">
-      <div class="proposal--photo" style="background-image:url({{ proposal.image.url }});">
-        <div class="proposal--gradient"></div>
-        <span class="proposal--title">
-          <span class="title-caption">action</span>
+      <div class="suggestion--photo" style="background-image:url({{ suggestion.image.url }});">
+        <div class="suggestion--gradient"></div>
+        <span class="suggestion--title">
+          <span class="title-caption">{{ suggestion.get_type_display }}</span>
           <h3>{{ revision.title }}</h3>
         </span>
       </div>
@@ -30,10 +30,10 @@
   <div class="row small-gap-below">
     <div class="col-md-2"></div>
     <div class="col-md-8">
-      <h5>Published by {{ proposal.owner.global_user.name }}, {{ proposal.pub_date|naturaltime }}</h5>{{ revision.description|markdown }}</div>
+      <h5>Published by {{ suggestion.owner.global_user.name }}, {{ suggestion.pub_date|naturaltime }}</h5>{{ revision.description|markdown }}</div>
   </div>
   <div id="reviews"></div><script>
-// proposal/load_reviews.js
+// suggestion/load_reviews.js
 sgreviews = function() {
     $('div.rateit, span.rateit').rateit();
 
@@ -63,7 +63,7 @@ sgreviews = function() {
 
 $(document).ready(function() {
     $("#reviews").load(
-        "{% url 'reviews' request.goal.slug proposal.slug %}",
+        "{% url 'reviews' request.goal.slug suggestion.slug %}",
         sgreviews
     );
 });

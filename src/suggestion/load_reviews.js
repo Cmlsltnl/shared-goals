@@ -27,7 +27,7 @@ sgreviews = function() {
 
 $(document).ready(function() {
     $("#reviews").load(
-        "{% url 'reviews' request.goal.slug proposal.slug %}",
+        "{% url 'reviews' request.goal.slug suggestion.slug %}",
         sgreviews
     );
 });

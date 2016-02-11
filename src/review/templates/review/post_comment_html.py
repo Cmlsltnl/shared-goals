@@ -5,7 +5,7 @@ from dominate.util import text
 
 from goal.templates.dominate_tags import *
 
-from proposal.templates.dominate_tags import *
+from suggestion.templates.dominate_tags import *
 
 
 @form(

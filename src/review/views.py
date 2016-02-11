@@ -5,7 +5,7 @@ from django.utils.decorators import method_decorator
 
 from goal.views import membership_required
 
-from proposal.models import Proposal
+from suggestion.models import Suggestion
 from review.forms import CommentForm, ReviewForm
 from review.models import Comment, Review
 
@@ -35,18 +35,18 @@ class ReviewsView(View):
 
         return is_form_valid
 
-    def get(self, request, goal_slug, proposal_slug):
-        return self.handle(request, goal_slug, proposal_slug)
+    def get(self, request, goal_slug, suggestion_slug):
+        return self.handle(request, goal_slug, suggestion_slug)
 
     @method_decorator(membership_required)
     @method_decorator(login_required)
-    def post(self, request, goal_slug, proposal_slug):
-        return self.handle(request, goal_slug, proposal_slug)
+    def post(self, request, goal_slug, suggestion_slug):
+        return self.handle(request, goal_slug, suggestion_slug)
 
-    def handle(self, request, goal_slug, proposal_slug):
-        proposal = get_object_or_404(Proposal, slug=proposal_slug)
-        latest_revision = proposal.get_current_revision()
-        all_reviews = Review.objects.filter(revision__proposal=proposal)
+    def handle(self, request, goal_slug, suggestion_slug):
+        suggestion = get_object_or_404(Suggestion, slug=suggestion_slug)
+        latest_revision = suggestion.get_current_revision()
+        all_reviews = Review.objects.filter(revision__suggestion=suggestion)
         review = (
             None
             if not request.member else
@@ -65,7 +65,7 @@ class ReviewsView(View):
                 if is_posting and try_again else
                 ReviewForm(initial=review.__dict__)
             )
-            if request.member and proposal.owner != request.member else
+            if request.member and suggestion.owner != request.member else
             None
         )
 
@@ -78,9 +78,9 @@ class ReviewsView(View):
             'post_button_header': (
                 None
                 if not review else (
-                    "Rate this proposal and give feedback"
+                    "Rate this suggestion and give feedback"
                     if review.is_draft else
-                    "Update your review of this proposal"
+                    "Update your review of this suggestion"
                 )
             ),
             'post_button_label': (

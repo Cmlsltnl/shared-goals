@@ -27,20 +27,20 @@
     padding-top: 28px;
 }
 
-.proposal--gradient {
+.suggestion--gradient {
     height: 100%;
     width: 100%;
     background-color: transparent;
     background-image: linear-gradient(rgba(15, 20, 31, 0) 0px, rgba(15, 20, 31, 0.1) 25%, rgba(15, 20, 31, 0.8) 100%);
 }
 
-.proposal--photo {
+.suggestion--photo {
     display: block;
     height: 200px;
     background-size: cover;
 }
 
-.proposal--title {
+.suggestion--title {
     background: transparent
     display: block;
     color: #FFF;
@@ -52,12 +52,12 @@
     left: 0px;
 }
 
-.proposal--title .title-caption {
+.suggestion--title .title-caption {
     float: left;
     clear: both;
 }
 
-.proposal--stars {
+.suggestion--stars {
     height: 20px;
     width: 100px;
 }

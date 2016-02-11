@@ -7,7 +7,7 @@ from dominate.util import text
 
 from goal.templates.dominate_tags import *
 
-from proposal.templates.dominate_tags import *
+from suggestion.templates.dominate_tags import *
 
 
 def result():
@@ -17,19 +17,19 @@ def result():
         with div(_class="row small-gap-below"):
             column(4)
             with column(4):
-                proposal_image("{{ revision.title }}")
+                suggestion_image("{{ revision.title }}")
 
         with div(_class="row small-gap-below"):
             column(2)
             with column(8):
                 h5(
-                    "Published by {{ proposal.owner.global_user.name }}, "
-                    "{{ proposal.pub_date|naturaltime }}"
+                    "Published by {{ suggestion.owner.global_user.name }}, "
+                    "{{ suggestion.pub_date|naturaltime }}"
                 )
                 text("{{ revision.description|markdown }}")
 
         div(id="reviews")
-        inline_script(settings.BASE_DIR, 'proposal/load_reviews.js')
+        inline_script(settings.BASE_DIR, 'suggestion/load_reviews.js')
 
     return (
         "{% extends 'base.html' %}",

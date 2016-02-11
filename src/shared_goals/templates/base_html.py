@@ -21,12 +21,12 @@ def top_right_menu():
                 text("{% trans 'Change password' %}")
 
 
-url_edit_proposal = (
-    "location.href='{% url 'edit-proposal' request.goal.slug "
-    "proposal.slug %}';"
+url_edit_suggestion = (
+    "location.href='{% url 'edit-suggestion' request.goal.slug "
+    "suggestion.slug %}';"
 )
-url_new_proposal = \
-    "location.href='{% url 'new-proposal' request.goal.slug %}';"
+url_new_suggestion = \
+    "location.href='{% url 'new-suggestion' request.goal.slug %}';"
 
 
 @div(_class="row top-right-div")
@@ -36,19 +36,19 @@ def top_right_div():
             with django_if("request.member"):
                 with div(id="top-right-div-inner", _class="btn-group"):
                     with django_if(
-                        "proposal and proposal.owner == request.member"
+                        "suggestion and suggestion.owner == request.member"
                     ):
                         button(
-                            "Edit Proposal",
-                            id="btn-edit-proposal",
+                            "Edit Suggestion",
+                            id="btn-edit-suggestion",
                             _class="btn btn-danger",
-                            onclick=url_edit_proposal
+                            onclick=url_edit_suggestion
                         )
 
                     button(
-                        "New Proposal",
+                        "New Suggestion",
                         _class="btn",
-                        onclick=url_new_proposal
+                        onclick=url_new_suggestion
                     )
             top_right_menu()
             with django_else():
