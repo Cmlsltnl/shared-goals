@@ -9,7 +9,7 @@ from django.utils.decorators import method_decorator
 
 from goal.views import membership_required
 
-from suggestion.forms import RevisionForm, SuggestionForm
+from suggestion.forms import SuggestionForm
 from suggestion.models import Suggestion, Revision
 
 
@@ -20,13 +20,16 @@ class PostSuggestionView(View):
                 Q(slug=slugify(title)) & ~Q(pk=suggestion.pk)
             ).exists()
 
-        form = RevisionForm(request.POST, request.FILES)
+        form = SuggestionForm(request.POST, request.FILES)
         form.is_duplicate_title = is_duplicate_title
 
         return form
 
     def get_populated_form(self, request, suggestion):
-        return RevisionForm(initial=suggestion.get_current_revision().__dict__)
+        return SuggestionForm(
+            instance=suggestion,
+            initial=suggestion.get_current_revision().__dict__
+        )
 
     def on_cancel(self, goal_slug):
         # todo redirect to previous page
@@ -77,117 +80,61 @@ class NewSuggestionView(PostSuggestionView):
         current_revision.description = form['description'].value()
         current_revision.save()
 
-        if is_form_valid and request.POST['submit'] == 'save':
-            suggestion.slug = slugify(
-                suggestion.get_current_revision().title)
-            suggestion.is_draft = False
+        if is_form_valid:
+            # todo also save the cropping if the form is invalid
+            suggestion.cropping = form.cleaned_data['cropping']
+            if 'image' in request.FILES:
+                suggestion.image = form.cleaned_data['image']
+
+            if request.POST['submit'] == 'save':
+                suggestion.slug = slugify(
+                    suggestion.get_current_revision().title)
+                suggestion.apply_cropping_to_image(replace_original=True)
+                suggestion.is_draft = False
+
             suggestion.save()
 
-        # todo when posting this form to save the new suggestion, first
-        # do an ajax post to save the cropped image
         return is_form_valid
 
     @method_decorator(membership_required)
     @method_decorator(login_required)
-    def get(self, request, goal_slug, suggestion_id=-1):
-        return self.handle(request, goal_slug, suggestion_id)
+    def get(self, request, goal_slug):
+        return self.handle(request, goal_slug)
 
     @method_decorator(membership_required)
     @method_decorator(login_required)
-    # todo ensure that post requests specify the draft suggestion id
-    def post(self, request, goal_slug, suggestion_id=-1):
-        return self.handle(request, goal_slug, suggestion_id)
+    def post(self, request, goal_slug):
+        return self.handle(request, goal_slug)
 
-    def handle(self, request, goal_slug, suggestion_id):
-        suggestion = (
-            self.get_or_create_draft(request)
-            if suggestion_id == -1 else
-            get_object_or_404(Suggestion, pk=suggestion_id)
-        )
-        is_posting = request.method == 'POST'
+    def handle(self, request, goal_slug):
+        suggestion = self.get_or_create_draft(request)
+        is_saving = \
+            request.method == 'POST' and request.POST['submit'] == 'save'
 
-        if is_posting:
-            if request.POST['submit'] == 'cancel':
-                return self.on_cancel(request.goal.slug)
+        if request.method == 'POST':
+            should_accept_data = self.__update_suggestion_and_save(
+                suggestion, request)
 
-            should_accept_data = \
-                self.__update_suggestion_and_save(suggestion, request)
-
-            if should_accept_data:
+            if should_accept_data and is_saving:
                 return self.on_save(request.goal.slug, suggestion.slug)
+            elif request.POST['submit'] == 'cancel':
+                return self.on_cancel(request.goal.slug)
 
         form = (
             self.get_posted_form(request, suggestion)
-            if is_posting else
+            if is_saving else
             self.get_populated_form(request, suggestion)
         )
 
         context = {
             'form': form,
-            'draft_suggestion': suggestion,
             'show_image_form': True,
+            'show_errors': is_saving,
             'cancel_button_label': "Save draft",
             'post_button_label': "Submit",
         }
 
         return render(request, 'suggestion/edit_suggestion.html', context)
-
-
-class SuggestionImageView(View):
-    def __get_posted_form(self, request, suggestion):
-        return SuggestionForm(request.POST, request.FILES)
-
-    def __get_populated_form(self, request, suggestion):
-        return SuggestionForm(
-            initial=suggestion.__dict__, files=dict(image=suggestion.image)
-        )
-
-    def __update_suggestion_and_save(self, suggestion, request):
-        form = self.__get_posted_form(request, suggestion)
-        is_form_valid = form.is_valid()
-
-        if is_form_valid:
-            if 'image' in request.FILES:
-                suggestion.image = form.cleaned_data['image']
-            suggestion.cropping = form.cleaned_data['cropping']
-
-            if request.POST['submit'] == 'save':
-                suggestion.apply_cropping_to_image(replace_original=True)
-
-            suggestion.save()
-
-        return is_form_valid
-
-    @method_decorator(membership_required)
-    @method_decorator(login_required)
-    def get(self, request, goal_slug, suggestion_id):
-        return self.handle(request, goal_slug, suggestion_id)
-
-    @method_decorator(membership_required)
-    @method_decorator(login_required)
-    def post(self, request, goal_slug, suggestion_id):
-        return self.handle(request, goal_slug, suggestion_id)
-
-    def handle(self, request, goal_slug, suggestion_id):
-        suggestion = get_object_or_404(Suggestion, pk=suggestion_id)
-        is_posting = request.method == 'POST'
-
-        if is_posting:
-            should_accept_data = \
-                self.__update_suggestion_and_save(suggestion, request)
-
-        form = (
-            self.__get_posted_form(request, suggestion)
-            if is_posting and not should_accept_data else
-            self.__get_populated_form(request, suggestion)
-        )
-
-        context = {
-            'form': form,
-        }
-
-        # todo distinguish in return type whether upload was successful
-        return render(request, 'suggestion/upload_image.html', context)
 
 
 class UpdateSuggestionView(PostSuggestionView):
@@ -198,6 +145,7 @@ class UpdateSuggestionView(PostSuggestionView):
         # todo see if duplication with update function can be removed
         if is_form_valid:
             revision = Revision()
+            # todo use cleaned data
             revision.title = revision_form['title'].value()
             revision.description = revision_form['description'].value()
             revision.suggestion = suggestion
@@ -237,6 +185,7 @@ class UpdateSuggestionView(PostSuggestionView):
         context = {
             'form': form,
             'show_image_form': False,
+            'show_errors': True,
             'cancel_button_label': "Cancel",
             'post_button_label': "Update",
         }

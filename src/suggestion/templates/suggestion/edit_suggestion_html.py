@@ -1,5 +1,3 @@
-from django.conf import settings
-
 from django_dominate.django_tags import *
 
 from dominate.tags import *
@@ -13,12 +11,42 @@ from suggestion.templates.dominate_tags import *
 @form(
     method="post",
     enctype="multipart/form-data",
-    id="revision-form"
+    id="suggestion-form"
 )
-def revision_form():
+def suggestion_form():
     django_csrf_token()
+
+    with django_if("show_image_form"):
+        with p():
+            with django_if("show_errors"):
+                text("{{ form.cropping.errors }}")
+            label(
+                _for="{{ form.cropping.id_for_label }}",
+                _class="form-label"
+            )
+            text("{{ form.cropping }}")
+
+        with p():
+            with django_if("show_errors"):
+                text("{{ form.image.errors }}")
+            with label(
+                _for="{{ form.image.id_for_label }}",
+                _class="form-label"
+            ):
+                text("Image")
+            text("{{ form.image }}")
+            button(
+                "Upload",
+                # todo reenable automatic upload
+                # _class="hidden",
+                id="upload-submit",
+                name="submit",
+                value="upload"
+            )
+
     with p():
-        text("{{ form.title.errors }}")
+        with django_if("show_errors"):
+            text("{{ form.title.errors }}")
         with label(
             _for="{{ form.title.id_for_label }}",
             _class="form-label"
@@ -34,7 +62,8 @@ def revision_form():
         )
 
     with p():
-        text("{{ form.description.errors }}")
+        with django_if("show_errors"):
+            text("{{ form.description.errors }}")
         with label(
             _for="{{ form.description.id_for_label }}",
             _class="form-label"
@@ -42,7 +71,7 @@ def revision_form():
             text("Describe your suggestion")
         with textarea(
             name="description",
-            form="revision-form",
+            form="suggestion-form",
             rows="20",
             _class="form-field"
         ):
@@ -63,10 +92,6 @@ def revision_form():
         )
 
 
-url_suggestion_image = \
-    "{% url 'new-suggestion-image' request.goal.slug draft_suggestion.id %}"
-
-
 def result():
     with django_block("head") as head:
         text("{{ form.media }}")
@@ -76,14 +101,7 @@ def result():
 
         column(2)
         with column(8):
-            with django_if("show_image_form"):
-                div(
-                    id="suggestion-image-div",
-                    data_ajax_url=url_suggestion_image
-                )
-            revision_form()
-
-        inline_script(settings.BASE_DIR, "suggestion/edit_suggestion_init.js")
+            suggestion_form()
 
     return (
         "{% extends 'base.html' %}",

@@ -3,7 +3,11 @@ from django import forms
 from .models import Suggestion
 
 
-class RevisionForm(forms.Form):
+class SuggestionForm(forms.ModelForm):
+    class Meta:
+        model = Suggestion
+        fields = ('image', 'cropping')
+
     is_duplicate_title = lambda x: False
 
     title = forms.CharField(label='Title', max_length=100)
@@ -14,9 +18,3 @@ class RevisionForm(forms.Form):
             raise forms.ValidationError(
                 "Sorry, this title is already used, please choose another"
             )
-
-
-class SuggestionForm(forms.ModelForm):
-    class Meta:
-        model = Suggestion
-        fields = ('image', 'cropping')
