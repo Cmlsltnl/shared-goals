@@ -52,6 +52,11 @@
     left: 0px;
 }
 
+.proposal--title .title-caption {
+    float: left;
+    clear: both;
+}
+
 .proposal--stars {
     height: 20px;
     width: 100px;

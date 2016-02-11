@@ -25,7 +25,10 @@
           <a href="{% url 'proposal' request.goal.slug proposal.slug %}">
             <div class="proposal--photo" style="background-image:url({{ proposal.image.url }});">
               <div class="proposal--gradient"></div>
-              <h3 class="proposal--title">{{ proposal.get_current_revision.title }}</h3>
+              <span class="proposal--title">
+                <span class="title-caption">action</span>
+                <h3>{{ proposal.get_current_revision.title }}</h3>
+              </span>
             </div>
           </a>
         </div>

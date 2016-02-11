@@ -1,7 +1,6 @@
 from django_dominate.django_tags import *
 
 from dominate.tags import *
-from dominate.util import text
 
 
 def column(k, **argv):
@@ -19,8 +18,9 @@ def proposal_list_item():
 )
 def proposal_image(title):
     div(_class="proposal--gradient")
-    with h3(_class="proposal--title"):
-        text(title)
+    with span(_class="proposal--title"):
+        span("action", _class="title-caption")
+        h3(title)
 
 
 def readonly_rateit(rating):
