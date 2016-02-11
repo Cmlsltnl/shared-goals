@@ -11,7 +11,6 @@ from suggestion.templates.dominate_tags import *
 @form(
     method="post",
     enctype="multipart/form-data",
-    id="suggestion-form"
 )
 def suggestion_form():
     django_csrf_token()
@@ -71,7 +70,6 @@ def suggestion_form():
             text("Describe your suggestion")
         with textarea(
             name="description",
-            form="suggestion-form",
             rows="20",
             _class="form-field"
         ):

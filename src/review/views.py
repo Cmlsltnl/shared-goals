@@ -1,6 +1,9 @@
+import json
+
 from django.contrib.auth.decorators import login_required
-from django.views.generic import View
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
+from django.views.generic import View
 from django.utils.decorators import method_decorator
 
 from goal.views import membership_required
@@ -50,6 +53,7 @@ class ReviewsView(View):
         review = (
             None
             if not request.member else
+
             self.__get_or_create_review(request, latest_revision, all_reviews)
         )
         is_saving = (
@@ -79,21 +83,30 @@ class ReviewsView(View):
             'review': review,
             'post_button_header': (
                 None
-                if not review else (
-                    "Rate this suggestion and give feedback"
-                    if review.is_draft else
-                    "Update your review of this suggestion"
-                )
+                if not review else
+
+                "Rate this suggestion and give feedback"
+                if review.is_draft else
+
+                "Update your review of this suggestion"
             ),
             'post_button_label': (
                 None
                 if not review else
-                "Submit" if review.is_draft else "Update"
+
+                "Submit"
+                if review.is_draft else
+
+                "Update"
             ),
             'cancel_button_label': (
                 None
                 if not review else
-                "Save draft" if review.is_draft else "Cancel"
+
+                "Save draft"
+                if review.is_draft else
+
+                "Cancel"
             ),
             'form': review_form,
             'published_reviews': published_reviews,
@@ -111,17 +124,19 @@ class CommentsView(View):
 
 
 class PostCommentView(View):
-    def __get_or_create_comment(self, request, review):
+    def __get_or_create_comment(self, request, review, reply_to_comment_id):
         draft = review.comments.filter(
             is_draft=True,
             owner=request.global_user,
-            review_id=review.id
+            review_id=review.id,
+            reply_to_id=reply_to_comment_id
         ).first()
 
         if not draft:
             draft = Comment()
             draft.owner = request.global_user
             draft.review = review
+            draft.reply_to_id = reply_to_comment_id
             draft.save()
 
         return draft
@@ -139,37 +154,42 @@ class PostCommentView(View):
 
     @method_decorator(login_required)
     def get(self, request, goal_slug, review_id, reply_to_comment_id=None):
-        return self.handle(request, review_id, reply_to_comment_id)
+        review = get_object_or_404(Review, pk=review_id)
+        comment = self.__get_or_create_comment(
+            request, review, reply_to_comment_id)
+        return self.__render_form(
+            request, review, CommentForm(instance=comment))
+
+    def __render_form(self, request, review, form):
+        context = {
+            'review': review,
+            'comment_form': form,
+        }
+        return render(request, 'review/post_comment.html', context)
 
     @method_decorator(login_required)
     def post(self, request, goal_slug, review_id, reply_to_comment_id=None):
-        return self.handle(request, review_id, reply_to_comment_id)
-
-    def handle(self, request, review_id, reply_to_comment_id):
         review = get_object_or_404(Review, pk=review_id)
-        comment = self.__get_or_create_comment(request, review)
-        is_posting = request.method == 'POST'
+        comment = self.__get_or_create_comment(
+            request, review, reply_to_comment_id)
+        is_saving = request.POST['submit'] == 'savecomment-submit'
+        is_data_valid = self.__update_comment_and_save(request, comment)
 
-        if is_posting:
-            is_data_valid = self.__update_comment_and_save(
-                request, comment)
-            try_again = (
-                request.POST['submit'] == 'savecomment-submit' and
-                not is_data_valid
+        if is_saving and not is_data_valid:
+            return HttpResponse(
+                json.dumps({
+                    'success': False,
+                    'form': self.__render_form(
+                        review,
+                        CommentForm(request.POST, request.FILES)
+                    )
+                }),
+                content_type="application/json"
             )
 
-        comment_form = (
-            None
-            if not request.global_user
-            else (
-                CommentForm(request.POST, request.FILES)
-                if is_posting and try_again else
-                CommentForm(initial=comment.__dict__)
-            )
+        return HttpResponse(
+            json.dumps({
+                'success': True,
+            }),
+            content_type="application/json"
         )
-
-        context = {
-            'review': review,
-            'comment_form': comment_form,
-        }
-        return render(request, 'review/post_comment.html', context)

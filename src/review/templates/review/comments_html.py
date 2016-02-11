@@ -28,12 +28,13 @@ def comment():
         with column(8):
             with div(style="text-indent: {{ comment.indent }}px;"):
                 text("{{ comment.body }}")
-                a(
-                    "reply",
-                    _class="comment-reply-link",
-                    data_ajax_url=comment_form_url
-                )
-                div(_class="comment-reply-div")
+                with django_if("request.global_user"):
+                    a(
+                        "reply",
+                        _class="comment-reply-link",
+                        data_ajax_url=comment_form_url
+                    )
+                    div(_class="comment-reply-div")
 
 
 @span()

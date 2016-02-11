@@ -47,7 +47,6 @@ def review_form():
         text("{{ form.description.errors }}")
         with textarea(
             name="description",
-            form="review-form",
             rows="10",
             _class="form-field"
         ):

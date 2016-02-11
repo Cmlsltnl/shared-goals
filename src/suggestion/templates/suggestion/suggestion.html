@@ -37,28 +37,40 @@
 sgreviews = function() {
     $('div.rateit, span.rateit').rateit();
 
-    // load comments into each comment-block
-    $(".comment-block").each(function(index, comment_block) {
+    function on_comment_form_submit(event) {
+        alert($(document.activeElement)[0].value);
+        event.preventDefault();
+    }
 
-        // load comments into this comment-block
-        url_get_comment_block = $(comment_block).data("ajax-url");
-        $(comment_block).load(url_get_comment_block, function() {
+    function init_reply_div() {
+        // connect post button to do an ajax post
+        form = $(this).find("form")[0];
+        $(form).submit(on_comment_form_submit);
+    }
 
-            // connect all reply-links within this comment-block
-            var reply_links = $(comment_block).find(".comment-reply-link");
-            reply_links.each(function(index, reply_link) {
+    function on_click_reply_link() {
+        // respond to clicking on $(this) reply link by showing a reply form
+        reply_div = $(this).siblings(".comment-reply-div")[0];
+        url_get_reply_form = $(this).data("ajax-url");
+        $(reply_div).load(url_get_reply_form, init_reply_div);
+    }
 
-                // connect this reply-link, so that it loads a form into reply-div
-                $(reply_link).click(function() {
-
-                    // load a reply form with ajax
-                    url_get_comment_form = $(reply_link).data("ajax-url");
-                    reply_div = $(reply_link).siblings(".comment-reply-div")[0];
-                    $(reply_div).load(url_get_comment_form);
-                });
-           });
+    function init_comment_block() {
+        // connect all reply-links within $(this) comment-block
+        $(this).find(".comment-reply-link").each(function(index, reply_link) {
+            $(reply_link).click(on_click_reply_link);
         });
-    });
+    }
+
+    function init_reviews() {
+        $(".comment-block").each(function(index, comment_block) {
+            // load comments into this comment-block
+            url_get_comment_block = $(comment_block).data("ajax-url");
+            $(comment_block).load(url_get_comment_block, init_comment_block);
+        });
+    }
+
+    init_reviews();
 }
 
 $(document).ready(function() {

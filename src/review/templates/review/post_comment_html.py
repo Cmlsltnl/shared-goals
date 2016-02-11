@@ -10,7 +10,6 @@ from suggestion.templates.dominate_tags import *
 
 @form(
     method="post",
-    id="comment-form",
     enctype="multipart/form-data",
     _class="big-gap-above"
 )
@@ -26,7 +25,6 @@ def comment_form():
             text("Comment on this review")
         with textarea(
             name="body",
-            form="comment-form",
             _class="form-field"
         ):
             text("{{ comment_form.body.value }}")
@@ -34,13 +32,11 @@ def comment_form():
     with div():
         button(
             "Submit",
-            id="savecomment-submit",
             name="submit",
             value="save"
         )
         button(
             "Cancel",
-            id="cancelcomment-submit",
             name="submit",
             value="cancel"
         )

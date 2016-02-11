@@ -13,7 +13,7 @@
             <div class="rateit" data-rateit-resetable="false" data-rateit-value="{{ form.rating.value }}" id="rateit-review"></div>
           </p>
           <p>{{ form.description.errors }}
-            <textarea class="form-field" form="review-form" name="description" rows="10">{{ form.description.value }}</textarea>
+            <textarea class="form-field" name="description" rows="10">{{ form.description.value }}</textarea>
           </p>
           <div>
             <button id="savereview-submit" name="submit" value="save">{{ post_button_label }}</button>

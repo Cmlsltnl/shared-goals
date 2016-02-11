@@ -17,8 +17,10 @@
         <div class="col-md-2"></div>
         <div class="col-md-8">
           <div style="text-indent: {{ comment.indent }}px;">{{ comment.body }}
-            <a class="comment-reply-link" data-ajax-url="{% url 'reply_comment' request.goal.slug review.id comment.id %}">reply</a>
-            <div class="comment-reply-div"></div>
+            {% if request.global_user %}
+              <a class="comment-reply-link" data-ajax-url="{% url 'reply_comment' request.goal.slug review.id comment.id %}">reply</a>
+              <div class="comment-reply-div"></div>
+            {% endif %}
           </div>
         </div>
       </div>
