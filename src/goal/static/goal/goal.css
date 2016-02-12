@@ -27,6 +27,10 @@
     padding-top: 28px;
 }
 
+.tiny-gap-above {
+    padding-top: 12px;
+}
+
 .suggestion--gradient {
     height: 100%;
     width: 100%;
@@ -68,4 +72,8 @@
 
 .suggestion-form--image {
     background-color: lightgray;
+}
+
+.review--comments-notice {
+    font-size: 12px;
 }

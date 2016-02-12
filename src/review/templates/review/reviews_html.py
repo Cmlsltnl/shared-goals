@@ -96,10 +96,23 @@ def published_review():
 
     div(
         _class="comment-block",
+        id=(
+            "{% if published_review.id == review.id %}"
+            "comments-on-my-review"
+            "{% endif %}"
+        ),
         data_ajax_url=(
             "{% url 'comments' request.goal.slug published_review.pk %}"
         )
     )
+
+
+@div(_class="review--comments-notice tiny-gap-above")
+def review_comments_notice():
+    text("Note: updating will remove ")
+    with a(href="#comments-on-my-review"):
+        text("{{ review.published_comments|length }} comments")
+    text(" that were made on your existing review")
 
 
 def result():
@@ -111,10 +124,7 @@ def result():
                     review_form()
 
                 with django_if("review.published_comments|length"):
-                    h5(
-                        "Note: updating will remove any comments that "
-                        "were made on your existing review"
-                    )
+                    review_comments_notice()
 
         with django_for("published_review in published_reviews"):
             published_review()

@@ -29,7 +29,9 @@
       <p>
         {% if show_errors %}{{ form.description.errors }}{% endif %}
         <label class="form-label" for="{{ form.description.id_for_label }}">Describe your suggestion</label>
-        <textarea class="form-field" name="description" rows="20">{{ form.description.value }}</textarea>
+        <p style="font-size: 10px;">
+          <a href="http://commonmark.org/help/">Markdown syntax</a> allowed</p>
+        <textarea class="form-field" name="description" rows="16">{{ form.description.value }}</textarea>
       </p>
       {% if show_image_form %}
         <div class="suggestion-form--image">

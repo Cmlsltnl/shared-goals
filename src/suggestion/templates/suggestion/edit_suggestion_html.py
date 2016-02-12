@@ -45,6 +45,7 @@ def suggestion_form():
             _class="form-field"
         )
 
+    url_markdown = 'http://commonmark.org/help/'
     with p():
         with django_if("show_errors"):
             text("{{ form.description.errors }}")
@@ -53,9 +54,15 @@ def suggestion_form():
             _class="form-label"
         ):
             text("Describe your suggestion")
+
+        with p(style="font-size: 10px;"):
+            with a(href=url_markdown):
+                text("Markdown syntax")
+            text(" allowed")
+
         with textarea(
             name="description",
-            rows="20",
+            rows="16",
             _class="form-field"
         ):
             text("{{ form.description.value }}")

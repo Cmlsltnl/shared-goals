@@ -22,7 +22,8 @@
         </form>
       {% endif %}
       {% if review.published_comments|length %}
-        <h5>Note: updating will remove any comments that were made on your existing review</h5>
+        <div class="review--comments-notice tiny-gap-above">Note: updating will remove 
+          <a href="#comments-on-my-review">{{ review.published_comments|length }} comments</a> that were made on your existing review</div>
       {% endif %}
     </div>
   </div>
@@ -46,7 +47,7 @@
           <p>{{ published_review.description }}</p>
         </div>
       </div>
-      <div class="comment-block" data-ajax-url="{% url 'comments' request.goal.slug published_review.pk %}"></div>
+      <div class="comment-block" data-ajax-url="{% url 'comments' request.goal.slug published_review.pk %}" id="{% if published_review.id == review.id %}comments-on-my-review{% endif %}"></div>
     </div>
   {% endfor %}<script>
 // review/init_review_form.js

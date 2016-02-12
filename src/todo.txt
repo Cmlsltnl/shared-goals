@@ -2,17 +2,17 @@
 - https://github.com/edoburu/django-fluent-comments/
 - https://github.com/HonzaKral/django-threadedcomments
 
-- use the suggestion.type field
+- reply to comment links must go below the comment
+- review text is not layed out well (no carriage returns)
 - allow to comment on a review
-- try to make image bigger in the new suggestion form
 - beware that image names in the porposals may clash (make names unique)
 - when uploading a new image in a draft suggestion, delete the previous one
-- below the form to update your review, add a link to scroll down to the comments
-- when rating a suggestion, allow to choose "I've done this", "I'm doing this",
-"After trying I gave up", "After trying I decided against it"
 - when updating a review, delete all comments
 - Advise member that their profile is totally public
 - Use now() timestamp from the db server
 - When leaving a Goal as a member, confirm that all Suggestion are deleted (or make them orphans that can be adopted?)
 - hrs in comment-block are not spread correctly
-- fix clear button when uploading suggestion image
+- fix bug with clear button when uploading suggestion image
+- test registration with console email backend
+- when rating a suggestion, allow to choose "I've done this", "I'm doing this",
+"After trying I gave up", "After trying I decided against it"
