@@ -8,15 +8,13 @@ from suggestion.models import Revision
 
 class Review(models.Model):
     EXPERIENCE_NOT_TRIED = 0
-    EXPERIENCE_DID_NOT_WORK = 1
-    EXPERIENCE_WORKED_IN_PAST = 2
-    EXPERIENCE_WORKS_NOW = 3
+    EXPERIENCE_TRIED = 1
+    EXPERIENCE_DOING = 1
 
     EXPERIENCE_CHOICES = (
-        (EXPERIENCE_NOT_TRIED, "I've not (really) tried this"),
-        (EXPERIENCE_DID_NOT_WORK, "I've tried this but it didn't work for me"),
-        (EXPERIENCE_WORKED_IN_PAST, "This has worked for me in the past"),
-        (EXPERIENCE_WORKS_NOW, "This is working for me now"),
+        (EXPERIENCE_NOT_TRIED, "I've not tried this"),
+        (EXPERIENCE_TRIED, "Yes, I've tried this myself"),
+        (EXPERIENCE_DOING, "I've tried this, and I'm still doing it"),
     )
 
     pub_date = models.DateTimeField('date published', auto_now=True)

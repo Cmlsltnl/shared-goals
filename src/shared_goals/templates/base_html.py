@@ -46,7 +46,7 @@ def top_right_div():
 
                     button(
                         "New Suggestion",
-                        _class="btn",
+                        _class="btn btn-success",
                         onclick=url_new_suggestion
                     )
             top_right_menu()

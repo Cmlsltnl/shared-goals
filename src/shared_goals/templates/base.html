@@ -11,7 +11,7 @@
             {% if suggestion and suggestion.owner == request.member %}
               <button class="btn btn-info" onclick="location.href='{% url 'update-suggestion' request.goal.slug suggestion.slug %}';">Update Suggestion</button>
             {% endif %}
-            <button class="btn" onclick="location.href='{% url 'new-suggestion' request.goal.slug %}';">New Suggestion</button>
+            <button class="btn btn-success" onclick="location.href='{% url 'new-suggestion' request.goal.slug %}';">New Suggestion</button>
           </div>
         {% endif %}
         <div class="dropdown clearfix pull-right">
