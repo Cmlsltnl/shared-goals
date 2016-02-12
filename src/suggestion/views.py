@@ -20,7 +20,12 @@ class PostSuggestionView(View):
                 Q(slug=slugify(title)) & ~Q(pk=suggestion.pk)
             ).exists()
 
-        form = SuggestionForm(request.POST, request.FILES)
+        form = SuggestionForm(
+            request.POST,
+            request.FILES,
+            instance=suggestion,
+            initial=suggestion.get_current_revision().__dict__
+        )
         form.is_duplicate_title = is_duplicate_title
 
         return form
@@ -34,12 +39,7 @@ class PostSuggestionView(View):
     def on_cancel(self, goal_slug):
         # todo redirect to previous page
         return HttpResponseRedirect(
-            reverse(
-                'goal',
-                kwargs=dict(
-                    goal_slug=goal_slug
-                )
-            )
+            reverse('goal', kwargs=dict(goal_slug=goal_slug))
         )
 
     def on_save(self, goal_slug, suggestion_slug):
@@ -93,7 +93,7 @@ class NewSuggestionView(PostSuggestionView):
             if request.POST['submit'] == 'save':
                 suggestion.slug = slugify(
                     suggestion.get_current_revision().title)
-                suggestion.apply_cropping_to_image(replace_original=True)
+                suggestion.apply_cropping_to_image(delete_original=False)
                 suggestion.is_draft = False
 
         suggestion.save()

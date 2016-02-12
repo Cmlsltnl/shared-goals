@@ -44,6 +44,18 @@ def review_form():
         )
 
     with p():
+        text("{{ form.experience.errors }}")
+        with label(
+            _for="{{ form.experience.id_for_label }}",
+            _class="form-label"
+        ):
+            text(
+                "Do you have any experience with the suggested "
+                "{{ latest_revision.suggestion.get_type_display }}?"
+            )
+        text("{{ form.experience }}")
+
+    with p():
         text("{{ form.description.errors }}")
         with textarea(
             name="description",
@@ -88,11 +100,22 @@ def published_review():
                         text("previous version")
                     text(" was {{ published_review.header|lowerfirst }}")
 
+    comment_form_url = \
+        "{% url 'post_comment' request.goal.slug published_review.id %}"
+
     with div(_class="row"):
         column(2)
         with column(8):
             with p():
                 text("{{ published_review.description }}")
+
+            with django_if("request.global_user"):
+                a(
+                    "comment on this review",
+                    _class="comment-reply-link",
+                    data_ajax_url=comment_form_url
+                )
+                div(_class="comment-reply-div")
 
     div(
         _class="comment-block",
@@ -109,10 +132,9 @@ def published_review():
 
 @div(_class="review--comments-notice tiny-gap-above")
 def review_comments_notice():
-    text("Note: updating will remove ")
+    text("Note: updating your review will remove ")
     with a(href="#comments-on-my-review"):
-        text("{{ review.published_comments|length }} comments")
-    text(" that were made on your existing review")
+        text("{{ review.published_comments|length }} related comments")
 
 
 def result():

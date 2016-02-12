@@ -7,12 +7,26 @@ from suggestion.models import Revision
 
 
 class Review(models.Model):
+    EXPERIENCE_NOT_TRIED = 0
+    EXPERIENCE_DID_NOT_WORK = 1
+    EXPERIENCE_WORKED_IN_PAST = 2
+    EXPERIENCE_WORKS_NOW = 3
+
+    EXPERIENCE_CHOICES = (
+        (EXPERIENCE_NOT_TRIED, "I've not (really) tried this"),
+        (EXPERIENCE_DID_NOT_WORK, "I've tried this but it didn't work for me"),
+        (EXPERIENCE_WORKED_IN_PAST, "This has worked for me in the past"),
+        (EXPERIENCE_WORKS_NOW, "This is working for me now"),
+    )
+
     pub_date = models.DateTimeField('date published', auto_now=True)
     owner = models.ForeignKey(Member)
     revision = models.ForeignKey(Revision, related_name="revisions", null=True)
     rating = models.DecimalField(max_digits=2, decimal_places=1, default=0)
     description = models.TextField(blank=True)
     is_draft = models.BooleanField(default=True)
+    experience = models.PositiveSmallIntegerField(
+        choices=EXPERIENCE_CHOICES, default=0, blank=True)
 
     def __str__(self):
         return "Review by %s for %s" % (self.owner, self.revision)

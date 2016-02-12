@@ -36,7 +36,7 @@ def comment_form():
             value="save"
         )
         button(
-            "Cancel",
+            "Save draft",
             name="submit",
             value="cancel"
         )

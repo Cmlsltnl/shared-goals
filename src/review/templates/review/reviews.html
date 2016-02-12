@@ -12,6 +12,8 @@
             <input class="form-field" id="id_rating" name="rating" type="hidden" value="{{ form.rating.value }}">
             <div class="rateit" data-rateit-resetable="false" data-rateit-value="{{ form.rating.value }}" id="rateit-review"></div>
           </p>
+          <p>{{ form.experience.errors }}
+            <label class="form-label" for="{{ form.experience.id_for_label }}">Do you have any experience with the suggested {{ latest_revision.suggestion.get_type_display }}?</label>{{ form.experience }}</p>
           <p>{{ form.description.errors }}
             <textarea class="form-field" name="description" rows="10">{{ form.description.value }}</textarea>
           </p>
@@ -22,8 +24,9 @@
         </form>
       {% endif %}
       {% if review.published_comments|length %}
-        <div class="review--comments-notice tiny-gap-above">Note: updating will remove 
-          <a href="#comments-on-my-review">{{ review.published_comments|length }} comments</a> that were made on your existing review</div>
+        <div class="review--comments-notice tiny-gap-above">Note: updating your review will remove 
+          <a href="#comments-on-my-review">{{ review.published_comments|length }} related comments</a>
+        </div>
       {% endif %}
     </div>
   </div>
@@ -45,6 +48,10 @@
         <div class="col-md-2"></div>
         <div class="col-md-8">
           <p>{{ published_review.description }}</p>
+          {% if request.global_user %}
+            <a class="comment-reply-link" data-ajax-url="{% url 'post_comment' request.goal.slug published_review.id %}">comment on this review</a>
+            <div class="comment-reply-div"></div>
+          {% endif %}
         </div>
       </div>
       <div class="comment-block" data-ajax-url="{% url 'comments' request.goal.slug published_review.pk %}" id="{% if published_review.id == review.id %}comments-on-my-review{% endif %}"></div>

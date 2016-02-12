@@ -29,6 +29,7 @@ class ReviewsView(View):
         is_form_valid = form.is_valid()
         if is_form_valid:
             review.rating = form.cleaned_data['rating']
+            review.experience = form.cleaned_data['experience']
             review.description = form.cleaned_data['description']
 
             if request.POST['submit'] == 'save':
@@ -74,6 +75,10 @@ class ReviewsView(View):
             if request.member and suggestion.owner != request.member else
             None
         )
+
+        if review_form and suggestion.type == Suggestion.TYPE_ACTION:
+            review_form.fields['experience'].choices = \
+                tuple(list(Review.EXPERIENCE_CHOICES)[:-1])
 
         published_reviews = \
             all_reviews.filter(is_draft=False).order_by('-pub_date')

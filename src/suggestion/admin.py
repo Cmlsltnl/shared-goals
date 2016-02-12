@@ -6,7 +6,8 @@ from .models import Suggestion, Revision
 
 def apply_cropping_to_image(modeladmin, request, queryset):
     for item in queryset:
-        item.apply_cropping_to_image(replace_original=True)
+        item.apply_cropping_to_image(delete_original=True)
+        item.save()
 apply_cropping_to_image.short_description = "Apply cropping to image"
 
 

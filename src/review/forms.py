@@ -6,7 +6,7 @@ from .models import Comment, Review
 class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
-        fields = ('rating', 'description')
+        fields = ('rating', 'experience', 'description')
 
     def clean_rating(self):
         data = self.cleaned_data['rating']
