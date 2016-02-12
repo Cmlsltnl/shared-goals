@@ -41,12 +41,15 @@ class EventHandler(FileSystemEventHandler):
                 os.path.relpath(template, self.path))[0]
 
             import_path = re.sub(os.path.sep, ".", rel_path)
-            mod = importlib.import_module(import_path)
-            outputfile = re.sub(r'_html\.py$', '.html', template)
-            with open(outputfile, 'w') as of:
-                for line in mod.result():
-                    of.write(str(line))
-                    of.write(os.linesep)
+            try:
+                mod = importlib.import_module(import_path)
+                outputfile = re.sub(r'_html\.py$', '.html', template)
+                with open(outputfile, 'w') as of:
+                    for line in mod.result():
+                        of.write(str(line))
+                        of.write(os.linesep)
+            except Exception as e:
+                print(e)
 
         for new_import in [
             x for x in sys.modules.keys() if x not in current_imports
