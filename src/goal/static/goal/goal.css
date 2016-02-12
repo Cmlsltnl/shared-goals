@@ -65,3 +65,7 @@
 .readonly-rateit {
     padding-top : 4px
 }
+
+.suggestion-form--image {
+    background-color: lightgray;
+}

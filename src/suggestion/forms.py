@@ -6,7 +6,7 @@ from .models import Suggestion
 class SuggestionForm(forms.ModelForm):
     class Meta:
         model = Suggestion
-        fields = ('image', 'cropping')
+        fields = ('image', 'cropping', 'type')
 
     is_duplicate_title = lambda x: False
 

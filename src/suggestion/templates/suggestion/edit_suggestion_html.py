@@ -15,33 +15,18 @@ from suggestion.templates.dominate_tags import *
 def suggestion_form():
     django_csrf_token()
 
-    with django_if("show_image_form"):
-        with p():
-            with django_if("show_errors"):
-                text("{{ form.cropping.errors }}")
-            label(
-                _for="{{ form.cropping.id_for_label }}",
-                _class="form-label"
+    with p():
+        with django_if("show_errors"):
+            text("{{ form.type.errors }}")
+        with label(
+            _for="{{ form.type.id_for_label }}",
+            _class="form-label"
+        ):
+            text(
+                "Will you suggest a one-time Action, "
+                "or a continuous Practice?"
             )
-            text("{{ form.cropping }}")
-
-        with p():
-            with django_if("show_errors"):
-                text("{{ form.image.errors }}")
-            with label(
-                _for="{{ form.image.id_for_label }}",
-                _class="form-label"
-            ):
-                text("Image")
-            text("{{ form.image }}")
-            button(
-                "Upload",
-                # todo reenable automatic upload
-                # _class="hidden",
-                id="upload-submit",
-                name="submit",
-                value="upload"
-            )
+        text("{{ form.type }}")
 
     with p():
         with django_if("show_errors"):
@@ -75,7 +60,41 @@ def suggestion_form():
         ):
             text("{{ form.description.value }}")
 
-    with div():
+    with django_if("show_image_form"):
+        with div(_class="suggestion-form--image"):
+            with p():
+                with django_if("show_errors"):
+                    text("{{ form.cropping.errors }}")
+                label(
+                    _for="{{ form.cropping.id_for_label }}",
+                    _class="form-label"
+                )
+                text("{{ form.cropping }}")
+
+            with p():
+                with django_if("show_errors"):
+                    text("{{ form.image.errors }}")
+                with label(
+                    _for="{{ form.image.id_for_label }}",
+                    _class="form-label"
+                ):
+                    text(
+                        "Make your suggestion look good by uploading an image")
+                text("{{ form.image }}")
+                button(
+                    "Upload",
+                    # todo reenable automatic upload
+                    # _class="hidden",
+                    id="upload-submit",
+                    name="submit",
+                    value="upload"
+                )
+
+    with p(_class="small-gap-above small-gap-below"):
+        with label(
+            _class="form-label"
+        ):
+            text("All done, press Submit to publish your suggestion")
         button(
             "{{ post_button_label }}",
             id="saverevision-submit",

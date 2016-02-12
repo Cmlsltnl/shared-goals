@@ -80,11 +80,15 @@ class NewSuggestionView(PostSuggestionView):
         current_revision.description = form['description'].value()
         current_revision.save()
 
+        suggestion.type = form['type'].value()
+
+        if 'image' in request.FILES:
+            # todo test if really an image
+            suggestion.image = request.FILES['image']
+
         if is_form_valid:
-            # todo also save the cropping if the form is invalid
+            # todo also save the cropping+image if the form is invalid
             suggestion.cropping = form.cleaned_data['cropping']
-            if 'image' in request.FILES:
-                suggestion.image = form.cleaned_data['image']
 
             if request.POST['submit'] == 'save':
                 suggestion.slug = slugify(
@@ -92,7 +96,7 @@ class NewSuggestionView(PostSuggestionView):
                 suggestion.apply_cropping_to_image(replace_original=True)
                 suggestion.is_draft = False
 
-            suggestion.save()
+        suggestion.save()
 
         return is_form_valid
 

@@ -3,6 +3,7 @@
 - https://github.com/HonzaKral/django-threadedcomments
 
 - use the suggestion.type field
+- allow to comment on a review
 - try to make image bigger in the new suggestion form
 - beware that image names in the porposals may clash (make names unique)
 - when uploading a new image in a draft suggestion, delete the previous one
@@ -14,3 +15,4 @@
 - Use now() timestamp from the db server
 - When leaving a Goal as a member, confirm that all Suggestion are deleted (or make them orphans that can be adopted?)
 - hrs in comment-block are not spread correctly
+- fix clear button when uploading suggestion image
