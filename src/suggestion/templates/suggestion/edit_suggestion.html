@@ -30,7 +30,7 @@
         {% if show_errors %}{{ form.description.errors }}{% endif %}
         <label class="form-label" for="{{ form.description.id_for_label }}">Describe your suggestion</label>
         <p style="font-size: 10px;">
-          <a href="http://commonmark.org/help/">Markdown syntax</a> allowed</p>
+          <a href="http://commonmark.org/help/">Markdown</a> allowed</p>
         <textarea class="form-field" name="description" rows="16">{{ form.description.value }}</textarea>
       </p>
       {% if show_image_form %}
@@ -48,7 +48,7 @@
       <p class="small-gap-above small-gap-below">
         <label class="form-label">All done, press Submit to publish your suggestion</label>
         <button id="saverevision-submit" name="submit" value="save">{{ post_button_label }}</button>
-        <button id="cancelrevision-submit" name="submit" value="cancel">{{ cancel_button_label }}</button>
+        <button id="cancelrevision-submit" name="submit" value="cancel">Cancel</button>
       </p>
     </form>
   </div>

@@ -76,28 +76,34 @@ class NewSuggestionView(PostSuggestionView):
         is_form_valid = form.is_valid()
 
         current_revision = suggestion.get_current_revision()
-        current_revision.title = form['title'].value()
-        current_revision.description = form['description'].value()
+        if 'title' in form.cleaned_data:
+            current_revision.title = form.cleaned_data['title']
+        if 'description' in form.cleaned_data:
+            current_revision.description = form.cleaned_data['description']
         current_revision.save()
 
-        suggestion.type = form['type'].value()
+        suggestion.type = form.cleaned_data['type']
+        if 'image' in form.cleaned_data:
+            # Note: when the image is cleared in the UI, the value of
+            # form.cleaned_data['image'] becomes False. In that case
+            # we store the value as "", otherwise saving the cropping
+            # field later on will crash.
+            suggestion.image = (
+                form.cleaned_data['image']
+                if form.cleaned_data['image'] else
+                ""
+            )
 
-        if 'image' in request.FILES:
-            # todo test if really an image
-            suggestion.image = request.FILES['image']
-
-        if is_form_valid:
-            # todo also save the cropping+image if the form is invalid
+        if 'cropping' in form.cleaned_data:
             suggestion.cropping = form.cleaned_data['cropping']
 
-            if request.POST['submit'] == 'save':
-                suggestion.slug = slugify(
-                    suggestion.get_current_revision().title)
-                suggestion.apply_cropping_to_image(delete_original=False)
-                suggestion.is_draft = False
+        if is_form_valid and request.POST['submit'] == 'save':
+            suggestion.slug = slugify(
+                suggestion.get_current_revision().title)
+            suggestion.apply_cropping_to_image(delete_original=False)
+            suggestion.is_draft = False
 
         suggestion.save()
-
         return is_form_valid
 
     @method_decorator(membership_required)
@@ -134,7 +140,6 @@ class NewSuggestionView(PostSuggestionView):
             'form': form,
             'show_image_form': True,
             'show_errors': is_saving,
-            'cancel_button_label': "Save draft",
             'post_button_label': "Submit",
         }
 
@@ -146,12 +151,10 @@ class UpdateSuggestionView(PostSuggestionView):
         revision_form = self.get_posted_form(request, suggestion)
         is_form_valid = revision_form.is_valid()
 
-        # todo see if duplication with update function can be removed
         if is_form_valid:
             revision = Revision()
-            # todo use cleaned data
-            revision.title = revision_form['title'].value()
-            revision.description = revision_form['description'].value()
+            revision.title = revision_form.cleaned_data['title']
+            revision.description = revision_form.cleaned_data['description']
             revision.suggestion = suggestion
             revision.save()
 
@@ -190,7 +193,6 @@ class UpdateSuggestionView(PostSuggestionView):
             'form': form,
             'show_image_form': False,
             'show_errors': True,
-            'cancel_button_label': "Cancel",
             'post_button_label': "Update",
         }
 

@@ -71,7 +71,7 @@ def review_form():
             value="save"
         )
         button(
-            "{{ cancel_button_label }}",
+            "Cancel",
             name="submit",
             value="cancel"
         )

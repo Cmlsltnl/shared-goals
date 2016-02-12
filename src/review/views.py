@@ -27,16 +27,17 @@ class ReviewsView(View):
     def __update_review_and_save(self, review, request):
         form = ReviewForm(request.POST, request.FILES)
         is_form_valid = form.is_valid()
-        if is_form_valid:
+
+        if 'rating' in form.cleaned_data:
             review.rating = form.cleaned_data['rating']
+        if 'experience' in form.cleaned_data:
             review.experience = form.cleaned_data['experience']
+        if 'description' in form.cleaned_data:
             review.description = form.cleaned_data['description']
+        if is_form_valid and request.POST['submit'] == 'save':
+            review.is_draft = False
 
-            if request.POST['submit'] == 'save':
-                review.is_draft = False
-
-            review.save()
-
+        review.save()
         return is_form_valid
 
     def get(self, request, goal_slug, suggestion_slug):
@@ -104,15 +105,6 @@ class ReviewsView(View):
 
                 "Update"
             ),
-            'cancel_button_label': (
-                None
-                if not review else
-
-                "Save draft"
-                if review.is_draft else
-
-                "Cancel"
-            ),
             'form': review_form,
             'published_reviews': published_reviews,
         }
@@ -149,12 +141,13 @@ class PostCommentView(View):
     def __update_comment_and_save(self, request, comment):
         form = CommentForm(request.POST, request.FILES)
         is_form_valid = form.is_valid()
-        if is_form_valid:
-            comment.body = form.cleaned_data['body']
-            if request.POST['submit'] == 'save':
-                comment.is_draft = False
-            comment.save()
 
+        if 'body' in form.cleaned_data:
+            comment.body = form.cleaned_data['body']
+        if is_form_valid and request.POST['submit'] == 'save':
+            comment.is_draft = False
+
+        comment.save()
         return is_form_valid
 
     @method_decorator(login_required)

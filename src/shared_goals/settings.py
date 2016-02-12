@@ -150,6 +150,9 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = '/home/maarten/code/shared_goals/media/'
 
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails.txt")
+
 from .settings_registration import *
 from .settings_cropping import *
 from .settings_sorl_thumbnails import *

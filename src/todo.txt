@@ -1,13 +1,7 @@
-- how does uploading really work, what's up with the details file
+- when updating a review, delete all comments
 - review text is not layed out well (no carriage returns)
 - connect link to comment on a review
-- reply links show wrong mouse pointer
-- always use cleaned_data when possible
-- don't allow empty comments
-- when updating a review, delete all comments
 - hrs in comment-block are not spread correctly
-- fix bug with clear button when uploading suggestion image
-- test registration with console email backend
 - use markdown in reviews and comments, but with a more modest style
 
 
@@ -20,6 +14,7 @@ Links
 
 Later
 
+- how does cropping really work, what's up with the details file
 - Ensure that uploaded images never override real images. Maybe uploaded images can go
 into a suggestions_inbox folder
 - Use now() timestamp from the db server

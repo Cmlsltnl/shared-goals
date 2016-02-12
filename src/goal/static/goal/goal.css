@@ -77,3 +77,7 @@
 .review--comments-notice {
     font-size: 12px;
 }
+
+.comment-reply-link {
+    cursor: pointer;
+}

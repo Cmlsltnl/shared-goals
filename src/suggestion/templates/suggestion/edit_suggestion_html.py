@@ -57,7 +57,7 @@ def suggestion_form():
 
         with p(style="font-size: 10px;"):
             with a(href=url_markdown):
-                text("Markdown syntax")
+                text("Markdown")
             text(" allowed")
 
         with textarea(
@@ -109,7 +109,7 @@ def suggestion_form():
             value="save"
         )
         button(
-            "{{ cancel_button_label }}",
+            "Cancel",
             id="cancelrevision-submit",
             name="submit",
             value="cancel"
