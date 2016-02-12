@@ -31,7 +31,7 @@ class ReviewsView(View):
             review.rating = form.cleaned_data['rating']
             review.description = form.cleaned_data['description']
 
-            if request.POST['submit'] == 'savereview-submit':
+            if request.POST['submit'] == 'save':
                 review.is_draft = False
 
             review.save()
@@ -58,7 +58,7 @@ class ReviewsView(View):
         )
         is_saving = (
             request.method == 'POST' and
-            request.POST['submit'] == 'savereview-submit'
+            request.POST['submit'] == 'save'
         )
 
         if request.method == 'POST':
@@ -172,7 +172,7 @@ class PostCommentView(View):
         review = get_object_or_404(Review, pk=review_id)
         comment = self.__get_or_create_comment(
             request, review, reply_to_comment_id)
-        is_saving = request.POST['submit'] == 'savecomment-submit'
+        is_saving = request.POST['submit'] == 'save'
         is_data_valid = self.__update_comment_and_save(request, comment)
 
         if is_saving and not is_data_valid:

@@ -16,8 +16,8 @@
             <textarea class="form-field" name="description" rows="10">{{ form.description.value }}</textarea>
           </p>
           <div>
-            <button id="savereview-submit" name="submit" value="save">{{ post_button_label }}</button>
-            <button id="cancelreview-submit" name="submit" value="cancel">{{ cancel_button_label }}</button>
+            <button name="submit" value="save">{{ post_button_label }}</button>
+            <button name="submit" value="cancel">{{ cancel_button_label }}</button>
           </div>
         </form>
       {% endif %}
@@ -63,7 +63,7 @@ $(document).ready(function() {
         // Send the data using post
         var posting = $.post(
             $("#review-form").data("ajax-url"),
-            $(this).serialize() + "&submit=" + $(document.activeElement)[0].id
+            $(this).serialize() + "&submit=" + $(document.activeElement)[0].value
         );
 
         // Put the results in a div

@@ -11,7 +11,7 @@ from suggestion.templates.dominate_tags import *
 @form(
     method="post",
     enctype="multipart/form-data",
-    _class="big-gap-above"
+    _class="small-gap-above"
 )
 def comment_form():
     django_csrf_token()
@@ -22,7 +22,7 @@ def comment_form():
             _for="{{ comment_form.body.id_for_label }}",
             _class="form-label"
         ):
-            text("Comment on this review")
+            text("Reply to this comment")
         with textarea(
             name="body",
             _class="form-field"

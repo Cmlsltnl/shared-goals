@@ -11,7 +11,7 @@ $(document).ready(function() {
         // Send the data using post
         var posting = $.post(
             $("#review-form").data("ajax-url"),
-            $(this).serialize() + "&submit=" + $(document.activeElement)[0].id
+            $(this).serialize() + "&submit=" + $(document.activeElement)[0].value
         );
 
         // Put the results in a div

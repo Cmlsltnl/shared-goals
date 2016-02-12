@@ -2,7 +2,7 @@
 - https://github.com/edoburu/django-fluent-comments/
 - https://github.com/HonzaKral/django-threadedcomments
 
-- use ajax to upload suggestion image.
+- use the suggestion.type field
 - try to make image bigger in the new suggestion form
 - beware that image names in the porposals may clash (make names unique)
 - when uploading a new image in a draft suggestion, delete the previous one

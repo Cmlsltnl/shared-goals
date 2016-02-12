@@ -55,13 +55,11 @@ def review_form():
     with div():
         button(
             "{{ post_button_label }}",
-            id="savereview-submit",
             name="submit",
             value="save"
         )
         button(
             "{{ cancel_button_label }}",
-            id="cancelreview-submit",
             name="submit",
             value="cancel"
         )
