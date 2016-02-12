@@ -37,7 +37,9 @@ class Review(models.Model):
         while len(comments):
             comment = comments.pop()
             result.append(comment)
-            for reply in comment.replies.order_by("pub_date"):
+            for reply in (
+                comment.replies.filter(is_draft=False).order_by("pub_date")
+            ):
                 comments.append(reply)
 
         return result
