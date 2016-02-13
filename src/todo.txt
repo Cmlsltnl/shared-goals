@@ -1,8 +1,6 @@
-- move apply_cropping_to_image somehwere else
+- connect link to comment on a review
 - add button to delete the suggestion
 - make proposals in profile look different (e.g. display at 50%)
-- connect link to comment on a review
-- hrs in comment-block are not spread correctly
 
 
 

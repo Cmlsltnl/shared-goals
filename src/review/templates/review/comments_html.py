@@ -21,10 +21,7 @@ def comment_header():
 
 
 @div(_class="row")
-def comment_body()
-    comment_form_url = \
-        "{% url 'reply_comment' request.goal.slug review.id the_comment.id %}"
-
+def comment_body():
     column(2)
     with column(8):
         with div(
@@ -33,17 +30,32 @@ def comment_body()
         ):
             text("{{ the_comment.body }}")
 
-        with django_if("request.global_user"):
-            a(
-                "reply",
-                _class="comment-reply-link",
-                data_ajax_url=comment_form_url,
-                style="padding-left: {{ the_comment.indent }}px;"
-            )
-            div(
-                _class="comment-reply-div",
-                style="padding-left: {{ the_comment.indent }}px;"
-            )
+
+@div(_class="row")
+def comment_reply_form():
+    comment_form_url = \
+        "{% url 'reply_comment' request.goal.slug review.id the_comment.id %}"
+
+    column(2)
+    with column(8):
+        a(
+            "reply",
+            _class="comment-reply-link",
+            data_ajax_url=comment_form_url,
+            style="padding-left: {{ the_comment.indent }}px;"
+        )
+        div(
+            _class="comment-reply-div",
+            style="padding-left: {{ the_comment.indent }}px;"
+        )
+
+
+@span()
+def comment():
+    comment_header()
+    comment_body()
+    with django_if("request.global_user"):
+        comment_reply_form()
 
 
 @span()
@@ -51,8 +63,7 @@ def review_comments():
     with django_for("the_comment in review.published_comments"):
         with django_if("forloop.first"):
             hr()
-        comment_header()
-        comment_body()
+        comment()
         hr()
 
 
