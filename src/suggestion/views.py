@@ -20,12 +20,7 @@ class PostSuggestionView(View):
                 Q(slug=slugify(title)) & ~Q(pk=suggestion.pk)
             ).exists()
 
-        form = SuggestionForm(
-            request.POST,
-            request.FILES,
-            instance=suggestion,
-            initial=suggestion.get_current_revision().__dict__
-        )
+        form = SuggestionForm(request.POST, request.FILES)
         form.is_duplicate_title = is_duplicate_title
 
         return form
@@ -71,15 +66,15 @@ class NewSuggestionView(PostSuggestionView):
             revision.save()
         return draft
 
-    def __update_suggestion_and_save(self, suggestion, request):
-        form = self.get_posted_form(request, suggestion)
+    def __update_suggestion_and_save(self, suggestion, form, submit):
         is_form_valid = form.is_valid()
 
         current_revision = suggestion.get_current_revision()
         if 'title' in form.cleaned_data:
-            current_revision.title = form.cleaned_data['title']
+            current_revision.title = form.cleaned_data['title'] or ''
         if 'description' in form.cleaned_data:
-            current_revision.description = form.cleaned_data['description']
+            current_revision.description = \
+                form.cleaned_data['description'] or ''
         current_revision.save()
 
         suggestion.type = form.cleaned_data['type']
@@ -97,7 +92,7 @@ class NewSuggestionView(PostSuggestionView):
         if 'cropping' in form.cleaned_data:
             suggestion.cropping = form.cleaned_data['cropping']
 
-        if is_form_valid and request.POST['submit'] == 'save':
+        if is_form_valid and submit == 'save':
             suggestion.slug = slugify(
                 suggestion.get_current_revision().title)
             suggestion.apply_cropping_to_image(delete_original=False)
@@ -118,28 +113,30 @@ class NewSuggestionView(PostSuggestionView):
 
     def handle(self, request, goal_slug):
         suggestion = self.get_or_create_draft(request)
-        is_saving = \
-            request.method == 'POST' and request.POST['submit'] == 'save'
+        is_posting = request.method == 'POST'
+        submit = request.POST.get('submit', 'none')
 
-        if request.method == 'POST':
+        bound_form = None
+        if is_posting:
+            bound_form = self.get_posted_form(request, suggestion)
             should_accept_data = self.__update_suggestion_and_save(
-                suggestion, request)
+                suggestion, bound_form, submit)
 
-            if should_accept_data and is_saving:
+            if should_accept_data and submit == 'save':
                 return self.on_save(request.goal.slug, suggestion.slug)
-            elif request.POST['submit'] == 'cancel':
+            elif submit == 'cancel':
                 return self.on_cancel(request.goal.slug)
 
         form = (
-            self.get_posted_form(request, suggestion)
-            if is_saving else
+            bound_form
+            if is_posting else
             self.get_populated_form(request, suggestion)
         )
 
         context = {
             'form': form,
             'show_image_form': True,
-            'show_errors': is_saving,
+            'show_errors': submit == 'save',
             'post_button_label': "Submit",
         }
 
@@ -147,14 +144,13 @@ class NewSuggestionView(PostSuggestionView):
 
 
 class UpdateSuggestionView(PostSuggestionView):
-    def __create_new_revision(self, suggestion, request):
-        revision_form = self.get_posted_form(request, suggestion)
-        is_form_valid = revision_form.is_valid()
+    def __create_new_revision(self, suggestion, form):
+        is_form_valid = form.is_valid()
 
         if is_form_valid:
             revision = Revision()
-            revision.title = revision_form.cleaned_data['title']
-            revision.description = revision_form.cleaned_data['description']
+            revision.title = form.cleaned_data['title']
+            revision.description = form.cleaned_data['description']
             revision.suggestion = suggestion
             revision.save()
 
@@ -173,18 +169,19 @@ class UpdateSuggestionView(PostSuggestionView):
     def handle(self, request, goal_slug, suggestion_slug):
         suggestion = get_object_or_404(Suggestion, slug=suggestion_slug)
         is_posting = request.method == 'POST'
+        submit = request.POST.get('submit', 'none')
 
+        bound_form = None
         if is_posting:
-            should_accept_data = request.POST['submit'] == 'cancel' or \
-                self.__create_new_revision(suggestion, request)
-
-            if request.POST['submit'] == 'cancel':
+            if submit == 'cancel':
                 return self.on_cancel(request.goal.slug)
-            elif request.POST['submit'] == 'save' and should_accept_data:
+
+            bound_form = self.get_posted_form(request, suggestion)
+            if self.__create_new_revision(suggestion, bound_form):
                 return self.on_save(request.goal.slug, suggestion.slug)
 
         form = (
-            self.get_posted_form(request, suggestion)
+            bound_form
             if is_posting else
             self.get_populated_form(request, suggestion)
         )
