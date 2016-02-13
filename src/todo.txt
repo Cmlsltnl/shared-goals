@@ -1,4 +1,6 @@
+- move apply_cropping_to_image somehwere else
 - add button to delete the suggestion
+- make proposals in profile look different (e.g. display at 50%)
 - connect link to comment on a review
 - hrs in comment-block are not spread correctly
 
@@ -6,6 +8,7 @@
 
 Links
 
+- http://stackoverflow.com/questions/11170425/how-to-unit-test-file-upload-in-django
 - http://stackoverflow.com/questions/641055/diff-to-html-diff2html-program
 - https://github.com/edoburu/django-fluent-comments/
 - https://github.com/HonzaKral/django-threadedcomments

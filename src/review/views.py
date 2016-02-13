@@ -24,8 +24,7 @@ class ReviewsView(View):
 
         return review
 
-    def __update_review_and_save(self, review, request):
-        form = ReviewForm(request.POST, request.FILES)
+    def __update_review_and_save(self, review, form, submit):
         is_form_valid = form.is_valid()
 
         if 'rating' in form.cleaned_data:
@@ -34,7 +33,7 @@ class ReviewsView(View):
             review.experience = form.cleaned_data['experience']
         if 'description' in form.cleaned_data:
             review.description = form.cleaned_data['description']
-        if is_form_valid and request.POST['submit'] == 'save':
+        if is_form_valid and submit == 'save':
             review.is_draft = False
 
         review.comments.filter(is_draft=False).delete()
@@ -60,28 +59,26 @@ class ReviewsView(View):
 
             self.__get_or_create_review(request, latest_revision, all_reviews)
         )
-        is_saving = (
-            request.method == 'POST' and
-            request.POST['submit'] == 'save'
-        )
+
+        submit = request.POST.get('submit', 'none')
+        if submit == 'cancel' and review.is_draft:
+            submit = 'save draft'
 
         if request.method == 'POST':
-            if is_saving or review.is_draft:
-                is_data_valid = self.__update_review_and_save(review, request)
+            bound_form = ReviewForm(request.POST, request.FILES)
+            if submit in ('save', 'save draft'):
+                self.__update_review_and_save(review, bound_form, submit)
 
-        review_form = (
-            (
-                ReviewForm(request.POST, request.FILES)
-                if is_saving and not is_data_valid else
+        review_form = None
+        if request.member and suggestion.owner != request.member:
+            review_form = (
+                bound_form
+                if submit == 'save' else
                 ReviewForm(instance=review)
             )
-            if request.member and suggestion.owner != request.member else
-            None
-        )
-
-        if review_form and suggestion.type == Suggestion.TYPE_ACTION:
-            review_form.fields['experience'].choices = \
-                tuple(list(Review.EXPERIENCE_CHOICES)[:-1])
+            if suggestion.type == Suggestion.TYPE_ACTION:
+                review_form.fields['experience'].choices = \
+                    tuple(list(Review.EXPERIENCE_CHOICES)[:-1])
 
         published_reviews = \
             all_reviews.filter(is_draft=False).order_by('-pub_date')
@@ -123,30 +120,31 @@ class CommentsView(View):
 
 
 class PostCommentView(View):
-    def __get_or_create_comment(self, request, review, reply_to_comment_id):
+    def __get_or_create_comment(
+        self, global_user, review, reply_to_comment_id
+    ):
         draft = review.comments.filter(
             is_draft=True,
-            owner=request.global_user,
+            owner=global_user,
             review_id=review.id,
             reply_to_id=reply_to_comment_id
         ).first()
 
         if not draft:
             draft = Comment()
-            draft.owner = request.global_user
+            draft.owner = global_user
             draft.review = review
             draft.reply_to_id = reply_to_comment_id
             draft.save()
 
         return draft
 
-    def __update_comment_and_save(self, request, comment):
-        form = CommentForm(request.POST, request.FILES)
+    def __update_comment_and_save(self, comment, form, submit):
         is_form_valid = form.is_valid()
 
         if 'body' in form.cleaned_data:
             comment.body = form.cleaned_data['body']
-        if is_form_valid and request.POST['submit'] == 'save':
+        if is_form_valid and submit == 'save':
             comment.is_draft = False
 
         comment.save()
@@ -156,7 +154,7 @@ class PostCommentView(View):
     def get(self, request, goal_slug, review_id, reply_to_comment_id=None):
         review = get_object_or_404(Review, pk=review_id)
         comment = self.__get_or_create_comment(
-            request, review, reply_to_comment_id)
+            request.global_user, review, reply_to_comment_id)
         return self.__render_form(
             request, review, CommentForm(instance=comment))
 
@@ -171,18 +169,18 @@ class PostCommentView(View):
     def post(self, request, goal_slug, review_id, reply_to_comment_id=None):
         review = get_object_or_404(Review, pk=review_id)
         comment = self.__get_or_create_comment(
-            request, review, reply_to_comment_id)
-        is_saving = request.POST['submit'] == 'save'
-        is_data_valid = self.__update_comment_and_save(request, comment)
+            request.global_user, review, reply_to_comment_id)
 
-        if is_saving and not is_data_valid:
+        submit = request.POST['submit']
+        bound_form = CommentForm(request.POST, request.FILES)
+        is_data_valid = self.__update_comment_and_save(
+            comment, bound_form, submit)
+
+        if submit == 'save' and not is_data_valid:
             return HttpResponse(
                 json.dumps({
                     'success': False,
-                    'form': self.__render_form(
-                        review,
-                        CommentForm(request.POST, request.FILES)
-                    )
+                    'form': self.__render_form(review, bound_form)
                 }),
                 content_type="application/json"
             )

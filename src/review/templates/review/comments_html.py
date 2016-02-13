@@ -27,7 +27,7 @@ def comment():
         column(2)
         with column(8):
             with div(style="text-indent: {{ comment.indent }}px;"):
-                "{{ comment.body }}"
+                text("{{ comment.body }}")
                 with django_if("request.global_user"):
                     a(
                         "reply",
