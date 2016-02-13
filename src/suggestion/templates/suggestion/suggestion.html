@@ -84,7 +84,13 @@ sgreviews = function() {
         $(comment_block).load(url_get_comment_block, init_comment_block);
     }
 
-    $(".comment-block").each(load_comment_block);
+    (function($) {
+        $.fn.load_comment_block = function() {
+            return this.each(load_comment_block);
+        };
+    }(jQuery));
+
+    $(".comment-block").load_comment_block();
 }
 
 $(document).ready(function() {

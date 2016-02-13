@@ -38,5 +38,3 @@ def result():
         "{% load humanize %}",
         content
     )
-
-# done123

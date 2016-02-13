@@ -69,7 +69,10 @@ class Comment(models.Model):
     is_draft = models.BooleanField(default=True)
 
     def __str__(self):
-        return "Comment by %s on %s" % (self.owner, self.target)
+        return (
+            "Comment by %s on %s (%s)"
+            % (self.owner, self.review, self.reply_to_id)
+        )
 
     def indent(self):
         result = 0
