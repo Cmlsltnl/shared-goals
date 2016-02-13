@@ -14,7 +14,9 @@ class SuggestionForm(forms.ModelForm):
     description = forms.CharField(label='Description')
 
     def clean_title(self):
-        if self.is_duplicate_title(self.cleaned_data['title']):
+        data = self.cleaned_data['title']
+        if self.is_duplicate_title(data):
             raise forms.ValidationError(
                 "Sorry, this title is already used, please choose another"
             )
+        return data
