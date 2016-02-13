@@ -2,17 +2,18 @@ from django.contrib import admin
 from image_cropping import ImageCroppingMixin
 
 from .models import Suggestion, Revision
+from .utils import apply_cropping_to_image
 
 
-def apply_cropping_to_image(modeladmin, request, queryset):
+def crop_image(modeladmin, request, queryset):
     for item in queryset:
-        item.apply_cropping_to_image(delete_original=True)
+        apply_cropping_to_image(item, delete_original=True)
         item.save()
-apply_cropping_to_image.short_description = "Apply cropping to image"
+crop_image.short_description = "Apply cropping to image"
 
 
 class ModelWithImageAdmin(ImageCroppingMixin, admin.ModelAdmin):
-    actions = [apply_cropping_to_image]
+    actions = [crop_image]
 
 
 class RevisionAdmin(admin.ModelAdmin):
