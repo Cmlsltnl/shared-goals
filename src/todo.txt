@@ -1,6 +1,6 @@
+- add button to delete the suggestion
 - connect link to comment on a review
 - hrs in comment-block are not spread correctly
-- use markdown in reviews and comments, but with a more modest style
 
 
 
@@ -18,3 +18,4 @@ into a suggestions_inbox folder
 - Use now() timestamp from the db server
 - When leaving a Goal as a member, confirm that all Suggestion are deleted (or make them orphans that can be adopted?)
 - Advise member that their profile is totally public
+- use markdown in reviews and comments, but with a more modest style

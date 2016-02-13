@@ -156,3 +156,4 @@ EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails.txt")
 from .settings_registration import *
 from .settings_cropping import *
 from .settings_sorl_thumbnails import *
+from .settings_markdown import *
