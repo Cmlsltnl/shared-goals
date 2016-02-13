@@ -37,7 +37,9 @@ class ReviewsView(View):
         if is_form_valid and request.POST['submit'] == 'save':
             review.is_draft = False
 
+        review.comments.filter(is_draft=False).delete()
         review.save()
+
         return is_form_valid
 
     def get(self, request, goal_slug, suggestion_slug):
