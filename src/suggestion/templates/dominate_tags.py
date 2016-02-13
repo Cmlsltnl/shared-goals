@@ -14,7 +14,11 @@ def suggestion_list_item():
 
 @div(
     _class="suggestion--photo",
-    style="background-image:url({{ suggestion.image.url }});"
+    style=(
+        "{% if suggestion.image %}"
+        "background-image:url({{ suggestion.image.url }});"
+        "{% endif %}"
+    )
 )
 def suggestion_image(title):
     div(_class="suggestion--gradient")

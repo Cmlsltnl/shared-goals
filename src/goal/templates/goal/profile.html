@@ -23,7 +23,7 @@
       {% for suggestion in suggestion_list %}
         <div class="col-md-4">
           <a href="{% url 'suggestion' request.goal.slug suggestion.slug %}">
-            <div class="suggestion--photo" style="background-image:url({{ suggestion.image.url }});">
+            <div class="suggestion--photo" style="{% if suggestion.image %}background-image:url({{ suggestion.image.url }});{% endif %}">
               <div class="suggestion--gradient"></div>
               <span class="suggestion--title">
                 <span class="title-caption">{{ suggestion.get_type_display }}</span>
