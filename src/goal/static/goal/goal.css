@@ -38,7 +38,7 @@
     background-image: linear-gradient(rgba(15, 20, 31, 0) 0px, rgba(15, 20, 31, 0.1) 25%, rgba(15, 20, 31, 0.8) 100%);
 }
 
-.suggestion--photo {
+.suggestion--image {
     display: block;
     height: 200px;
     background-size: cover;
@@ -102,4 +102,12 @@
 
 .sg-review-even {
     background-color: #dededd;
+}
+
+.profile--suggestion-list .suggestion--image {
+    height: 100px;
+}
+
+.profile--suggestion-list .suggestion--title h3 {
+    font-size: 14px;
 }

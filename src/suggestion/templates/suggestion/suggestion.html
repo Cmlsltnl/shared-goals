@@ -18,7 +18,7 @@
   <div class="row small-gap-below">
     <div class="col-md-4"></div>
     <div class="col-md-4">
-      <div class="suggestion--photo" style="{% if suggestion.image %}background-image:url({{ suggestion.image.url }});{% endif %}">
+      <div class="suggestion--image" style="{% if suggestion.image %}background-image:url({{ suggestion.image.url }});{% endif %}">
         <div class="suggestion--gradient"></div>
         <span class="suggestion--title">
           <span class="title-caption">{{ suggestion.get_type_display }}</span>

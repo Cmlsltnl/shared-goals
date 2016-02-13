@@ -13,7 +13,7 @@ def suggestion_list_item():
 
 
 @div(
-    _class="suggestion--photo",
+    _class="suggestion--image",
     style=(
         "{% if suggestion.image %}"
         "background-image:url({{ suggestion.image.url }});"

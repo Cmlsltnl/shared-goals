@@ -15,13 +15,13 @@ def result():
 
         with div(_class="row"):
             with column(4):
-                with h4(_class="small-gap-below"):
+                with h4(_class=""):
                     text("My suggestions:")
 
         with django_for("suggestion_list in suggestion_lists"):
-            with div(_class="row small-gap-above"):
+            with div(_class="row small-gap-above profile--suggestion-list"):
                 with django_for("suggestion in suggestion_list"):
-                    with column(4):
+                    with column(2):
                         suggestion_list_item()
             with django_empty():
                 h5("You have not created any suggestions yet")

@@ -1,8 +1,4 @@
-- separate the reviews for one suggestions a bit better, and make the difference between reviews
-and comments clearer
 - connect button to delete the suggestion (ask for confirmation)
-- make proposals in profile look different (e.g. display at 50%)
-
 
 
 Links
@@ -21,3 +17,6 @@ into a suggestions_inbox folder
 - When leaving a Goal as a member, confirm that all Suggestion are deleted (or make them orphans that can be adopted?)
 - Advise member that their profile is totally public
 - use markdown in reviews and comments, but with a more modest style
+- Highlight currently selected main menu item
+- suggestion preview button
+- garbage collect revisions that have no reviews and are not the latest one
