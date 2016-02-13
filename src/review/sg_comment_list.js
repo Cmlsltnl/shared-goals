@@ -33,9 +33,18 @@
         $(reply_div).load(url_get_reply_form, init_reply_div);
     }
 
+    $.fn.sg_comment_reply_link = function() {
+        return this.each(function(dummy_index, reply_link) {
+            $(reply_link).click(on_click_reply_link);
+        });
+    };
+}(jQuery));
+
+
+(function($) {
     function init_comment_list() {
         // connect all reply-links within $(this) comment list
-        $(this).find(".comment-reply-link").click(on_click_reply_link);
+        $(this).find(".comment-reply-link").sg_comment_reply_link();
     }
 
     $.fn.sg_comment_list = function() {
