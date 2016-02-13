@@ -71,9 +71,7 @@
 
     function init_comment_list() {
         // connect all reply-links within $(this) comment list
-        $(this).find(".comment-reply-link").each(function(index, reply_link) {
-            $(reply_link).click(on_click_reply_link);
-        });
+        $(this).find(".comment-reply-link").click(on_click_reply_link);
     }
 
     $.fn.sg_comment_list = function() {
