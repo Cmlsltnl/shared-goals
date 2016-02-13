@@ -1,4 +1,3 @@
-- review text is not layed out well (no carriage returns)
 - connect link to comment on a review
 - hrs in comment-block are not spread correctly
 - use markdown in reviews and comments, but with a more modest style

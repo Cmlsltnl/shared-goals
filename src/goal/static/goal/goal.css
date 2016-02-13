@@ -81,3 +81,7 @@
 .comment-reply-link {
     cursor: pointer;
 }
+
+.review--description {
+    white-space: pre-wrap;
+}

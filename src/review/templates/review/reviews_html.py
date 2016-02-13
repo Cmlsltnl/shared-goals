@@ -106,7 +106,7 @@ def published_review():
     with div(_class="row"):
         column(2)
         with column(8):
-            with p():
+            with div(_class="review--description"):
                 text("{{ published_review.description }}")
 
             with django_if("request.global_user"):

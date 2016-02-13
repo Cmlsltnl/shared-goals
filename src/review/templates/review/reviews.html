@@ -47,7 +47,7 @@
       <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-8">
-          <p>{{ published_review.description }}</p>
+          <div class="review--description">{{ published_review.description }}</div>
           {% if request.global_user %}
             <a class="comment-reply-link" data-ajax-url="{% url 'post_comment' request.goal.slug published_review.id %}">comment on this review</a>
             <div class="comment-reply-div"></div>
