@@ -31,29 +31,35 @@
     </div>
   </div>
   {% for the_review in published_reviews %}
-    <div class="row big-gap-above">
+    <div class="row small-gap-above small-gap-below sg-review sg-review-{% cycle 'even' 'odd' %}">
       <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-2">
           <div class="rateit readonly-rateit" data-rateit-readonly="true" data-rateit-resetable="false" data-rateit-value="{{ the_review.rating }}"></div>
         </div>
         <div class="col-md-6">
-          {% if the_review.revision.pk == latest_revision.pk %}{{ the_review.header }}
-            {% else %}A 
-              <a href="{% url 'revision' request.goal.slug the_review.revision.suggestion.slug the_review.revision.pk %}">previous version</a> was {{ the_review.header|lowerfirst }}
+          {% if the_review.description %}Review 
+            {% else %}Rating 
           {% endif %}
-        </div>
+          {% if the_review.revision.pk != latest_revision.pk %}of a 
+            <a href="{% url 'revision' request.goal.slug the_review.revision.suggestion.slug the_review.revision.pk %}">previous version </a>
+          {% endif %}by {{ the_review.header }}</div>
       </div>
       <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-8">
           <div class="review--description">{{ the_review.description }}</div>
-          {% if request.global_user %}
-            <a class="comment-reply-link" data-ajax-url="{% url 'post_comment' request.goal.slug the_review.id %}">comment on this review</a>
-            <div class="comment-reply-div"></div>
-          {% endif %}
         </div>
       </div>
+      {% if request.global_user %}
+        <div class="row">
+          <div class="col-md-2"></div>
+          <div class="col-md-8">
+            <a class="comment-reply-link" data-ajax-url="{% url 'post_comment' request.goal.slug the_review.id %}">comment on this review</a>
+            <div class="comment-reply-div"></div>
+          </div>
+        </div>
+      {% endif %}
       <div class="sg-comment-list" data-ajax-url="{% url 'comments' request.goal.slug the_review.pk %}" id="{% if the_review.id == review.id %}comments-on-my-review{% endif %}"></div>
     </div>
   {% endfor %}

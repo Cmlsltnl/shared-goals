@@ -39,7 +39,7 @@ def top_right_div():
                         "suggestion and suggestion.owner == request.member"
                     ):
                         button(
-                            "Update Suggestion",
+                            "Edit Suggestion",
                             _class="btn btn-info",
                             onclick=url_update_suggestion
                         )

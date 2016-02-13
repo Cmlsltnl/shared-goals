@@ -31,10 +31,7 @@ class Review(models.Model):
 
     @property
     def header(self):
-        header = \
-            "Reviewed by " if self.description \
-            else "Rated by "
-        header += self.owner.global_user.name
+        header = self.owner.global_user.name
         header += ", %s" % naturaltime(self.pub_date)
         return header
 

@@ -32,7 +32,7 @@ def comment_body():
 
 
 @div(_class="row")
-def comment_reply_form():
+def reply_to_comment_link():
     comment_form_url = \
         "{% url 'reply_comment' request.goal.slug review.id the_comment.id %}"
 
@@ -55,7 +55,7 @@ def comment():
     comment_header()
     comment_body()
     with django_if("request.global_user"):
-        comment_reply_form()
+        reply_to_comment_link()
 
 
 @span()

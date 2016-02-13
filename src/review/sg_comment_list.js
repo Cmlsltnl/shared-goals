@@ -12,7 +12,9 @@
         // Put the results in a div
         posting.done(function(data) {
             if (data.success) {
-                form.closest(".sg-comment-list").sg_comment_list();
+                form.closest(".sg-review").find(".sg-comment-list").sg_comment_list();
+                // unload the form for replying to the review
+                form.closest(".sg-review").find(".comment-reply-div").empty();
             }
         });
     }

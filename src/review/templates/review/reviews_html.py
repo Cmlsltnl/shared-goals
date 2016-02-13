@@ -87,34 +87,42 @@ def published_review_header():
         readonly_rateit("{{ the_review.rating }}")
 
     with column(6):
-        with django_if(
-            "the_review.revision.pk == latest_revision.pk"
-        ):
-            text("{{ the_review.header }}")
+        with django_if("the_review.description"):
+            text("Review ")
             with django_else():
-                text("A ")
-                with a(href=revision_href):
-                    text("previous version")
-                text(" was {{ the_review.header|lowerfirst }}")
+                text("Rating ")
+
+        with django_if(
+            "the_review.revision.pk != latest_revision.pk"
+        ):
+            text("of a ")
+            with a(href=revision_href):
+                text("previous version ")
+
+        text("by {{ the_review.header }}")
 
 
 @div(_class="row")
 def published_review_description():
-    comment_form_url = \
-        "{% url 'post_comment' request.goal.slug the_review.id %}"
-
     column(2)
     with column(8):
         with div(_class="review--description"):
             text("{{ the_review.description }}")
 
-        with django_if("request.global_user"):
-            a(
-                "comment on this review",
-                _class="comment-reply-link",
-                data_ajax_url=comment_form_url
-            )
-            div(_class="comment-reply-div")
+
+@div(_class="row")
+def reply_to_review_link():
+    comment_form_url = \
+        "{% url 'post_comment' request.goal.slug the_review.id %}"
+
+    column(2)
+    with column(8):
+        a(
+            "comment on this review",
+            _class="comment-reply-link",
+            data_ajax_url=comment_form_url
+        )
+        div(_class="comment-reply-div")
 
 
 def published_review_comments():
@@ -131,10 +139,15 @@ def published_review_comments():
     )
 
 
-@div(_class="row big-gap-above")
+@div(_class=(
+    "row small-gap-above small-gap-below sg-review "
+    "sg-review-{% cycle 'even' 'odd' %}")
+)
 def published_review():
     published_review_header()
     published_review_description()
+    with django_if("request.global_user"):
+        reply_to_review_link()
     published_review_comments()
 
 

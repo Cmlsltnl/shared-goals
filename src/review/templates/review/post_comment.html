@@ -1,7 +1,7 @@
 <form class="small-gap-above" enctype="multipart/form-data" method="post">
   {% csrf_token %}
   <p>{{ comment_form.body.errors }}
-    <label class="form-label" for="{{ comment_form.body.id_for_label }}">Reply to this comment</label>
+    <label class="form-label" for="{{ comment_form.body.id_for_label }}">{{ reply_header }}</label>
     <textarea class="form-field" name="body">{{ comment_form.body.value }}</textarea>
   </p>
   <div>

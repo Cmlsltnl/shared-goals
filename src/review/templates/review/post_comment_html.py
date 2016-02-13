@@ -22,7 +22,7 @@ def comment_form():
             _for="{{ comment_form.body.id_for_label }}",
             _class="form-label"
         ):
-            text("Reply to this comment")
+            text("{{ reply_header }}")
         with textarea(
             name="body",
             _class="form-field"

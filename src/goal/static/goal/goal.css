@@ -89,3 +89,17 @@
 .comment--description {
     white-space: pre-wrap;
 }
+
+.suggestion--delete-button {
+    position: absolute;
+    right: 16px;
+    bottom: 50px;
+}
+
+.sg-review-odd {
+    background-color: #eeeedd;
+}
+
+.sg-review-even {
+    background-color: #dededd;
+}

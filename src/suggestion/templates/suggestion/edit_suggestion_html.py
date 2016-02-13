@@ -97,23 +97,30 @@ def suggestion_form():
                     value="upload"
                 )
 
-    with p(_class="small-gap-above small-gap-below"):
-        with label(
-            _class="form-label"
-        ):
-            text("All done, press Submit to publish your suggestion")
-        button(
-            "{{ post_button_label }}",
-            id="saverevision-submit",
-            name="submit",
-            value="save"
-        )
-        button(
-            "Cancel",
-            id="cancelrevision-submit",
-            name="submit",
-            value="cancel"
-        )
+    with div():
+        with div(_class="small-gap-above small-gap-below"):
+            with label(
+                _class="form-label"
+            ):
+                text("{{ submit_button_header }}")
+            button(
+                "{{ post_button_label }}",
+                name="submit",
+                value="save"
+            )
+            button(
+                "Cancel",
+                name="submit",
+                value="cancel"
+            )
+
+        with django_if("show_delete_button"):
+            button(
+                "Delete this suggestion",
+                name="submit",
+                value="delete",
+                _class="btn btn-danger suggestion--delete-button"
+            )
 
 
 def result():
@@ -123,9 +130,10 @@ def result():
     with django_block("content") as content:
         goal_header()
 
-        column(2)
-        with column(8):
-            suggestion_form()
+        with div(_class="row"):
+            column(2)
+            with column(8):
+                suggestion_form()
 
     return (
         "{% extends 'base.html' %}",

@@ -14,42 +14,49 @@
       </div>
     </div>
   </div>
-  <div class="col-md-2"></div>
-  <div class="col-md-8">
-    <form enctype="multipart/form-data" method="post">
-      {% csrf_token %}
-      <p>
-        {% if show_errors %}{{ form.type.errors }}{% endif %}
-        <label class="form-label" for="{{ form.type.id_for_label }}">Will you suggest a one-time Action, or a continuous Practice?</label>{{ form.type }}</p>
-      <p>
-        {% if show_errors %}{{ form.title.errors }}{% endif %}
-        <label class="form-label" for="{{ form.title.id_for_label }}">Title</label>
-        <input class="form-field" id="id_title" maxlength="100" name="title" type="text" value="{{ form.title.value }}">
-      </p>
-      <p>
-        {% if show_errors %}{{ form.description.errors }}{% endif %}
-        <label class="form-label" for="{{ form.description.id_for_label }}">Describe your suggestion</label>
-        <p style="font-size: 10px;">
-          <a href="http://commonmark.org/help/">Markdown</a> allowed</p>
-        <textarea class="form-field" name="description" rows="16">{{ form.description.value }}</textarea>
-      </p>
-      {% if show_image_form %}
-        <div class="suggestion-form--image">
-          <p>
-            {% if show_errors %}{{ form.cropping.errors }}{% endif %}
-            <label class="form-label" for="{{ form.cropping.id_for_label }}"></label>{{ form.cropping }}</p>
-          <p>
-            {% if show_errors %}{{ form.image.errors }}{% endif %}
-            <label class="form-label" for="{{ form.image.id_for_label }}">Make your suggestion look good by uploading an image</label>{{ form.image }}
-            <button id="upload-submit" name="submit" value="upload">Upload</button>
-          </p>
+  <div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+      <form enctype="multipart/form-data" method="post">
+        {% csrf_token %}
+        <p>
+          {% if show_errors %}{{ form.type.errors }}{% endif %}
+          <label class="form-label" for="{{ form.type.id_for_label }}">Will you suggest a one-time Action, or a continuous Practice?</label>{{ form.type }}</p>
+        <p>
+          {% if show_errors %}{{ form.title.errors }}{% endif %}
+          <label class="form-label" for="{{ form.title.id_for_label }}">Title</label>
+          <input class="form-field" id="id_title" maxlength="100" name="title" type="text" value="{{ form.title.value }}">
+        </p>
+        <p>
+          {% if show_errors %}{{ form.description.errors }}{% endif %}
+          <label class="form-label" for="{{ form.description.id_for_label }}">Describe your suggestion</label>
+          <p style="font-size: 10px;">
+            <a href="http://commonmark.org/help/">Markdown</a> allowed</p>
+          <textarea class="form-field" name="description" rows="16">{{ form.description.value }}</textarea>
+        </p>
+        {% if show_image_form %}
+          <div class="suggestion-form--image">
+            <p>
+              {% if show_errors %}{{ form.cropping.errors }}{% endif %}
+              <label class="form-label" for="{{ form.cropping.id_for_label }}"></label>{{ form.cropping }}</p>
+            <p>
+              {% if show_errors %}{{ form.image.errors }}{% endif %}
+              <label class="form-label" for="{{ form.image.id_for_label }}">Make your suggestion look good by uploading an image</label>{{ form.image }}
+              <button id="upload-submit" name="submit" value="upload">Upload</button>
+            </p>
+          </div>
+        {% endif %}
+        <div>
+          <div class="small-gap-above small-gap-below">
+            <label class="form-label">{{ submit_button_header }}</label>
+            <button name="submit" value="save">{{ post_button_label }}</button>
+            <button name="submit" value="cancel">Cancel</button>
+          </div>
+          {% if show_delete_button %}
+            <button class="btn btn-danger suggestion--delete-button" name="submit" value="delete">Delete this suggestion</button>
+          {% endif %}
         </div>
-      {% endif %}
-      <p class="small-gap-above small-gap-below">
-        <label class="form-label">All done, press Submit to publish your suggestion</label>
-        <button id="saverevision-submit" name="submit" value="save">{{ post_button_label }}</button>
-        <button id="cancelrevision-submit" name="submit" value="cancel">Cancel</button>
-      </p>
-    </form>
+      </form>
+    </div>
   </div>
 {% endblock %}

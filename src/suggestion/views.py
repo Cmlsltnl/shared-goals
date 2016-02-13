@@ -137,7 +137,11 @@ class NewSuggestionView(PostSuggestionView):
             'form': form,
             'show_image_form': True,
             'show_errors': submit == 'save',
-            'post_button_label': "Submit",
+            'post_button_label': 'Submit',
+            'submit_button_header': (
+                'All done, press Submit to publish your suggestion'
+            ),
+            'show_delete_button': False
         }
 
         return render(request, 'suggestion/edit_suggestion.html', context)
@@ -191,6 +195,8 @@ class UpdateSuggestionView(PostSuggestionView):
             'show_image_form': False,
             'show_errors': True,
             'post_button_label': "Update",
+            'submit_button_header': 'Press Update to publish your changes',
+            'show_delete_button': True
         }
 
         return render(request, 'suggestion/edit_suggestion.html', context)

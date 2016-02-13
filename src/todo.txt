@@ -1,8 +1,6 @@
-- bug when commenting on a review (form is not closed & comments reloaded, probably because the
-reply link is not within a comments-list)
-- when replying to a review, don't say "Reply to this comment"
-- separate the reviews for one suggestions a bit better
-- add button to delete the suggestion
+- separate the reviews for one suggestions a bit better, and make the difference between reviews
+and comments clearer
+- connect button to delete the suggestion (ask for confirmation)
 - make proposals in profile look different (e.g. display at 50%)
 
 

@@ -156,12 +156,21 @@ class PostCommentView(View):
         comment = self.__get_or_create_comment(
             request.global_user, review, reply_to_comment_id)
         return self.__render_form(
-            request, review, CommentForm(instance=comment))
+            request,
+            review,
+            CommentForm(instance=comment),
+            reply_to_comment_id
+        )
 
-    def __render_form(self, request, review, form):
+    def __render_form(self, request, review, form, reply_to_comment_id):
         context = {
             'review': review,
             'comment_form': form,
+            'reply_header': (
+                'Comment on this review'
+                if reply_to_comment_id is None else
+                'Reply to this comment'
+            )
         }
         return render(request, 'review/post_comment.html', context)
 
@@ -180,7 +189,8 @@ class PostCommentView(View):
             return HttpResponse(
                 json.dumps({
                     'success': False,
-                    'form': self.__render_form(review, bound_form)
+                    'form': self.__render_form(
+                        review, bound_form, reply_to_comment_id)
                 }),
                 content_type="application/json"
             )
