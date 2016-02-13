@@ -77,57 +77,67 @@ def review_form():
         )
 
 
-revision_href = (
-    "{% url 'revision' request.goal.slug "
-    "published_review.revision.suggestion.slug published_review.revision.pk %}"
-)
+@div(_class="row")
+def published_review_header():
+    revision_href = (
+        "{% url 'revision' request.goal.slug "
+        "the_review.revision.suggestion.slug the_review.revision.pk %}"
+    )
+
+    column(2)
+    with column(2):
+        readonly_rateit("{{ the_review.rating }}")
+
+    with column(6):
+        with django_if(
+            "the_review.revision.pk == latest_revision.pk"
+        ):
+            text("{{ the_review.header }}")
+            with django_else():
+                text("A ")
+                with a(href=revision_href):
+                    text("previous version")
+                text(" was {{ the_review.header|lowerfirst }}")
 
 
-@div(_class="row big-gap-above")
-def published_review():
-    with div(_class="row"):
-        column(2)
-        with column(2):
-            readonly_rateit("{{ published_review.rating }}")
-        with column(6):
-            with django_if(
-                "published_review.revision.pk == latest_revision.pk"
-            ):
-                text("{{ published_review.header }}")
-                with django_else():
-                    text("A ")
-                    with a(href=revision_href):
-                        text("previous version")
-                    text(" was {{ published_review.header|lowerfirst }}")
-
+@div(_class="row")
+def published_review_description():
     comment_form_url = \
-        "{% url 'post_comment' request.goal.slug published_review.id %}"
+        "{% url 'post_comment' request.goal.slug the_review.id %}"
 
-    with div(_class="row"):
-        column(2)
-        with column(8):
-            with div(_class="review--description"):
-                text("{{ published_review.description }}")
+    column(2)
+    with column(8):
+        with div(_class="review--description"):
+            text("{{ the_review.description }}")
 
-            with django_if("request.global_user"):
-                a(
-                    "comment on this review",
-                    _class="comment-reply-link",
-                    data_ajax_url=comment_form_url
-                )
-                div(_class="comment-reply-div")
+        with django_if("request.global_user"):
+            a(
+                "comment on this review",
+                _class="comment-reply-link",
+                data_ajax_url=comment_form_url
+            )
+            div(_class="comment-reply-div")
 
-    div(
+
+def published_review_comments():
+    return div(
         _class="comment-block",
         id=(
-            "{% if published_review.id == review.id %}"
+            "{% if the_review.id == review.id %}"
             "comments-on-my-review"
             "{% endif %}"
         ),
         data_ajax_url=(
-            "{% url 'comments' request.goal.slug published_review.pk %}"
+            "{% url 'comments' request.goal.slug the_review.pk %}"
         )
     )
+
+
+@div(_class="row big-gap-above")
+def published_review():
+    published_review_header()
+    published_review_description()
+    published_review_comments()
 
 
 @div(_class="review--comments-notice tiny-gap-above")
@@ -148,7 +158,7 @@ def result():
                 with django_if("review.published_comments|length"):
                     review_comments_notice()
 
-        with django_for("published_review in published_reviews"):
+        with django_for("the_review in published_reviews"):
             published_review()
 
         inline_script(settings.BASE_DIR, 'review/init_review_form.js')

@@ -1,7 +1,7 @@
 {% load humanize %}
 {% load case_utils %}
 <span>
-  {% for comment in review.published_comments %}
+  {% for the_comment in review.published_comments %}
     {% if forloop.first %}
       <hr>
     {% endif %}
@@ -9,19 +9,18 @@
       <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-8">
-          <div style="text-indent: {{ comment.indent }}px;">{{ comment.owner.name }}
-            {% if comment.reply_to %}(=&gt; {{ comment.reply_to.owner.name }}) {% endif %}, {{ comment.pub_date|naturaltime }}</div>
+          <div style="text-indent: {{ the_comment.indent }}px;">{{ the_comment.owner.name }}
+            {% if the_comment.reply_to %}(=&gt; {{ the_comment.reply_to.owner.name }}) {% endif %}, {{ the_comment.pub_date|naturaltime }}</div>
         </div>
       </div>
       <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-8">
-          <div style="text-indent: {{ comment.indent }}px;">{{ comment.body }}
-            {% if request.global_user %}
-              <a class="comment-reply-link" data-ajax-url="{% url 'reply_comment' request.goal.slug review.id comment.id %}">reply</a>
-              <div class="comment-reply-div"></div>
-            {% endif %}
-          </div>
+          <div class="comment--description" style="padding-left: {{ the_comment.indent }}px;">{{ the_comment.body }}</div>
+          {% if request.global_user %}
+            <a class="comment-reply-link" data-ajax-url="{% url 'reply_comment' request.goal.slug review.id the_comment.id %}" style="padding-left: {{ the_comment.indent }}px;">reply</a>
+            <div class="comment-reply-div" style="padding-left: {{ the_comment.indent }}px;"></div>
+          {% endif %}
         </div>
       </div>
     </span>
