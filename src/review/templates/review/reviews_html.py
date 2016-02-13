@@ -1,5 +1,3 @@
-from django.conf import settings
-
 from django_dominate.django_tags import *
 
 from dominate.tags import *
@@ -121,7 +119,7 @@ def published_review_description():
 
 def published_review_comments():
     return div(
-        _class="comment-block",
+        _class="sg-comment-list",
         id=(
             "{% if the_review.id == review.id %}"
             "comments-on-my-review"
@@ -160,8 +158,6 @@ def result():
 
         with django_for("the_review in published_reviews"):
             published_review()
-
-        inline_script(settings.BASE_DIR, 'review/init_review_form.js')
 
     return (
         "{% load humanize %}",

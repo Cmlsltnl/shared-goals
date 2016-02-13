@@ -28,9 +28,9 @@ def suggestion_description_div():
         text("{{ revision.description|markdown }}")
 
 
-@div(id="reviews")
+@div(id="sg-review-list")
 def empty_reviews_div():
-    inline_script(settings.BASE_DIR, 'suggestion/load_reviews.js')
+    pass
 
 
 def result():
@@ -39,6 +39,10 @@ def result():
         suggestion_image_div()
         suggestion_description_div()
         empty_reviews_div()
+
+        inline_script(settings.BASE_DIR, 'review/sg_comment_list.js')
+        inline_script(settings.BASE_DIR, 'review/sg_review_list.js')
+        inline_script(settings.BASE_DIR, 'suggestion/init_suggestion.js')
 
     return (
         "{% extends 'base.html' %}",

@@ -32,11 +32,9 @@
     <div class="col-md-8">
       <h5>Published by {{ suggestion.owner.global_user.name }}, {{ suggestion.pub_date|naturaltime }}</h5>{{ revision.description|markdown }}</div>
   </div>
-  <div id="reviews"><script>
-// suggestion/load_reviews.js
-sgreviews = function() {
-    $('div.rateit, span.rateit').rateit();
-
+  <div id="sg-review-list"></div><script>
+// review/sg_comment_list.js
+(function($) {
     function on_comment_form_submit(event) {
         event.preventDefault();
 
@@ -50,7 +48,7 @@ sgreviews = function() {
         // Put the results in a div
         posting.done(function(data) {
             if (data.success) {
-                load_comment_block(0, form.closest(".comment-block"));
+                form.closest(".sg-comment-list").sg_comment_list();
             }
         });
     }
@@ -71,33 +69,63 @@ sgreviews = function() {
         $(reply_div).load(url_get_reply_form, init_reply_div);
     }
 
-    function init_comment_block() {
-        // connect all reply-links within $(this) comment-block
+    function init_comment_list() {
+        // connect all reply-links within $(this) comment list
         $(this).find(".comment-reply-link").each(function(index, reply_link) {
             $(reply_link).click(on_click_reply_link);
         });
     }
 
-    function load_comment_block(dummy_index, comment_block) {
-        // load comments into this comment-block
-        url_get_comment_block = $(comment_block).data("ajax-url");
-        $(comment_block).load(url_get_comment_block, init_comment_block);
-    }
+    $.fn.sg_comment_list = function() {
+        return this.each(function(dummy_index, comment_list) {
 
-    (function($) {
-        $.fn.load_comment_block = function() {
-            return this.each(load_comment_block);
-        };
-    }(jQuery));
+            // load comments into this comment list
+            url_get_comment_list = $(comment_list).data("ajax-url");
+            $(comment_list).load(url_get_comment_list, init_comment_list);
+        });
+    };
+}(jQuery));
+</script><script>
+// review/sg_review_list.js
+(function($) {
+    $.fn.sg_review_list = function() {
+        return this.each(function(dummy_index, review_list_div) {
 
-    $(".comment-block").load_comment_block();
-}
-
+            $(review_list_div).find('div.rateit, span.rateit').rateit();
+            $(review_list_div).find('.sg-comment-list').sg_comment_list();
+        });
+    };
+}(jQuery));
+</script><script>
+// suggestion/init_suggestion.js
 $(document).ready(function() {
-    $("#reviews").load(
+    $('#rateit-review').bind('rated', function() {
+        $('#id_rating').val($(this).rateit('value'));
+    });
+
+    $("#review-form").submit(function(event) {
+
+        // Stop form from submitting normally
+        event.preventDefault();
+
+        // Send the data using post
+        var posting = $.post(
+            $("#review-form").data("ajax-url"),
+            $(this).serialize() + "&submit=" + $(document.activeElement)[0].value
+        );
+
+        // Put the results in a div
+        posting.done(function(data) {
+            $("#sg-review-list").html(data);
+            $("#sg-review-list").sg_review_list();
+        });
+    });
+
+    $("#sg-review-list").load(
         "{% url 'reviews' request.goal.slug suggestion.slug %}",
-        sgreviews
+        function() {
+            $(this).sg_review_list();
+        }
     );
 });
-</script></div>
-{% endblock %}
+</script>{% endblock %}

@@ -16,8 +16,15 @@ $(document).ready(function() {
 
         // Put the results in a div
         posting.done(function(data) {
-            $("#reviews").html(data);
-            sgreviews();
+            $("#sg-review-list").html(data);
+            $("#sg-review-list").sg_review_list();
         });
     });
+
+    $("#sg-review-list").load(
+        "{% url 'reviews' request.goal.slug suggestion.slug %}",
+        function() {
+            $(this).sg_review_list();
+        }
+    );
 });

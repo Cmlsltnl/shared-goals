@@ -1,6 +1,4 @@
-sgreviews = function() {
-    $('div.rateit, span.rateit').rateit();
-
+(function($) {
     function on_comment_form_submit(event) {
         event.preventDefault();
 
@@ -14,7 +12,7 @@ sgreviews = function() {
         // Put the results in a div
         posting.done(function(data) {
             if (data.success) {
-                load_comment_block(0, form.closest(".comment-block"));
+                form.closest(".sg-comment-list").sg_comment_list();
             }
         });
     }
@@ -35,31 +33,19 @@ sgreviews = function() {
         $(reply_div).load(url_get_reply_form, init_reply_div);
     }
 
-    function init_comment_block() {
-        // connect all reply-links within $(this) comment-block
+    function init_comment_list() {
+        // connect all reply-links within $(this) comment list
         $(this).find(".comment-reply-link").each(function(index, reply_link) {
             $(reply_link).click(on_click_reply_link);
         });
     }
 
-    function load_comment_block(dummy_index, comment_block) {
-        // load comments into this comment-block
-        url_get_comment_block = $(comment_block).data("ajax-url");
-        $(comment_block).load(url_get_comment_block, init_comment_block);
-    }
+    $.fn.sg_comment_list = function() {
+        return this.each(function(dummy_index, comment_list) {
 
-    (function($) {
-        $.fn.load_comment_block = function() {
-            return this.each(load_comment_block);
-        };
-    }(jQuery));
-
-    $(".comment-block").load_comment_block();
-}
-
-$(document).ready(function() {
-    $("#reviews").load(
-        "{% url 'reviews' request.goal.slug suggestion.slug %}",
-        sgreviews
-    );
-});
+            // load comments into this comment list
+            url_get_comment_list = $(comment_list).data("ajax-url");
+            $(comment_list).load(url_get_comment_list, init_comment_list);
+        });
+    };
+}(jQuery));
