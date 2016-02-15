@@ -5,6 +5,7 @@ from . import views
 urlpatterns = [
     url(r'^profile/$', views.ProfileView.as_view(), name='profile'),
     url(r'^$', views.GoalsView.as_view(), name='home'),
+    url(r'^new-goal$', views.NewGoalView.as_view(), name='new-goal'),
     url(
         r'^to/(?P<goal_slug>[\-\w]+)/$',
         views.GoalView.as_view(),

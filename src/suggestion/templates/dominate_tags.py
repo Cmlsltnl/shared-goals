@@ -3,10 +3,6 @@ from django_dominate.django_tags import *
 from dominate.tags import *
 
 
-def column(k, **argv):
-    return div(_class="col-md-%d" % k, **argv)
-
-
 @a(href="{% url 'suggestion' suggestion.goal.slug suggestion.slug %}")
 def suggestion_list_item():
     suggestion_image("{{ suggestion.get_current_revision.title }}")

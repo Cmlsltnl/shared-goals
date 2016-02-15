@@ -4,14 +4,22 @@
 
 {% block header %}
   <div class="row top-right-div">
+    <div>
+      <a href="{% url 'home' %}">Shared Goals</a>
+    </div>
     <div class="pull-right">
       {% if user.is_authenticated %}
         {% if request.member %}
-          <div class="btn-group" id="top-right-div-inner">
+          <div class="btn-group">
             {% if suggestion and suggestion.owner == request.global_user %}
               <button class="btn btn-info" onclick="location.href='{% url 'update-suggestion' request.goal.slug suggestion.slug %}';">Edit Suggestion</button>
             {% endif %}
             <button class="btn btn-success" onclick="location.href='{% url 'new-suggestion' request.goal.slug %}';">New Suggestion</button>
+          </div>
+        {% endif %}
+        {% if request.global_user and not request.member %}
+          <div class="btn-group">
+            <button class="btn btn-success" onclick="location.href='{% url 'new-goal' %}';">New Goal</button>
           </div>
         {% endif %}
         <div class="dropdown clearfix pull-right">

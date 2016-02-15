@@ -74,6 +74,10 @@
     background-color: lightgray;
 }
 
+.goal-form--image {
+    background-color: lightgray;
+}
+
 .review--comments-notice {
     font-size: 12px;
 }

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block head %}{{ form.media }}{% endblock %}
+{% block content %}
+  <div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+      <form enctype="multipart/form-data" method="post">
+        {% csrf_token %}
+        <p>
+          {% if show_errors %}{{ form.title.errors }}{% endif %}
+          <label class="form-label" for="{{ form.title.id_for_label }}">Title</label>
+          <input class="form-field" id="id_title" maxlength="100" name="title" type="text" value="{{ form.title.value }}">
+        </p>
+        {% if show_image_form %}
+          <div class="goal-form--image">
+            <p>
+              {% if show_errors %}{{ form.cropping.errors }}{% endif %}
+              <label class="form-label" for="{{ form.cropping.id_for_label }}"></label>{{ form.cropping }}</p>
+            <p>
+              {% if show_errors %}{{ form.image.errors }}{% endif %}
+              <label class="form-label" for="{{ form.image.id_for_label }}">Upload an image to illustrate your goal</label>{{ form.image }}
+              <button id="upload-submit" name="submit" value="upload">Upload</button>
+            </p>
+          </div>
+        {% endif %}
+        <div>
+          <div class="small-gap-above small-gap-below">
+            <label class="form-label">{{ submit_button_header }}</label>
+            <button name="submit" value="save">{{ post_button_label }}</button>
+            <button name="submit" value="cancel">Cancel</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

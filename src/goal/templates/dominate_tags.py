@@ -3,6 +3,10 @@ from django_dominate.django_tags import *
 from dominate.tags import *
 
 
+def column(k, **argv):
+    return div(_class="col-md-%d" % k, **argv)
+
+
 @div(_class="row small-gap-below")
 def goal_header():
     with div(_class="text-center"):

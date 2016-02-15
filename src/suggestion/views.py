@@ -13,6 +13,7 @@ from notification.models import Notification
 
 from suggestion.forms import SuggestionForm
 from suggestion.models import Suggestion, Revision
+from suggestion.utils import apply_cropping_to_image
 
 
 class PostSuggestionView(View):
@@ -97,7 +98,7 @@ class NewSuggestionView(PostSuggestionView):
         if is_form_valid and submit == 'save':
             suggestion.slug = slugify(
                 suggestion.get_current_revision().title)
-            suggestion.apply_cropping_to_image(delete_original=False)
+            apply_cropping_to_image(suggestion, delete_original=False)
             suggestion.is_draft = False
             suggestion.save()
 
@@ -136,11 +137,10 @@ class NewSuggestionView(PostSuggestionView):
             elif submit == 'cancel':
                 return self.on_cancel(request.goal.slug)
 
-        form = (
-            bound_form
-            if is_posting else
-            self.get_populated_form(request, suggestion)
-        )
+        if is_posting and submit == 'save':
+            form = bound_form
+        else:
+            form = self.get_populated_form(request, suggestion)
 
         context = {
             'form': form,

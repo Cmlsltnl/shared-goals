@@ -1,15 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
-from image_cropping import ImageRatioField
 
-from sorl.thumbnail import ImageField as SorlImageField
+from image_cropping import ImageCropField, ImageRatioField
 
 
 class GlobalUser(models.Model):
     user = models.OneToOneField(User)
     join_date = models.DateTimeField('date joined', auto_now_add=True)
-    image = SorlImageField(blank=True, upload_to='members')
+    image = ImageCropField(blank=True, upload_to='members')
     cropping = ImageRatioField('image', '360x430')
 
     @property
@@ -24,9 +23,10 @@ class Goal(models.Model):
     title = models.CharField(max_length=100, unique=True)
     pub_date = models.DateTimeField('date published', auto_now_add=True)
     slug = models.SlugField('slug', max_length=60, unique=True)
-    image = models.ImageField(blank=True, upload_to='goals')
+    image = ImageCropField(blank=True, upload_to='goals')
     cropping = ImageRatioField('image', '430x360')
     owner = models.ForeignKey(GlobalUser)
+    is_draft = models.BooleanField(default=True)
 
     def save(self, *args, **kwargs):
         if not self.id:
@@ -41,7 +41,7 @@ class Member(models.Model):
     global_user = models.ForeignKey(GlobalUser)
     goal = models.ForeignKey(Goal, related_name="members")
     join_date = models.DateTimeField('date joined', auto_now_add=True)
-    image = SorlImageField(blank=True, upload_to='members')
+    image = ImageCropField(blank=True, upload_to='members')
     cropping = ImageRatioField('image', '360x430')
 
     @property
