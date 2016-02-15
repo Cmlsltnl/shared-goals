@@ -1,5 +1,5 @@
 - connect button to delete the suggestion (ask for confirmation)
-
+- don't create notfication for commenting on your own stuff
 
 Links
 

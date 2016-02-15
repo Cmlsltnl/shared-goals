@@ -8,6 +8,7 @@ from django.utils.decorators import method_decorator
 
 from goal.views import membership_required
 
+from notification.models import Notification
 from suggestion.models import Suggestion
 from review.forms import CommentForm, ReviewForm
 from review.models import Comment, Review
@@ -146,8 +147,13 @@ class PostCommentView(View):
             comment.body = form.cleaned_data['body']
         if is_form_valid and submit == 'save':
             comment.is_draft = False
+            comment.save()
 
-        comment.save()
+            notification = Notification.create_for_comment(comment)
+            notification.save()
+        else:
+            comment.save()
+
         return is_form_valid
 
     @method_decorator(login_required)

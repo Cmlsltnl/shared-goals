@@ -8,14 +8,14 @@
         <button class="btn btn-default" onclick="location.href='{% url 'goal' request.goal.slug %}';">Suggestions</button>
         <button class="btn btn-default">Members</button>
         {% if request.member %}
-          <button class="btn btn-default" onclick="location.href='{% url 'profile' request.goal.slug %}';">My Profile</button>
+          <button class="btn btn-default" onclick="location.href='{% url 'profile' request.goal.slug %}';">Profile</button>
         {% endif %}
       </div>
     </div>
   </div>
   <div class="row">
     <div class="col-md-4">
-      <h4 class="">My suggestions:</h4>
+      <h4 class="">Your suggestions:</h4>
     </div>
   </div>
   {% for suggestion_list in suggestion_lists %}
@@ -38,4 +38,23 @@
       <h5>You have not created any suggestions yet</h5>
     
   {% endfor %}
-{% endblock %}
+  <div class="row">
+    <div class="col-md-4">
+      <h4 class="">Notifications:</h4>
+    </div>
+  </div>
+  {% for notification in notifications %}
+    <div class="row small-gap-above profile--suggestion-list">{{ notification.html|safe }}</div>
+  {% endfor %}<script>
+// goal/init_profile.js
+$(document).ready(function() {
+
+    function on_click_notification() {
+        window.location = $(this).data("next-url");
+    };
+
+    $(".sg-notification").each(function (dummy_index, notification) {
+        $(notification).click(on_click_notification);
+    });
+});
+</script>{% endblock %}

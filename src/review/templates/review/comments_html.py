@@ -12,10 +12,13 @@ from suggestion.templates.dominate_tags import *
 def comment_header():
     column(2)
     with column(8):
-        with div(style="text-indent: {{ the_comment.indent }}px;"):
+        with div(
+            id="sg-comment-{{ the_comment.pk }}",
+            style="text-indent: {{ the_comment.indent }}px;"
+        ):
             text("{{ the_comment.owner.name }}")
             with django_if("the_comment.reply_to"):
-                text("(=> {{ the_comment.reply_to.owner.name }}) ")
+                text("(=> {{ the_comment.reply_to.owner.name }})")
 
             text(", {{ the_comment.pub_date|naturaltime }}")
 

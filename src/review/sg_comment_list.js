@@ -44,9 +44,22 @@
 
 
 (function($) {
+    $.fn.scroll_to_current_anchor = function() {
+        var tmp = window.location.hash;
+        window.location.hash = ""
+        window.location.hash = tmp;
+    };
+}(jQuery));
+
+
+(function($) {
     function init_comment_list() {
         // connect all reply-links within $(this) comment list
         $(this).find(".comment-reply-link").sg_comment_reply_link();
+
+        // it's possible that the current anchor refers to a comment in
+        // the list that was just loaded
+        $().scroll_to_current_anchor();
     }
 
     $.fn.sg_comment_list = function() {

@@ -3,6 +3,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic import View
 
+from notification.models import Notification
+
 
 def membership_required(view):
     def _wrapper(request, *args, **kw):
@@ -42,7 +44,12 @@ class ProfileView(View):
             is_draft=False
         ).order_by('-avg_rating')
 
+        notifications = Notification.objects.filter(
+            owner=request.global_user,
+            goal=request.goal
+        )
         context = {
-            'suggestion_lists': chunks(suggestions, 3)
+            'suggestion_lists': chunks(suggestions, 3),
+            'notifications': notifications
         }
         return render(request, 'goal/profile.html', context)

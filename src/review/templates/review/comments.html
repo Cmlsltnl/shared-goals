@@ -9,8 +9,8 @@
       <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-8">
-          <div style="text-indent: {{ the_comment.indent }}px;">{{ the_comment.owner.name }}
-            {% if the_comment.reply_to %}(=&gt; {{ the_comment.reply_to.owner.name }}) {% endif %}, {{ the_comment.pub_date|naturaltime }}</div>
+          <div id="sg-comment-{{ the_comment.pk }}" style="text-indent: {{ the_comment.indent }}px;">{{ the_comment.owner.name }}
+            {% if the_comment.reply_to %}(=&gt; {{ the_comment.reply_to.owner.name }}){% endif %}, {{ the_comment.pub_date|naturaltime }}</div>
         </div>
       </div>
       <div class="row">

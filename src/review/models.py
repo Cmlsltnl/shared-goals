@@ -9,7 +9,7 @@ from suggestion.models import Revision
 class Review(models.Model):
     EXPERIENCE_NOT_TRIED = 0
     EXPERIENCE_TRIED = 1
-    EXPERIENCE_DOING = 1
+    EXPERIENCE_DOING = 2
 
     EXPERIENCE_CHOICES = (
         (EXPERIENCE_NOT_TRIED, "I've not tried this"),

@@ -16,7 +16,7 @@ def goal_header():
             button("Members", _class="btn btn-default")
             with django_if("request.member"):
                 button(
-                    "My Profile",
+                    "Profile",
                     _class="btn btn-default",
                     onclick=(
                         "location.href='"

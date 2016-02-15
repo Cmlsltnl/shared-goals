@@ -1,3 +1,4 @@
+import datetime
 import glob
 import importlib
 import logging
@@ -5,6 +6,7 @@ import os
 import re
 import sys
 import time
+import traceback
 
 from django.core.management.base import BaseCommand
 from django.conf import settings
@@ -35,6 +37,8 @@ class EventHandler(FileSystemEventHandler):
 
     def __generate_templates(self):
         current_imports = list(sys.modules.keys())
+        count_templates = 0
+        error_text = ""
 
         for template in self.python_templates:
             rel_path = os.path.splitext(
@@ -48,13 +52,22 @@ class EventHandler(FileSystemEventHandler):
                     for line in mod.result():
                         of.write(str(line))
                         of.write(os.linesep)
-            except Exception as e:
-                print(e)
+            except:
+                error_text += traceback.format_exc() + os.linesep
+            else:
+                count_templates += 1
 
         for new_import in [
             x for x in sys.modules.keys() if x not in current_imports
         ]:
             del sys.modules[new_import]
+
+        print(
+            "Generated %d templates on %s"
+            % (count_templates, datetime.datetime.now())
+        )
+        if error_text:
+            print(error_text)
 
     def on_moved(self, event):
         super(EventHandler, self).on_moved(event)

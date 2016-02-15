@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'goal.apps.GoalConfig',
     'suggestion.apps.SuggestionConfig',
     'review.apps.ReviewConfig',
+    'notification.apps.NotificationConfig',
     'django_extensions',
     'django_dominate',
     'markdown_deux',
