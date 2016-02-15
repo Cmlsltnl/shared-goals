@@ -4,7 +4,7 @@ from . import views
 
 urlpatterns = [
     url(
-        r'^follow-notification/(?P<notification_id>\d+)/$',
+        r'^follow/(?P<notification_id>\d+)/$',
         views.NotificationFollowView.as_view(),
         name='follow-notification'
     ),

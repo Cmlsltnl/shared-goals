@@ -172,14 +172,14 @@ class Command(BaseCommand):
 
     def __create_comments(self):
         self.comment_1 = Comment()
-        self.comment_1.owner = self.user_mnieber.global_user
+        self.comment_1.owner = self.user_mnieber
         self.comment_1.body = "Thanks for the feedback"
         self.comment_1.review = self.review_yoga_twist
         self.comment_1.is_draft = False
         self.comment_1.save()
 
         self.comment_2 = Comment()
-        self.comment_2.owner = self.user_anders_om.global_user
+        self.comment_2.owner = self.user_anders_om
         self.comment_2.body = "I see your point"
         self.comment_2.review = self.review_yoga_twist
         self.comment_2.reply_to = self.comment_1

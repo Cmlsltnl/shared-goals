@@ -11,7 +11,7 @@
         <button class="btn btn-default" onclick="location.href='{% url 'goal' request.goal.slug %}';">Suggestions</button>
         <button class="btn btn-default">Members</button>
         {% if request.member %}
-          <button class="btn btn-default" onclick="location.href='{% url 'profile' request.goal.slug %}';">Profile</button>
+          <button class="btn btn-default" onclick="location.href='{% url 'profile' %}';">Profile</button>
         {% endif %}
       </div>
     </div>

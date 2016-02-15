@@ -1,18 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <div class="row small-gap-below">
-    <div class="text-center">
-      <h1>{{ request.goal.title }}</h1>
-      <div class="button-grp">
-        <button class="btn btn-default" onclick="location.href='{% url 'goal' request.goal.slug %}';">Suggestions</button>
-        <button class="btn btn-default">Members</button>
-        {% if request.member %}
-          <button class="btn btn-default" onclick="location.href='{% url 'profile' request.goal.slug %}';">Profile</button>
-        {% endif %}
-      </div>
-    </div>
-  </div>
   <div class="row">
     <div class="col-md-4">
       <h4 class="">Your suggestions:</h4>
@@ -22,7 +10,7 @@
     <div class="row small-gap-above profile--suggestion-list">
       {% for suggestion in suggestion_list %}
         <div class="col-md-2">
-          <a href="{% url 'suggestion' request.goal.slug suggestion.slug %}">
+          <a href="{% url 'suggestion' suggestion.goal.slug suggestion.slug %}">
             <div class="suggestion--image" style="{% if suggestion.image %}background-image:url({{ suggestion.image.url }});{% endif %}">
               <div class="suggestion--gradient"></div>
               <span class="suggestion--title">

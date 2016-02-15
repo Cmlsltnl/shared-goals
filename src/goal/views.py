@@ -1,7 +1,11 @@
+from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic import View
+from django.utils.decorators import method_decorator
+
+from suggestion.models import Suggestion
 
 from notification.models import Notification
 
@@ -37,9 +41,17 @@ class GoalView(View):
         return render(request, 'goal/goal.html', context)
 
 
+class GoalsView(View):
+    def get(self, request):
+        context = {
+        }
+        return render(request, 'goal/goals.html', context)
+
+
 class ProfileView(View):
-    def get(self, request, goal_slug):
-        suggestions = request.goal.suggestions.filter(
+    @method_decorator(login_required)
+    def get(self, request):
+        suggestions = Suggestion.objects.filter(
             owner=request.global_user,
             is_draft=False
         ).order_by('-avg_rating')

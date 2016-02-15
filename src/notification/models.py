@@ -6,7 +6,7 @@ from django.db import models
 
 from goal.models import GlobalUser, Goal
 
-from suggestin.models import Suggestion
+from suggestion.models import Suggestion
 
 from review.models import Comment, Review
 

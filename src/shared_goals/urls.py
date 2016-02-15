@@ -7,10 +7,8 @@ from django.views import static
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^accounts/', include('registration.backends.hmac.urls')),
-    url('', include('notification.urls')),
-    url(r'^to/(?P<goal_slug>[\-\w]+)/', include('goal.urls')),
-    url(r'^to/(?P<goal_slug>[\-\w]+)/', include('suggestion.urls')),
-    url(r'^to/(?P<goal_slug>[\-\w]+)/', include('review.urls')),
+    url(r'^notification/', include('notification.urls')),
+    url(r'', include('goal.urls')),
 ]
 
 if settings.DEBUG:

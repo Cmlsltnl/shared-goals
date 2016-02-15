@@ -7,7 +7,7 @@ def column(k, **argv):
     return div(_class="col-md-%d" % k, **argv)
 
 
-@a(href="{% url 'suggestion' request.goal.slug suggestion.slug %}")
+@a(href="{% url 'suggestion' suggestion.goal.slug suggestion.slug %}")
 def suggestion_list_item():
     suggestion_image("{{ suggestion.get_current_revision.title }}")
 

@@ -19,7 +19,6 @@ def goal_header():
                     "Profile",
                     _class="btn btn-default",
                     onclick=(
-                        "location.href='"
-                        "{% url 'profile' request.goal.slug %}';"
+                        "location.href='{% url 'profile' %}';"
                     )
                 )
