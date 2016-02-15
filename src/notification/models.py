@@ -48,6 +48,13 @@ class Notification(models.Model):
         if self.template == self.TEMPLATE_NEW_COMMENT:
             self.__context_for_new_template(c)
 
+        c['is_read'] = 1 if self.is_read else 0
+        c['notification_read_url'] = reverse(
+            'notification-read',
+            kwargs=dict(
+                notification_id=self.pk
+            )
+        )
         return t.render(c)
 
     def __context_for_new_template(self, c):

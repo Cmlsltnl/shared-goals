@@ -7,10 +7,13 @@ from dominate.util import text
 def result():
     with span() as content:
         with a(
-            _class="sg-notification",
-            data_next_url="{{ next_url }}",
+            _class="sg-notification sg-notification-read-{{ is_read }}",
+            href="{{ next_url }}",
         ):
-            text("New comment from {{ comment.owner.name }} on your {{ on_what }}")
+            text(
+                "New comment from {{ comment.owner.name }} on your "
+                "{{ on_what }}"
+            )
 
     return (
         content,

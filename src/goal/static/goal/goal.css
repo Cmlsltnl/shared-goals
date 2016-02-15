@@ -111,3 +111,11 @@
 .profile--suggestion-list .suggestion--title h3 {
     font-size: 14px;
 }
+
+.sg-notification-read-0 {
+    font-weight: bold;
+}
+
+.sg-notification-read-1 {
+    font-weight: normal;
+}
