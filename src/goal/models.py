@@ -20,7 +20,7 @@ class GlobalUser(models.Model):
 
 
 class Goal(models.Model):
-    title = models.CharField(max_length=100, unique=True)
+    title = models.CharField(max_length=100)
     pub_date = models.DateTimeField('date published', auto_now_add=True)
     slug = models.SlugField('slug', max_length=60, unique=True)
     image = ImageCropField(blank=True, upload_to='goals')

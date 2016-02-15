@@ -175,6 +175,6 @@ def result():
 
     return (
         "{% load humanize %}",
-        "{% load case_utils %}",
+        "{% load notification_tags %}",
         reviews,
     )

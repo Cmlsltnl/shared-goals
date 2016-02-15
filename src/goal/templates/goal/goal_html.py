@@ -20,6 +20,8 @@ def result():
                 h5("There are no suggestions yet")
 
     return (
-        "{% extends 'base.html' %}\n",
+        "{% extends 'base.html' %}",
+        "{% load notification_tags %}",
+
         content
     )

@@ -81,16 +81,8 @@ class NewSuggestionView(PostSuggestionView):
         current_revision.save()
 
         suggestion.type = form.cleaned_data['type']
-        if 'image' in form.cleaned_data:
-            # Note: when the image is cleared in the UI, the value of
-            # form.cleaned_data['image'] becomes False. In that case
-            # we store the value as "", otherwise saving the cropping
-            # field later on will crash.
-            suggestion.image = (
-                form.cleaned_data['image']
-                if form.cleaned_data['image'] else
-                ""
-            )
+        if form.cleaned_data.get('image', None):
+            suggestion.image = form.cleaned_data['image']
 
         if 'cropping' in form.cleaned_data:
             suggestion.cropping = form.cleaned_data['cropping']

@@ -1,5 +1,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>Shared Goals</h1>
+  <div class="text-center">
+    <h1>Shared Goals</h1>
+  </div>
+  {% for goal_list in goal_lists %}
+    <div class="row small-gap-above">
+      {% for goal in goal_list %}
+        <div class="col-md-4">
+          <a href="{% url 'goal' goal.slug %}">
+            <div class="goal--image" style="{% if goal.image %}background-image:url({{ goal.image.url }});{% endif %}">
+              <div class="goal--gradient"></div>
+              <span class="goal--title">
+                <h3>{{ goal.title }}</h3>
+              </span>
+            </div>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+    {% empty %}
+      <h5>There are no goals yet</h5>
+    
+  {% endfor %}
 {% endblock %}

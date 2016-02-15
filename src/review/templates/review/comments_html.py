@@ -73,6 +73,5 @@ def review_comments():
 def result():
     return (
         "{% load humanize %}",
-        "{% load case_utils %}",
         review_comments(),
     )

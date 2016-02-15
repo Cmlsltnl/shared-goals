@@ -138,6 +138,7 @@ def result():
     return (
         "{% extends 'base.html' %}",
         "{% load staticfiles %}",
+        "{% load notification_tags %}",
         head,
         content,
     )

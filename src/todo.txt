@@ -1,7 +1,8 @@
-- shared goals logo
-- upload image button broken
 - connect button to delete the suggestion (ask for confirmation)
 - after submitting a review, scroll to it
+- show nr of unread notifications
+- problem: going to the profile loses the context of the current goal
+- group notifications by goal
 
 Links
 
@@ -12,7 +13,7 @@ Links
 
 Later
 
-- how does cropping really work, what's up with the details file
+- learn how jcrop myself. How does cropping really work, what's up with the details file?
 - Ensure that uploaded images never override real images. Maybe uploaded images can go
 into a suggestions_inbox folder
 - Use now() timestamp from the db server

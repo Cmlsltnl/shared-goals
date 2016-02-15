@@ -38,13 +38,38 @@
     background-image: linear-gradient(rgba(15, 20, 31, 0) 0px, rgba(15, 20, 31, 0.1) 25%, rgba(15, 20, 31, 0.8) 100%);
 }
 
+.goal--gradient {
+    height: 100%;
+    width: 100%;
+    background-color: transparent;
+    background-image: linear-gradient(rgba(15, 20, 31, 0) 0px, rgba(15, 20, 31, 0.1) 25%, rgba(15, 20, 31, 0.8) 100%);
+}
+
 .suggestion--image {
     display: block;
     height: 200px;
     background-size: cover;
 }
 
+.goal--image {
+    display: block;
+    height: 200px;
+    background-size: cover;
+}
+
 .suggestion--title {
+    background: transparent
+    display: block;
+    color: #FFF;
+    padding-left: 24px;
+    padding-right: 24px;
+    width: 100%;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+}
+
+.goal--title {
     background: transparent
     display: block;
     color: #FFF;

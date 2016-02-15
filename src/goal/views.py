@@ -49,7 +49,12 @@ class GoalView(View):
 
 class GoalsView(View):
     def get(self, request):
+        goals = Goal.objects.filter(
+            is_draft=False
+        ).order_by('-pub_date')
+
         context = {
+            'goal_lists': chunks(goals, 3)
         }
         return render(request, 'goal/goals.html', context)
 
@@ -91,12 +96,8 @@ class NewGoalView(View):
         if 'title' in form.cleaned_data:
             goal.title = form.cleaned_data['title'] or ''
 
-        if 'image' in form.cleaned_data:
-            goal.image = (
-                form.cleaned_data['image']
-                if form.cleaned_data['image'] else
-                ""
-            )
+        if form.cleaned_data.get('image', None):
+            goal.image = form.cleaned_data['image']
 
         if 'cropping' in form.cleaned_data:
             goal.cropping = form.cleaned_data['cropping']
@@ -164,8 +165,7 @@ class ProfileView(View):
         ).order_by('-avg_rating')
 
         notifications = Notification.objects.filter(
-            owner=request.global_user,
-            goal=request.goal
+            owner=request.global_user
         ).order_by('-pub_date')
         context = {
             'suggestion_lists': chunks(suggestions, 3),

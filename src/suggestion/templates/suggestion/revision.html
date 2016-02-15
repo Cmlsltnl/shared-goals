@@ -11,7 +11,11 @@
         <button class="btn btn-default" onclick="location.href='{% url 'goal' request.goal.slug %}';">Suggestions</button>
         <button class="btn btn-default">Members</button>
         {% if request.member %}
-          <button class="btn btn-default" onclick="location.href='{% url 'profile' %}';">Profile</button>
+          <button class="btn btn-default" onclick="location.href='{% url 'profile' %}';">Profile
+            {% with request.global_user.notifications|unread as unread_notifications %}
+              {% if unread_notifications.count %} ({{ unread_notifications.count }}){% endif %}
+            {% endwith %}
+          </button>
         {% endif %}
       </div>
     </div>

@@ -4,5 +4,5 @@ register = template.Library()
 
 
 @register.filter
-def lowerfirst(x):
-    return x[0].lower() + x[1:]
+def unread(notifications):
+    return notifications.filter(is_read=False)
