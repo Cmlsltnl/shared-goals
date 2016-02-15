@@ -11,6 +11,7 @@ from suggestion.templates.dominate_tags import *
 
 def result():
     with django_block("content") as content:
+        goal_header()
 
         with div(_class="row"):
             with column(4):
@@ -38,5 +39,6 @@ def result():
 
     return (
         "{% extends 'base.html' %}\n",
+        "{% load notification_tags %}\n",
         content,
     )

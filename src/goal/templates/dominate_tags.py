@@ -19,11 +19,11 @@ def goal_header():
                 onclick="location.href='{% url 'goal' request.goal.slug %}';"
             )
             button("Members", _class="btn btn-default")
-            with django_if("request.member"):
+            with django_if("request.global_user"):
                 with button(
                     _class="btn btn-default",
                     onclick=(
-                        "location.href='{% url 'profile' %}';"
+                        "location.href='{{ profile_url }}';"
                     )
                 ):
                     text("Profile")

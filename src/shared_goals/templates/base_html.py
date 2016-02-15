@@ -45,8 +45,16 @@ def goal_buttons():
     url_new_goal = \
         "location.href='{% url 'new-goal' %}';"
 
-    with button(_class="btn btn-success", onclick=url_new_goal):
-        text("New Goal")
+    url_join_goal = \
+        "location.href='{% url 'join-goal' request.goal.slug %}';"
+
+    with django_if("not request.goal"):
+        with button(_class="btn btn-success", onclick=url_new_goal):
+            text("New Goal")
+
+    with django_if("request.goal and not request.member"):
+        with button(_class="btn btn-success", onclick=url_join_goal):
+            text("Join Goal")
 
 
 @div(_class="pull-right")
@@ -56,7 +64,7 @@ def top_right_div():
         with django_if("request.member"):
             suggestion_buttons()
 
-        with django_if("request.global_user and not request.member"):
+        with django_if("request.global_user"):
             goal_buttons()
 
         top_right_menu()

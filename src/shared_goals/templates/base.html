@@ -17,9 +17,14 @@
             <button class="btn btn-success" onclick="location.href='{% url 'new-suggestion' request.goal.slug %}';">New Suggestion</button>
           </div>
         {% endif %}
-        {% if request.global_user and not request.member %}
+        {% if request.global_user %}
           <div class="btn-group">
-            <button class="btn btn-success" onclick="location.href='{% url 'new-goal' %}';">New Goal</button>
+            {% if not request.goal %}
+              <button class="btn btn-success" onclick="location.href='{% url 'new-goal' %}';">New Goal</button>
+            {% endif %}
+            {% if request.goal and not request.member %}
+              <button class="btn btn-success" onclick="location.href='{% url 'join-goal' request.goal.slug %}';">Join Goal</button>
+            {% endif %}
           </div>
         {% endif %}
         <div class="dropdown clearfix pull-right">

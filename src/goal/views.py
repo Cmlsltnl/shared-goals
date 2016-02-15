@@ -7,7 +7,7 @@ from django.template.defaultfilters import slugify
 from django.views.generic import View
 from django.utils.decorators import method_decorator
 
-from .models import Goal
+from .models import Member, Goal
 from .forms import GoalForm
 
 from suggestion.models import Suggestion
@@ -57,6 +57,18 @@ class GoalsView(View):
             'goal_lists': chunks(goals, 3)
         }
         return render(request, 'goal/goals.html', context)
+
+
+class JoinGoalView(View):
+    @method_decorator(login_required)
+    def get(self, request, goal_slug):
+        Member.objects.get_or_create(
+            global_user=request.global_user,
+            goal=request.goal
+        )
+        return HttpResponseRedirect(
+            reverse('goal', kwargs=dict(goal_slug=request.goal.slug))
+        )
 
 
 class NewGoalView(View):
@@ -158,11 +170,14 @@ class NewGoalView(View):
 
 class ProfileView(View):
     @method_decorator(login_required)
-    def get(self, request):
+    def get(self, request, goal_slug=None):
         suggestions = Suggestion.objects.filter(
             owner=request.global_user,
             is_draft=False
         ).order_by('-avg_rating')
+
+        if request.goal:
+            suggestions = suggestions.filter(goal=request.goal)
 
         notifications = Notification.objects.filter(
             owner=request.global_user

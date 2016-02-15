@@ -1,8 +1,6 @@
+- group notifications by goal
 - connect button to delete the suggestion (ask for confirmation)
 - after submitting a review, scroll to it
-- show nr of unread notifications
-- problem: going to the profile loses the context of the current goal
-- group notifications by goal
 
 Links
 
