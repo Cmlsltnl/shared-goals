@@ -22,7 +22,7 @@ def suggestion_description_div():
     column(2)
     with column(8):
         h5(
-            "Published by {{ suggestion.owner.global_user.name }}, "
+            "Published by {{ suggestion.owner.name }}, "
             "{{ suggestion.pub_date|naturaltime }}"
         )
         text("{{ revision.description|markdown }}")

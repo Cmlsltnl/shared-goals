@@ -1,5 +1,5 @@
 - connect button to delete the suggestion (ask for confirmation)
-- don't create notfication for commenting on your own stuff
+- after submitting a review, scroll to it
 
 Links
 
@@ -18,5 +18,5 @@ into a suggestions_inbox folder
 - Advise member that their profile is totally public
 - use markdown in reviews and comments, but with a more modest style
 - Highlight currently selected main menu item
-- suggestion preview button
 - garbage collect revisions that have no reviews and are not the latest one
+- use suggestion.get_url() instead of calling reverse?

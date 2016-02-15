@@ -9,6 +9,8 @@ from django.utils.decorators import method_decorator
 
 from goal.views import membership_required
 
+from notification.models import Notification
+
 from suggestion.forms import SuggestionForm
 from suggestion.models import Suggestion, Revision
 
@@ -52,12 +54,12 @@ class PostSuggestionView(View):
 class NewSuggestionView(PostSuggestionView):
     def get_or_create_draft(self, request):
         draft = Suggestion.objects.filter(
-            is_draft=True, owner=request.member
+            is_draft=True, owner=request.global_user
         ).first()
 
         if not draft:
             draft = Suggestion()
-            draft.owner = request.member
+            draft.owner = request.global_user
             draft.goal = request.goal
             draft.save()
 
@@ -97,8 +99,15 @@ class NewSuggestionView(PostSuggestionView):
                 suggestion.get_current_revision().title)
             suggestion.apply_cropping_to_image(delete_original=False)
             suggestion.is_draft = False
+            suggestion.save()
 
-        suggestion.save()
+            notification = Notification.create_for_suggestion(suggestion)
+            if notification.owner != suggestion.owner:
+                notification.save()
+
+        else:
+            suggestion.save()
+
         return is_form_valid
 
     @method_decorator(membership_required)

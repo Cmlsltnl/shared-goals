@@ -16,10 +16,10 @@ from review.models import Comment, Review
 
 class ReviewsView(View):
     def __get_or_create_review(self, request, revision, all_reviews):
-        review = all_reviews.filter(owner=request.member).first()
+        review = all_reviews.filter(owner=request.global_user).first()
         if not review:
             review = Review()
-            review.owner = request.member
+            review.owner = request.global_user
             review.revision = revision
             review.save()
 
@@ -34,11 +34,18 @@ class ReviewsView(View):
             review.experience = form.cleaned_data['experience']
         if 'description' in form.cleaned_data:
             review.description = form.cleaned_data['description']
+
         if is_form_valid and submit == 'save':
             review.is_draft = False
+            review.save()
 
-        review.comments.filter(is_draft=False).delete()
-        review.save()
+            review.comments.filter(is_draft=False).delete()
+
+            notification = Notification.create_for_review(review)
+            if notification.owner != review.owner:
+                notification.save()
+        else:
+            review.save()
 
         return is_form_valid
 
@@ -71,7 +78,7 @@ class ReviewsView(View):
                 self.__update_review_and_save(review, bound_form, submit)
 
         review_form = None
-        if request.member and suggestion.owner != request.member:
+        if request.global_user and suggestion.owner != request.global_user:
             review_form = (
                 bound_form
                 if submit == 'save' else
@@ -150,7 +157,8 @@ class PostCommentView(View):
             comment.save()
 
             notification = Notification.create_for_comment(comment)
-            notification.save()
+            if notification.owner != comment.owner:
+                notification.save()
         else:
             comment.save()
 

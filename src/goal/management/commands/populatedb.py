@@ -91,7 +91,7 @@ class Command(BaseCommand):
     def __create_suggestions(self):
         self.yoga_bend = Suggestion()
         self.yoga_bend.goal = self.become_a_yogi
-        self.yoga_bend.owner = self.yogi_mnieber
+        self.yoga_bend.owner = self.user_mnieber
         self.yoga_bend.is_draft = False
         self.yoga_bend.image = "suggestions/KroukTom-710x300-crop.jpg"
         self.yoga_bend.slug = "bend-backwards"
@@ -105,7 +105,7 @@ class Command(BaseCommand):
 
         self.yoga_meditate = Suggestion()
         self.yoga_meditate.goal = self.become_a_yogi
-        self.yoga_meditate.owner = self.yogi_mnieber
+        self.yoga_meditate.owner = self.user_mnieber
         self.yoga_meditate.is_draft = False
         self.yoga_meditate.image = "suggestions/Yoga_Nidra.jpg"
         self.yoga_meditate.slug = "meditate-often"
@@ -119,7 +119,7 @@ class Command(BaseCommand):
 
         self.yoga_twist = Suggestion()
         self.yoga_twist.goal = self.become_a_yogi
-        self.yoga_twist.owner = self.yogi_anders_om
+        self.yoga_twist.owner = self.user_anders_om
         self.yoga_twist.is_draft = False
         self.yoga_twist.image = "suggestions/MC_AM06_00_sized2.jpg"
         self.yoga_twist.slug = "keep-twisting"
@@ -141,7 +141,7 @@ class Command(BaseCommand):
 
         self.yoga_acrobatics = Suggestion()
         self.yoga_acrobatics.goal = self.become_a_yogi
-        self.yoga_acrobatics.owner = self.yogi_marie_houana
+        self.yoga_acrobatics.owner = self.user_marie_houana
         self.yoga_acrobatics.is_draft = False
         self.yoga_acrobatics.image = "suggestions/yoga-acrobats.jpg"
         self.yoga_acrobatics.slug = "yoga-acrobatics"
@@ -155,7 +155,7 @@ class Command(BaseCommand):
 
     def __create_reviews(self):
         self.review_yoga_twist = Review()
-        self.review_yoga_twist.owner = self.yogi_marie_houana
+        self.review_yoga_twist.owner = self.user_marie_houana
         self.review_yoga_twist.revision = self.rev_yoga_twist
         self.review_yoga_twist.rating = 2.5
         self.review_yoga_twist.description = "Not bad!"
@@ -163,7 +163,7 @@ class Command(BaseCommand):
         self.review_yoga_twist.save()
 
         self.review_yoga_twist_2 = Review()
-        self.review_yoga_twist_2.owner = self.yogi_mnieber
+        self.review_yoga_twist_2.owner = self.user_mnieber
         self.review_yoga_twist_2.revision = self.rev_yoga_twist_2
         self.review_yoga_twist_2.rating = 4
         self.review_yoga_twist_2.description = "Good, good, good"
@@ -172,14 +172,14 @@ class Command(BaseCommand):
 
     def __create_comments(self):
         self.comment_1 = Comment()
-        self.comment_1.owner = self.yogi_mnieber.global_user
+        self.comment_1.owner = self.user_mnieber.global_user
         self.comment_1.body = "Thanks for the feedback"
         self.comment_1.review = self.review_yoga_twist
         self.comment_1.is_draft = False
         self.comment_1.save()
 
         self.comment_2 = Comment()
-        self.comment_2.owner = self.yogi_anders_om.global_user
+        self.comment_2.owner = self.user_anders_om.global_user
         self.comment_2.body = "I see your point"
         self.comment_2.review = self.review_yoga_twist
         self.comment_2.reply_to = self.comment_1

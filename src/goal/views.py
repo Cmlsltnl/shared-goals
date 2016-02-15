@@ -40,14 +40,14 @@ class GoalView(View):
 class ProfileView(View):
     def get(self, request, goal_slug):
         suggestions = request.goal.suggestions.filter(
-            owner=request.member,
+            owner=request.global_user,
             is_draft=False
         ).order_by('-avg_rating')
 
         notifications = Notification.objects.filter(
             owner=request.global_user,
             goal=request.goal
-        )
+        ).order_by('-pub_date')
         context = {
             'suggestion_lists': chunks(suggestions, 3),
             'notifications': notifications

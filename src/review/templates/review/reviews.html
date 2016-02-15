@@ -31,7 +31,7 @@
     </div>
   </div>
   {% for the_review in published_reviews %}
-    <div class="row small-gap-above small-gap-below sg-review sg-review-{% cycle 'even' 'odd' %}">
+    <div class="row small-gap-above small-gap-below sg-review sg-review-{% cycle 'even' 'odd' %}" id="sg-review-{{ the_review.pk }}">
       <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-2">

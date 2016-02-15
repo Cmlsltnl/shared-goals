@@ -1,7 +1,7 @@
 from django.contrib.humanize.templatetags.humanize import naturaltime
 from django.db import models
 
-from goal.models import GlobalUser, Member
+from goal.models import GlobalUser
 
 from suggestion.models import Revision
 
@@ -18,7 +18,7 @@ class Review(models.Model):
     )
 
     pub_date = models.DateTimeField('date published', auto_now=True)
-    owner = models.ForeignKey(Member)
+    owner = models.ForeignKey(GlobalUser)
     revision = models.ForeignKey(Revision, related_name="revisions", null=True)
     rating = models.DecimalField(max_digits=2, decimal_places=1, default=0)
     description = models.TextField(blank=True)
@@ -31,7 +31,7 @@ class Review(models.Model):
 
     @property
     def header(self):
-        header = self.owner.global_user.name
+        header = self.owner.name
         header += ", %s" % naturaltime(self.pub_date)
         return header
 

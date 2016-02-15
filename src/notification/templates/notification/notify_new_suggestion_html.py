@@ -11,7 +11,8 @@ def result():
             href="{{ target_url }}",
         ):
             text(
-                "{{ comment.owner.name }} {{ did_what }}"
+                "{{ suggestion.owner.name }} created a new suggestion "
+                "{{ suggestion.get_current_revision.title }}"
             )
 
     return (

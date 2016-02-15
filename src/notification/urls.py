@@ -4,8 +4,8 @@ from . import views
 
 urlpatterns = [
     url(
-        r'^ajax-notification-read/(?P<notification_id>\d+)/$',
-        views.NotificationReadView.as_view(),
-        name='notification-read'
+        r'^follow-notification/(?P<notification_id>\d+)/$',
+        views.NotificationFollowView.as_view(),
+        name='follow-notification'
     ),
 ]

@@ -141,7 +141,8 @@ def published_review_comments():
 
 @div(_class=(
     "row small-gap-above small-gap-below sg-review "
-    "sg-review-{% cycle 'even' 'odd' %}")
+    "sg-review-{% cycle 'even' 'odd' %}"),
+    id="sg-review-{{ the_review.pk }}"
 )
 def published_review():
     published_review_header()

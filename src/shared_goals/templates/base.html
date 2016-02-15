@@ -8,7 +8,7 @@
       {% if user.is_authenticated %}
         {% if request.member %}
           <div class="btn-group" id="top-right-div-inner">
-            {% if suggestion and suggestion.owner == request.member %}
+            {% if suggestion and suggestion.owner == request.global_user %}
               <button class="btn btn-info" onclick="location.href='{% url 'update-suggestion' request.goal.slug suggestion.slug %}';">Edit Suggestion</button>
             {% endif %}
             <button class="btn btn-success" onclick="location.href='{% url 'new-suggestion' request.goal.slug %}';">New Suggestion</button>

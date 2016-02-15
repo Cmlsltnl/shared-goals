@@ -36,7 +36,8 @@ def top_right_div():
             with django_if("request.member"):
                 with div(id="top-right-div-inner", _class="btn-group"):
                     with django_if(
-                        "suggestion and suggestion.owner == request.member"
+                        "suggestion and "
+                        "suggestion.owner == request.global_user"
                     ):
                         button(
                             "Edit Suggestion",

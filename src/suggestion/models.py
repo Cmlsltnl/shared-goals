@@ -1,6 +1,7 @@
+from django.core.urlresolvers import reverse
 from django.db import models
 
-from goal.models import Goal, Member
+from goal.models import Goal, GlobalUser
 
 from image_cropping import ImageCropField, ImageRatioField
 
@@ -18,7 +19,7 @@ class Suggestion(models.Model):
     type = models.PositiveSmallIntegerField(choices=TYPE_CHOICES, default=0)
     avg_rating = models.DecimalField(
         max_digits=2, decimal_places=1, default=0.0)
-    owner = models.ForeignKey(Member)
+    owner = models.ForeignKey(GlobalUser)
     is_draft = models.BooleanField(default=True)
     image = ImageCropField(upload_to="suggestions", blank=True)
     cropping = ImageRatioField('image', '360x200')
@@ -30,6 +31,13 @@ class Suggestion(models.Model):
 
     def get_current_revision(self):
         return self.revisions.latest('pub_date')
+
+    def get_url(self):
+        return reverse(
+            'suggestion',
+            kwargs=dict(
+                goal_slug=self.goal.slug, suggestion_slug=self.slug)
+        )
 
 
 class Revision(models.Model):
