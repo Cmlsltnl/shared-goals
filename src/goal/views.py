@@ -29,12 +29,6 @@ def membership_required(view):
     return _wrapper
 
 
-def chunks(l, n):
-    """Yield successive n-sized chunks from l."""
-    for i in range(0, len(l), n):
-        yield l[i:i + n]
-
-
 class GoalView(View):
     def get(self, request, goal_slug):
         suggestions = request.goal.suggestions.filter(
@@ -42,7 +36,7 @@ class GoalView(View):
         ).order_by('-avg_rating')
 
         context = {
-            'suggestion_lists': chunks(suggestions, 3)
+            'suggestions': suggestions,
         }
         return render(request, 'goal/goal.html', context)
 
@@ -54,7 +48,7 @@ class GoalsView(View):
         ).order_by('-pub_date')
 
         context = {
-            'goal_lists': chunks(goals, 3)
+            'goals': goals
         }
         return render(request, 'goal/goals.html', context)
 
@@ -183,7 +177,8 @@ class ProfileView(View):
             owner=request.global_user
         ).order_by('-pub_date')
         context = {
-            'suggestion_lists': chunks(suggestions, 3),
-            'notifications': notifications
+            'suggestions': suggestions,
+            'notifications': notifications,
+            'global_user': request.global_user
         }
         return render(request, 'goal/profile.html', context)

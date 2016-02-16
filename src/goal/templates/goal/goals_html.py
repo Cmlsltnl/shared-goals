@@ -29,7 +29,7 @@ def result():
         with div(_class="text-center"):
             h1("Shared Goals")
 
-        with django_for("goal_list in goal_lists"):
+        with django_for("goal_list in goals|chunks:3"):
             with div(_class="row small-gap-above"):
                 with django_for("goal in goal_list"):
                     with column(4):
@@ -38,6 +38,7 @@ def result():
                 h5("There are no goals yet")
 
     return (
-        "{% extends 'base.html' %}\n",
+        "{% extends 'base.html' %}",
+        "{% load shared_goals_tags %}",
         content
     )

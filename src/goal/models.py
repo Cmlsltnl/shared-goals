@@ -38,7 +38,7 @@ class Goal(models.Model):
 
 
 class Member(models.Model):
-    global_user = models.ForeignKey(GlobalUser)
+    global_user = models.ForeignKey(GlobalUser, related_name="memberships")
     goal = models.ForeignKey(Goal, related_name="members")
     join_date = models.DateTimeField('date joined', auto_now_add=True)
     image = ImageCropField(blank=True, upload_to='members')

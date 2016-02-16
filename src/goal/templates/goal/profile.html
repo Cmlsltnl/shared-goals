@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
-
 {% load notification_tags %}
-
+{% load shared_goals_tags %}
 {% block content %}
   <div class="row small-gap-below">
     <div class="text-center">
@@ -21,36 +20,82 @@
   </div>
   <div class="row">
     <div class="col-md-4">
-      <h4 class="">Your suggestions:</h4>
-    </div>
-  </div>
-  {% for suggestion_list in suggestion_lists %}
-    <div class="row small-gap-above profile--suggestion-list">
-      {% for suggestion in suggestion_list %}
-        <div class="col-md-2">
-          <a href="{% url 'suggestion' suggestion.goal.slug suggestion.slug %}">
-            <div class="suggestion--image" style="{% if suggestion.image %}background-image:url({{ suggestion.image.url }});{% endif %}">
-              <div class="suggestion--gradient"></div>
-              <span class="suggestion--title">
-                <span class="title-caption">{{ suggestion.get_type_display }}</span>
-                <h3>{{ suggestion.get_current_revision.title }}</h3>
-              </span>
-            </div>
-          </a>
-        </div>
-      {% endfor %}
-    </div>
-    {% empty %}
-      <h5>You have not created any suggestions yet</h5>
-    
-  {% endfor %}
-  <div class="row">
-    <div class="col-md-4">
       <h4 class="">Notifications:</h4>
     </div>
   </div>
   {% for notification in notifications %}
     <div class="row small-gap-above profile--suggestion-list">{{ notification.html|safe }}</div>
+    {% empty %}
+      <h5>No notifications yet</h5>
+    
+  {% endfor %}
+  {% for member in global_user.memberships.all %}
+    {% with member.goal as the_goal %}
+      <div class="sg-review-{% cycle 'even' 'odd' %}">
+        <span>
+          <div class="row">
+            <div class="col-md-4">
+              <h4 class="">Suggestions for {{ the_goal }}:</h4>
+            </div>
+          </div>
+          {% with the_goal|suggestions_owned_by:global_user as the_suggestions %}
+            <span>
+              {% for suggestion_list in the_suggestions|chunks:6 %}
+                <div class="row small-gap-below profile--suggestion-list">
+                  {% for suggestion in suggestion_list %}
+                    <div class="col-md-2">
+                      <a href="{% url 'suggestion' suggestion.goal.slug suggestion.slug %}">
+                        <div class="suggestion--image" style="{% if suggestion.image %}background-image:url({{ suggestion.image.url }});{% endif %}">
+                          <div class="suggestion--gradient"></div>
+                          <span class="suggestion--title">
+                            <span class="title-caption">{{ suggestion.get_type_display }}</span>
+                            <h3>{{ suggestion.get_current_revision.title }}</h3>
+                          </span>
+                        </div>
+                      </a>
+                    </div>
+                  {% endfor %}
+                </div>
+                {% empty %}
+                  <h5>No suggestions yet</h5>
+                
+              {% endfor %}
+            </span>
+          {% endwith %}
+        </span>
+        <span>
+          <div class="row">
+            <div class="col-md-4">
+              <h4 class="">Reviews for {{ the_goal }}:</h4>
+            </div>
+          </div>
+          {% with the_goal|suggestions_reviewed_by:global_user as the_suggestions %}
+            <span>
+              {% for suggestion_list in the_suggestions|chunks:6 %}
+                <div class="row small-gap-below profile--suggestion-list">
+                  {% for suggestion in suggestion_list %}
+                    <div class="col-md-2">
+                      <a href="{% url 'suggestion' suggestion.goal.slug suggestion.slug %}">
+                        <div class="suggestion--image" style="{% if suggestion.image %}background-image:url({{ suggestion.image.url }});{% endif %}">
+                          <div class="suggestion--gradient"></div>
+                          <span class="suggestion--title">
+                            <span class="title-caption">{{ suggestion.get_type_display }}</span>
+                            <h3>{{ suggestion.get_current_revision.title }}</h3>
+                          </span>
+                        </div>
+                      </a>
+                    </div>
+                  {% endfor %}
+                </div>
+                {% empty %}
+                  <h5>No reviews yet</h5>
+                
+              {% endfor %}
+            </span>
+          {% endwith %}
+        </span>
+      </div>
+    {% endwith %}
   {% endfor %}<script>
 // goal/init_profile.js
 $(document).ready(function() {

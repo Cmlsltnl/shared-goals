@@ -11,7 +11,7 @@ def result():
     with django_block("content") as content:
         goal_header()
 
-        with django_for("suggestion_list in suggestion_lists"):
+        with django_for("suggestion_list in suggestions|chunks:3"):
             with div(_class="row small-gap-above"):
                 with django_for("suggestion in suggestion_list"):
                     with column(4):
@@ -22,6 +22,7 @@ def result():
     return (
         "{% extends 'base.html' %}",
         "{% load notification_tags %}",
+        "{% load shared_goals_tags %}",
 
         content
     )

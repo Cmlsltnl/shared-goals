@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
-
+{% load shared_goals_tags %}
 {% block content %}
   <div class="text-center">
     <h1>Shared Goals</h1>
   </div>
-  {% for goal_list in goal_lists %}
+  {% for goal_list in goals|chunks:3 %}
     <div class="row small-gap-above">
       {% for goal in goal_list %}
         <div class="col-md-4">

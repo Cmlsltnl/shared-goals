@@ -1,9 +1,13 @@
+- reviews in the profile should jump to the #review anchor
 - group notifications by goal
+- user a profile url to/goal/profile/mnieber so that any member can be shown
+- set focus when you open a new form
 - connect button to delete the suggestion (ask for confirmation)
 - after submitting a review, scroll to it
 
 Links
 
+- http://serverfault.com/questions/216998/supervisord-doesnt-stop-nginx-process
 - http://stackoverflow.com/questions/11170425/how-to-unit-test-file-upload-in-django
 - http://stackoverflow.com/questions/641055/diff-to-html-diff2html-program
 - https://github.com/edoburu/django-fluent-comments/

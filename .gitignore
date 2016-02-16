@@ -2,6 +2,7 @@ django-registration-templates
 *.sqlite3
 migrations
 bootstrap.txt
+/static/
 /bin/log/
 /bin/*.pid
 /media/
