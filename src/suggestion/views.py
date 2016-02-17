@@ -99,6 +99,9 @@ class UpdateSuggestionView(PostSuggestionView):
         if is_posting:
             if submit == 'cancel':
                 return self.on_cancel(request.goal.slug)
+            if submit == 'delete':
+                suggestion.delete()
+                return self.on_cancel(request.goal.slug)
 
             bound_form = SuggestionForm.get_posted_form(request, suggestion)
             if bound_form.create_new_revision(suggestion):
@@ -116,7 +119,7 @@ class UpdateSuggestionView(PostSuggestionView):
             'show_errors': True,
             'post_button_label': "Update",
             'submit_button_header': 'Press Update to publish your changes',
-            'show_delete_button': True
+            'show_delete_button': True,
         }
 
         return render(request, 'suggestion/edit_suggestion.html', context)
