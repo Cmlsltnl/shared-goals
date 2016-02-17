@@ -1,11 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.views.generic import View
 from django.utils.decorators import method_decorator
 
-from .models import Member, Goal
+from .models import Member, GlobalUser, Goal
 from .forms import GoalForm
 
 from suggestion.models import Suggestion
@@ -117,7 +117,11 @@ class NewGoalView(View):
 
 class ProfileView(View):
     @method_decorator(login_required)
-    def get(self, request, goal_slug=None):
+    def get(self, request, goal_slug, username):
+        global_user = get_object_or_404(
+            GlobalUser,
+            user__username=username
+        )
         suggestions = Suggestion.objects.filter(
             owner=request.global_user,
             is_draft=False
@@ -132,7 +136,7 @@ class ProfileView(View):
         context = {
             'suggestions': suggestions,
             'notifications': notifications,
-            'global_user': request.global_user,
-            'show_notifications': True,
+            'global_user': global_user,
+            'show_notifications': request.global_user == global_user,
         }
         return render(request, 'goal/profile.html', context)

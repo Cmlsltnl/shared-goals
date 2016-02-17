@@ -3,9 +3,9 @@ from django.conf.urls import include, url
 from . import views
 
 urlpatterns = [
-    url(r'^profile/$', views.ProfileView.as_view(), name='global-profile'),
+    # url(r'^profile/$', views.ProfileView.as_view(), name='global-profile'),
     url(
-        r'^to/(?P<goal_slug>[\-\w]+)/profile/$',
+        r'^to/(?P<goal_slug>[\-\w]+)/profile/(?P<username>[\-\w]+)/$',
         views.ProfileView.as_view(),
         name='profile'
     ),

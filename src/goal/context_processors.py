@@ -6,6 +6,9 @@ def profile_url(request):
         profile_url=(
             reverse('global-profile')
             if not request.goal else
-            reverse('profile', kwargs=dict(goal_slug=request.goal.slug))
+            reverse(
+                'profile',
+                args=(request.goal.slug, request.global_user.user.username)
+            )
         )
     )
