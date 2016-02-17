@@ -101,7 +101,7 @@ class UpdateSuggestionView(PostSuggestionView):
                 return self.on_cancel(request.goal.slug)
 
             bound_form = SuggestionForm.get_posted_form(request, suggestion)
-            if self.create_new_revision(suggestion, bound_form):
+            if bound_form.create_new_revision(suggestion):
                 return self.on_save(request.goal.slug, suggestion.slug)
 
         form = (

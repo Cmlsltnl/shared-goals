@@ -38,6 +38,16 @@ class GoalView(View):
         return render(request, 'goal/goal.html', context)
 
 
+class MembersView(View):
+    def get(self, request, goal_slug):
+        members = request.goal.members.all()
+
+        context = {
+            'members': members,
+        }
+        return render(request, 'goal/members.html', context)
+
+
 class GoalsView(View):
     def get(self, request):
         goals = Goal.objects.filter(

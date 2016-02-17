@@ -21,6 +21,11 @@ urlpatterns = [
         views.GoalView.as_view(),
         name='goal'
     ),
+    url(
+        r'^to/(?P<goal_slug>[\-\w]+)/members/$',
+        views.MembersView.as_view(),
+        name='members'
+    ),
     url(r'^to/(?P<goal_slug>[\-\w]+)/', include('suggestion.urls')),
     url(r'^to/(?P<goal_slug>[\-\w]+)/', include('review.urls')),
 ]

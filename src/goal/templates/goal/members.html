@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load notification_tags %}
+{% load shared_goals_tags %}
+{% block content %}
+  <div class="row small-gap-below">
+    <div class="text-center">
+      <h1>{{ request.goal.title }}</h1>
+      <div class="button-grp">
+        <button class="btn btn-default" onclick="location.href='{% url 'goal' request.goal.slug %}';">Suggestions</button>
+        <button class="btn btn-default">Members</button>
+        {% if request.global_user %}
+          <button class="btn btn-default" onclick="location.href='{{ profile_url }}';">Profile
+            {% with request.global_user.notifications|unread as unread_notifications %}
+              {% if unread_notifications.count %} ({{ unread_notifications.count }}){% endif %}
+            {% endwith %}
+          </button>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% for the_member in members %}
+    <div class="row small-gap-above">
+      <div class="col-md-12">
+        <a href="{% url 'profile' request.goal.slug the_member.global_user.user.username %}">{{ the_member.name }}</a>
+      </div>
+    </div>
+    {% empty %}
+      <h5>There are no members yet</h5>
+    
+  {% endfor %}
+{% endblock %}

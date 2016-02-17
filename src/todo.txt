@@ -1,4 +1,3 @@
-- use a profile url to/goal/profile/mnieber so that any member can be shown
 - set focus when you open a new form
 - connect button to delete the suggestion (ask for confirmation)
 - after submitting a review, scroll to it
@@ -13,6 +12,7 @@ Links
 
 Later
 
+- restrict accetable user names (so that we can lookup profiles properly)
 - learn how jcrop myself. How does cropping really work, what's up with the details file?
 - Ensure that uploaded images never override real images. Maybe uploaded images can go
 into a suggestions_inbox folder
