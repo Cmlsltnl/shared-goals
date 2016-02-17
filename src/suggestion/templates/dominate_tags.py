@@ -15,7 +15,7 @@ def suggestion_image():
     div(_class="suggestion--gradient")
     with span(_class="suggestion--title"):
         span(
-            "{{ the_suggestion.get_type_display }}",
+            "{{ the_suggestion.get_type_display }} {{ the_suggestion.stars }}",
             _class="title-caption"
         )
         h3("{{ the_revision.title }}")

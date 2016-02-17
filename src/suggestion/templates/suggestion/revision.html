@@ -29,7 +29,7 @@
           <div class="suggestion--image" style="{% if the_suggestion.image %}background-image:url({{ the_suggestion.image.url }});{% endif %}">
             <div class="suggestion--gradient"></div>
             <span class="suggestion--title">
-              <span class="title-caption">{{ the_suggestion.get_type_display }}</span>
+              <span class="title-caption">{{ the_suggestion.get_type_display }} {{ the_suggestion.stars }}</span>
               <h3>{{ the_revision.title }}</h3>
             </span>
           </div>

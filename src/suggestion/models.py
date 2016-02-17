@@ -1,3 +1,5 @@
+import emoji
+
 from django.core.urlresolvers import reverse
 from django.db import models
 
@@ -37,6 +39,11 @@ class Suggestion(models.Model):
             'suggestion',
             kwargs=dict(
                 goal_slug=self.goal.slug, suggestion_slug=self.slug)
+        )
+
+    def stars(self):
+        return (
+            emoji.emojize(":star:", use_aliases=True) * round(self.avg_rating)
         )
 
 

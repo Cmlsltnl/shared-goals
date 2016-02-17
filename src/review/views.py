@@ -9,9 +9,12 @@ from django.utils.decorators import method_decorator
 from goal.views import membership_required
 
 from notification.models import Notification
+
 from suggestion.models import Suggestion
+
 from review.forms import CommentForm, ReviewForm
 from review.models import Comment, Review
+from review.utils import update_rating_and_save
 
 
 class ReviewsView(View):
@@ -38,6 +41,7 @@ class ReviewsView(View):
         if is_form_valid and submit == 'save':
             review.is_draft = False
             review.save()
+            update_rating_and_save(review.revision.suggestion)
 
             review.comments.filter(is_draft=False).delete()
 

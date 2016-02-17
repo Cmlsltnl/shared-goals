@@ -4,43 +4,47 @@
 
 {% block header %}
   <div class="row top-right-div">
-    <div>
-      <a href="{% url 'home' %}">Shared Goals</a>
-    </div>
-    <div class="pull-right">
-      {% if user.is_authenticated %}
-        {% if request.member %}
-          <div class="btn-group">
-            {% if suggestion and suggestion.owner == request.global_user %}
-              <button class="btn btn-info" onclick="location.href='{% url 'update-suggestion' request.goal.slug suggestion.slug %}';">Edit Suggestion</button>
-            {% endif %}
-            <button class="btn btn-success" onclick="location.href='{% url 'new-suggestion' request.goal.slug %}';">New Suggestion</button>
+    <div class="col-md-12">
+      <div>
+        <a href="{% url 'home' %}">Shared Goals</a>
+        <a href="https://github.com/mnieber/shared-goals/blob/master/README.md">| About</a>
+        <a href="https://github.com/mnieber/shared-goals/issues">| Give feedback</a>
+      </div>
+      <div class="pull-right">
+        {% if user.is_authenticated %}
+          {% if request.member %}
+            <div class="btn-group">
+              {% if suggestion and suggestion.owner == request.global_user %}
+                <button class="btn btn-info" onclick="location.href='{% url 'update-suggestion' request.goal.slug suggestion.slug %}';">Edit Suggestion</button>
+              {% endif %}
+              <button class="btn btn-success" onclick="location.href='{% url 'new-suggestion' request.goal.slug %}';">New Suggestion</button>
+            </div>
+          {% endif %}
+          {% if request.global_user %}
+            <div class="btn-group">
+              {% if not request.goal %}
+                <button class="btn btn-success" onclick="location.href='{% url 'new-goal' %}';">New Goal</button>
+              {% endif %}
+              {% if request.goal and not request.member %}
+                <button class="btn btn-success" onclick="location.href='{% url 'join-goal' request.goal.slug %}';">Join Goal</button>
+              {% endif %}
+            </div>
+          {% endif %}
+          <div class="dropdown clearfix pull-right">
+            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">{{ user.first_name }}</a>
+            <span class="caret"></span>
+            <ul class="dropdown-menu">
+              <li>
+                <a href="{% url 'auth_logout' %}">{% trans 'Log out' %}</a>
+                <a href="{% url 'auth_password_change' %}">{% trans 'Change password' %}</a>
+              </li>
+            </ul>
           </div>
+          {% else %}
+            <a href="{% url 'auth_login' %}">{% trans 'Log in' %}</a>
+          
         {% endif %}
-        {% if request.global_user %}
-          <div class="btn-group">
-            {% if not request.goal %}
-              <button class="btn btn-success" onclick="location.href='{% url 'new-goal' %}';">New Goal</button>
-            {% endif %}
-            {% if request.goal and not request.member %}
-              <button class="btn btn-success" onclick="location.href='{% url 'join-goal' request.goal.slug %}';">Join Goal</button>
-            {% endif %}
-          </div>
-        {% endif %}
-        <div class="dropdown clearfix pull-right">
-          <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">{{ user.first_name }}</a>
-          <span class="caret"></span>
-          <ul class="dropdown-menu">
-            <li>
-              <a href="{% url 'auth_logout' %}">{% trans 'Log out' %}</a>
-              <a href="{% url 'auth_password_change' %}">{% trans 'Change password' %}</a>
-            </li>
-          </ul>
-        </div>
-        {% else %}
-          <a href="{% url 'auth_login' %}">{% trans 'Log in' %}</a>
-        
-      {% endif %}
+      </div>
     </div>
   </div>
 {% endblock %}

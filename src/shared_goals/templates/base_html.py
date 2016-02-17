@@ -1,6 +1,9 @@
 from dominate.tags import *
 from dominate.util import text
+
 from django_dominate.django_tags import *
+
+from goal.templates.dominate_tags import *
 
 
 @div(_class="dropdown clearfix pull-right")
@@ -78,12 +81,21 @@ def top_left_div():
     with a(href="{% url 'home' %}"):
         text("Shared Goals")
 
+    with a(
+        href="https://github.com/mnieber/shared-goals/blob/master/README.md"
+    ):
+        text("| About")
+
+    with a(href="https://github.com/mnieber/shared-goals/issues"):
+        text("| Give feedback")
+
 
 def result():
     with django_block("header") as header:
         with div(_class="row top-right-div"):
-            top_left_div()
-            top_right_div()
+            with column(12):
+                top_left_div()
+                top_right_div()
 
     return (
         "{% extends 'base_base.html' %}\n",
