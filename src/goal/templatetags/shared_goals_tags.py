@@ -13,7 +13,7 @@ def chunks(l, n):
 
 
 @register.filter
-def suggestions_owned_by(goal, global_user):
+def suggestions_by(goal, global_user):
     return [
         x for x in goal.suggestions.filter(owner=global_user, is_draft=False)
     ]
@@ -22,4 +22,7 @@ def suggestions_owned_by(goal, global_user):
 @register.filter
 def reviews_by(goal, global_user):
     reviews = Review.objects.filter(owner=global_user, is_draft=False)
-    return [r for r in reviews if r.revision.suggestion.goal == goal]
+    return [
+        r for r in reviews if
+        r.description and r.revision.suggestion.goal == goal
+    ]

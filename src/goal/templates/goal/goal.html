@@ -18,18 +18,20 @@
       </div>
     </div>
   </div>
-  {% for suggestion_list in suggestions|chunks:3 %}
+  {% for the_chunk in suggestions|chunks:3 %}
     <div class="row small-gap-above">
-      {% for suggestion in suggestion_list %}
+      {% for the_suggestion in the_chunk %}
         <div class="col-md-4">
           <a href="{% url 'suggestion' the_suggestion.goal.slug the_suggestion.slug %}">
-            <div class="suggestion--image" style="{% if the_suggestion.image %}background-image:url({{ the_suggestion.image.url }});{% endif %}">
-              <div class="suggestion--gradient"></div>
-              <span class="suggestion--title">
-                <span class="title-caption">{{ the_suggestion.get_type_display }}</span>
-                <h3>{{ the_suggestion.get_current_revision.title }}</h3>
-              </span>
-            </div>
+            {% with the_suggestion.get_current_revision as the_revision %}
+              <div class="suggestion--image" style="{% if the_suggestion.image %}background-image:url({{ the_suggestion.image.url }});{% endif %}">
+                <div class="suggestion--gradient"></div>
+                <span class="suggestion--title">
+                  <span class="title-caption">{{ the_suggestion.get_type_display }}</span>
+                  <h3>{{ the_revision.title }}</h3>
+                </span>
+              </div>
+            {% endwith %}
           </a>
         </div>
       {% endfor %}

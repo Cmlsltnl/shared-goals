@@ -20,24 +20,28 @@
       </div>
     </div>
   </div>
-  <div class="row small-gap-below">
-    <div class="col-md-4"></div>
-    <div class="col-md-4">
-      <div class="suggestion--image" style="{% if the_suggestion.image %}background-image:url({{ the_suggestion.image.url }});{% endif %}">
-        <div class="suggestion--gradient"></div>
-        <span class="suggestion--title">
-          <span class="title-caption">{{ the_suggestion.get_type_display }}</span>
-          <h3>{{ revision.title }}</h3>
-        </span>
+  {% with suggestion as the_suggestion %}
+    {% with the_suggestion.get_current_revision as the_revision %}
+      <div class="row small-gap-below">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+          <div class="suggestion--image" style="{% if the_suggestion.image %}background-image:url({{ the_suggestion.image.url }});{% endif %}">
+            <div class="suggestion--gradient"></div>
+            <span class="suggestion--title">
+              <span class="title-caption">{{ the_suggestion.get_type_display }}</span>
+              <h3>{{ the_revision.title }}</h3>
+            </span>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-  <div class="row small-gap-below">
-    <div class="col-md-2"></div>
-    <div class="col-md-8">
-      <h5>Published by {{ suggestion.owner.name }}, {{ suggestion.pub_date|naturaltime }}</h5>{{ revision.description|markdown }}</div>
-  </div>
-  <div id="sg-review-list"></div><script>
+      <div class="row small-gap-below">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+          <h5>Published by {{ the_suggestion.owner.name }}, {{ the_suggestion.pub_date|naturaltime }}</h5>{{ the_revision.description|markdown }}</div>
+      </div>
+      <div id="sg-review-list"></div>
+    {% endwith %}
+  {% endwith %}<script>
 // review/sg_comment_list.js
 (function($) {
     function on_comment_form_submit(event) {

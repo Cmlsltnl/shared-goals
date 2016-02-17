@@ -9,14 +9,18 @@ from goal.templates.dominate_tags import *
 from suggestion.templates.dominate_tags import *
 
 
+goal_url = "{% url 'goal' the_goal.slug %}"
+
+
 def suggestions_for_goal():
     def suggestion():
         url = "{% url 'suggestion' the_goal.slug the_suggestion.slug %}"
         with column(2) as result:
             with a(href=url):
-                suggestion_image(
-                    "{{ the_suggestion.get_current_revision.title }}"
-                )
+                with django_with(
+                    "the_suggestion.get_current_revision as the_revision"
+                ):
+                    suggestion_image()
         return result
 
     def list_of_suggestions():
@@ -32,10 +36,11 @@ def suggestions_for_goal():
         with div(_class="row"):
             with column(4):
                 with h4(_class=""):
-                    text("Suggestions for {{ the_goal }}:")
+                    text("Suggestions for ")
+                    a("{{ the_goal }}", href=goal_url)
 
         with django_with(
-            "the_goal|suggestions_owned_by:global_user as "
+            "the_goal|suggestions_by:global_user as "
             "the_suggestions"
         ):
             list_of_suggestions()
@@ -52,7 +57,7 @@ def reviews_for_goal():
                 )
                 with column(2) as result:
                     with a(href=url):
-                        suggestion_image("{{ the_revision.title }}")
+                        suggestion_image()
         return result
 
     def list_of_reviews():
@@ -68,7 +73,8 @@ def reviews_for_goal():
         with div(_class="row"):
             with column(4):
                 with h4(_class=""):
-                    text("Reviews for {{ the_goal }}:")
+                    text("Reviews for ")
+                    a("{{ the_goal }}", href=goal_url)
 
         with django_with(
             "the_goal|reviews_by:global_user as the_reviews"

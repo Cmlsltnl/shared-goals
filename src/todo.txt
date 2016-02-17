@@ -1,8 +1,4 @@
-- turn goal titles into links in the profile
-- reviews in the profile should jump to the #review anchor
-- for the moment, the goal-profile button should link to the global profile
-- group notifications by goal
-- user a profile url to/goal/profile/mnieber so that any member can be shown
+- use a profile url to/goal/profile/mnieber so that any member can be shown
 - set focus when you open a new form
 - connect button to delete the suggestion (ask for confirmation)
 - after submitting a review, scroll to it

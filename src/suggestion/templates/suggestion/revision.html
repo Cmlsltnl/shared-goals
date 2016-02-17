@@ -3,6 +3,7 @@
 {% load staticfiles %}
 {% load humanize %}
 {% load markdown_deux_tags %}
+{% load notification_tags %}
 {% block content %}
   <div class="row small-gap-below">
     <div class="text-center">
@@ -20,22 +21,26 @@
       </div>
     </div>
   </div>
-  <div class="row small-gap-below">
-    <div class="col-md-4"></div>
-    <div class="col-md-4">
-      <div class="suggestion--image" style="{% if the_suggestion.image %}background-image:url({{ the_suggestion.image.url }});{% endif %}">
-        <div class="suggestion--gradient"></div>
-        <span class="suggestion--title">
-          <span class="title-caption">{{ the_suggestion.get_type_display }}</span>
-          <h3>{{ revision.title }}</h3>
-        </span>
+  {% with suggestion as the_suggestion %}
+    {% with revision as the_revision %}
+      <div class="row small-gap-below">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+          <div class="suggestion--image" style="{% if the_suggestion.image %}background-image:url({{ the_suggestion.image.url }});{% endif %}">
+            <div class="suggestion--gradient"></div>
+            <span class="suggestion--title">
+              <span class="title-caption">{{ the_suggestion.get_type_display }}</span>
+              <h3>{{ the_revision.title }}</h3>
+            </span>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-  <div class="row small-gap-below">
-    <div class="col-md-2"></div>
-    <div class="col-md-8">
-      <p>This is a previous version of a 
-        <a href="{% url 'suggestion' request.goal.slug suggestion.slug %}">suggestion</a> by {{ suggestion.owner.name }}</p>{{ revision.description|markdown }}</div>
-  </div>
+      <div class="row small-gap-below">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+          <p>This is a previous version of a 
+            <a href="{% url 'suggestion' request.goal.slug suggestion.slug %}">suggestion</a> by {{ the_suggestion.owner.name }}</p>{{ the_revision.description|markdown }}</div>
+      </div>
+    {% endwith %}
+  {% endwith %}
 {% endblock %}
