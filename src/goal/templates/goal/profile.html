@@ -2,33 +2,22 @@
 {% load notification_tags %}
 {% load shared_goals_tags %}
 {% block content %}
-  <div class="row small-gap-below">
-    <div class="text-center">
-      <h1>{{ request.goal.title }}</h1>
-      <div class="button-grp">
-        <button class="btn btn-default" onclick="location.href='{% url 'goal' request.goal.slug %}';">Suggestions</button>
-        <button class="btn btn-default">Members</button>
-        {% if request.global_user %}
-          <button class="btn btn-default" onclick="location.href='{{ profile_url }}';">Profile
-            {% with request.global_user.notifications|unread as unread_notifications %}
-              {% if unread_notifications.count %} ({{ unread_notifications.count }}){% endif %}
-            {% endwith %}
-          </button>
-        {% endif %}
+  <h2>{{ global_user.name }}</h2>
+  {% if show_notifications %}
+    <div class="small-gap-below">
+      <div class="row">
+        <div class="col-md-4">
+          <h4 class="">Notifications:</h4>
+        </div>
       </div>
+      {% for notification in notifications %}
+        <div class="row">{{ notification.html|safe }}</div>
+        {% empty %}
+          <h5>No notifications yet</h5>
+        
+      {% endfor %}
     </div>
-  </div>
-  <div class="row">
-    <div class="col-md-4">
-      <h4 class="">Notifications:</h4>
-    </div>
-  </div>
-  {% for notification in notifications %}
-    <div class="row small-gap-above profile--suggestion-list">{{ notification.html|safe }}</div>
-    {% empty %}
-      <h5>No notifications yet</h5>
-    
-  {% endfor %}
+  {% endif %}
   {% for member in global_user.memberships.all %}
     {% with member.goal as the_goal %}
       <div class="sg-review-{% cycle 'even' 'odd' %}">

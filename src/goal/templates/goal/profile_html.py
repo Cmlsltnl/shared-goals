@@ -50,18 +50,20 @@ def reviews_for_goal():
 
 def result():
     with django_block("content") as content:
-        goal_header()
+        h2("{{ global_user.name }}")
 
-        with div(_class="row"):
-            with column(4):
-                with h4(_class=""):
-                    text("Notifications:")
+        with django_if("show_notifications"):
+            with div(_class="small-gap-below"):
+                with div(_class="row"):
+                    with column(4):
+                        with h4(_class=""):
+                            text("Notifications:")
 
-        with django_for("notification in notifications"):
-            with div(_class="row small-gap-above profile--suggestion-list"):
-                text("{{ notification.html|safe }}")
-            with django_empty():
-                h5("No notifications yet")
+                with django_for("notification in notifications"):
+                    with div(_class="row"):
+                        text("{{ notification.html|safe }}")
+                    with django_empty():
+                        h5("No notifications yet")
 
         with django_for("member in global_user.memberships.all"):
             with django_with("member.goal as the_goal"):

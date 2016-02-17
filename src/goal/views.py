@@ -179,6 +179,7 @@ class ProfileView(View):
         context = {
             'suggestions': suggestions,
             'notifications': notifications,
-            'global_user': request.global_user
+            'global_user': request.global_user,
+            'show_notifications': True,
         }
         return render(request, 'goal/profile.html', context)
