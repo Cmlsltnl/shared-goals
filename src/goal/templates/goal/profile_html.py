@@ -9,68 +9,115 @@ from goal.templates.dominate_tags import *
 from suggestion.templates.dominate_tags import *
 
 
-@span
-def list_of_suggestions(empty_msg):
-    with django_for("suggestion_list in the_suggestions|chunks:6"):
-        with div(_class="row small-gap-below profile--suggestion-list"):
-            with django_for("suggestion in suggestion_list"):
-                with column(2):
-                    suggestion_list_item()
-        with django_empty():
-            h5(empty_msg)
-
-
-@span
 def suggestions_for_goal():
-    with div(_class="row"):
-        with column(4):
-            with h4(_class=""):
-                text("Suggestions for {{ the_goal }}:")
+    def suggestion():
+        url = "{% url 'suggestion' the_goal.slug the_suggestion.slug %}"
+        with column(2) as result:
+            with a(href=url):
+                suggestion_image(
+                    "{{ the_suggestion.get_current_revision.title }}"
+                )
+        return result
 
-    with django_with(
-        "the_goal|suggestions_owned_by:global_user as "
-        "the_suggestions"
-    ):
-        list_of_suggestions("No suggestions yet")
+    def list_of_suggestions():
+        with django_for("the_chunk in the_suggestions|chunks:6") as result:
+            with div(_class="row small-gap-below profile--suggestion-list"):
+                with django_for("the_suggestion in the_chunk"):
+                    suggestion()
+            with django_empty():
+                h5("No suggestions yet")
+        return result
+
+    with span() as result:
+        with div(_class="row"):
+            with column(4):
+                with h4(_class=""):
+                    text("Suggestions for {{ the_goal }}:")
+
+        with django_with(
+            "the_goal|suggestions_owned_by:global_user as "
+            "the_suggestions"
+        ):
+            list_of_suggestions()
+    return result
 
 
-@span
 def reviews_for_goal():
-    with div(_class="row"):
-        with column(4):
-            with h4(_class=""):
-                text("Reviews for {{ the_goal }}:")
+    def review():
+        with django_with("the_review.revision as the_revision") as result:
+            with django_with("the_revision.suggestion as the_suggestion"):
+                url = (
+                    "{% url 'suggestion' the_goal.slug the_suggestion.slug %}"
+                    "#sg-review-{{ the_review.pk }}"
+                )
+                with column(2) as result:
+                    with a(href=url):
+                        suggestion_image("{{ the_revision.title }}")
+        return result
 
-    with django_with(
-        "the_goal|suggestions_reviewed_by:global_user as "
-        "the_suggestions"
-    ):
-        list_of_suggestions("No reviews yet")
+    def list_of_reviews():
+        with django_for("the_chunk in the_reviews|chunks:6") as result:
+            with div(_class="row small-gap-below profile--suggestion-list"):
+                with django_for("the_review in the_chunk"):
+                    review()
+            with django_empty():
+                h5("No reviews yet")
+        return result
+
+    with span() as result:
+        with div(_class="row"):
+            with column(4):
+                with h4(_class=""):
+                    text("Reviews for {{ the_goal }}:")
+
+        with django_with(
+            "the_goal|reviews_by:global_user as the_reviews"
+        ):
+            list_of_reviews()
+    return result
+
+
+def suggestions_and_reviews():
+    with django_for("the_member in global_user.memberships.all") as result:
+        with django_with("the_member.goal as the_goal"):
+            with div(_class="sg-review-{% cycle 'even' 'odd' %}"):
+                suggestions_for_goal()
+                reviews_for_goal()
+    return result
+
+
+def notifications():
+    def header():
+        with div(_class="row") as result:
+            with column(4):
+                with h4(_class=""):
+                    text("Notifications:")
+        return result
+
+    def list_them():
+        with django_for("the_notification in notifications") as result:
+            with div(_class="row"):
+                text("{{ the_notification.html|safe }}")
+            with django_empty():
+                h5("No notifications yet")
+        return result
+
+    with django_if("show_notifications") as result:
+        header()
+        list_them()
+    return result
+
+
+def user_name():
+    return h2("{{ global_user.name }}")
 
 
 def result():
+
     with django_block("content") as content:
-        h2("{{ global_user.name }}")
-
-        with django_if("show_notifications"):
-            with div(_class="small-gap-below"):
-                with div(_class="row"):
-                    with column(4):
-                        with h4(_class=""):
-                            text("Notifications:")
-
-                with django_for("notification in notifications"):
-                    with div(_class="row"):
-                        text("{{ notification.html|safe }}")
-                    with django_empty():
-                        h5("No notifications yet")
-
-        with django_for("member in global_user.memberships.all"):
-            with django_with("member.goal as the_goal"):
-                with div(_class="sg-review-{% cycle 'even' 'odd' %}"):
-                    suggestions_for_goal()
-                    reviews_for_goal()
-
+        user_name()
+        notifications()
+        suggestions_and_reviews()
         inline_script(settings.BASE_DIR, "goal/init_profile.js")
 
     return (

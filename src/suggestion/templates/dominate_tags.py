@@ -3,16 +3,16 @@ from django_dominate.django_tags import *
 from dominate.tags import *
 
 
-@a(href="{% url 'suggestion' suggestion.goal.slug suggestion.slug %}")
+@a(href="{% url 'suggestion' the_suggestion.goal.slug the_suggestion.slug %}")
 def suggestion_list_item():
-    suggestion_image("{{ suggestion.get_current_revision.title }}")
+    suggestion_image("{{ the_suggestion.get_current_revision.title }}")
 
 
 @div(
     _class="suggestion--image",
     style=(
-        "{% if suggestion.image %}"
-        "background-image:url({{ suggestion.image.url }});"
+        "{% if the_suggestion.image %}"
+        "background-image:url({{ the_suggestion.image.url }});"
         "{% endif %}"
     )
 )
@@ -20,7 +20,7 @@ def suggestion_image(title):
     div(_class="suggestion--gradient")
     with span(_class="suggestion--title"):
         span(
-            "{{ suggestion.get_type_display }}",
+            "{{ the_suggestion.get_type_display }}",
             _class="title-caption"
         )
         h3(title)

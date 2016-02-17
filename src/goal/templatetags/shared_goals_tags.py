@@ -20,9 +20,6 @@ def suggestions_owned_by(goal, global_user):
 
 
 @register.filter
-def suggestions_reviewed_by(goal, global_user):
+def reviews_by(goal, global_user):
     reviews = Review.objects.filter(owner=global_user, is_draft=False)
-    return [
-        r.revision.suggestion for r in reviews
-        if r.revision.suggestion.goal == goal
-    ]
+    return [r for r in reviews if r.revision.suggestion.goal == goal]
