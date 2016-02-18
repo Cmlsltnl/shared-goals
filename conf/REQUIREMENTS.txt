@@ -11,6 +11,7 @@ django-registration==2.0.4
 django-tag-parser==2.1
 dominate==2.1.16
 easy-thumbnails==2.3
+emoji==0.3.9
 ipdb==0.8.1
 ipython==4.0.3
 ipython-genutils==0.1.0

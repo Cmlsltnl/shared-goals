@@ -1,5 +1,4 @@
 - set focus when you open a new form
-- connect button to delete the suggestion (ask for confirmation)
 - after submitting a review, scroll to it
 
 Links

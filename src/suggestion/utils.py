@@ -1,7 +1,11 @@
 import os
 import re
 import shutil
-import urllib
+
+try:
+    from urllib.parse import unquote
+except ImportError:
+    from urllib import unquote
 
 from django.conf import settings
 
@@ -16,7 +20,7 @@ def apply_cropping_to_image(item, delete_original=False):
         return re.sub("^%s" % settings.MEDIA_URL, "", url)
 
     tmp_image_url = rel_url(cropped_thumbnail(None, item, "cropping"))
-    rel_tmp_path = urllib.parse.unquote(tmp_image_url)
+    rel_tmp_path = unquote(tmp_image_url)
 
     rel_cropped_image_path = os.path.join(
         item.image.field.upload_to,

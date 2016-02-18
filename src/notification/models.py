@@ -1,5 +1,9 @@
 import json
-import urllib
+
+try:
+    from urllib.parse import urlencode
+except ImportError:
+    from urllib import urlencode
 
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -88,7 +92,7 @@ class Notification(models.Model):
 
         c['is_read'] = 1 if self.is_read else 0
 
-        parameters = urllib.parse.urlencode({'next': c['next_url']})
+        parameters = urlencode({'next': c['next_url']})
         c['target_url'] = reverse(
             'follow-notification',
             kwargs=dict(
