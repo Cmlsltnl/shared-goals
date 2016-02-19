@@ -70,6 +70,7 @@ class Command(BaseCommand):
         self.become_a_yogi = Goal()
         self.become_a_yogi.owner = self.user_marie_houana
         self.become_a_yogi.title = "Become a yogi"
+        self.become_a_yogi.is_draft = False
         self.become_a_yogi.save()
 
     def __create_members(self):

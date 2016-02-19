@@ -66,6 +66,7 @@ class NewSuggestionView(PostSuggestionView):
 
         context = {
             'form': form,
+            'image': suggestion.image,
             'show_image_form': True,
             'show_errors': submit == 'save',
             'post_button_label': 'Submit',

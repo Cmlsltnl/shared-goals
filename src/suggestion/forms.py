@@ -1,9 +1,10 @@
+import json
+
 from django import forms
 from django.db.models import Q
 from django.template.defaultfilters import slugify
 
 from .models import Suggestion, Revision
-from .utils import apply_cropping_to_image
 
 from notification.models import Notification
 
@@ -11,7 +12,7 @@ from notification.models import Notification
 class SuggestionForm(forms.ModelForm):
     class Meta:
         model = Suggestion
-        fields = ('image', 'cropping', 'type')
+        fields = ('image', 'type')
 
     is_duplicate_title = lambda x: False
 
@@ -35,6 +36,7 @@ class SuggestionForm(forms.ModelForm):
 
         form = SuggestionForm(request.POST, request.FILES)
         form.is_duplicate_title = is_duplicate_title
+        form.cropping = json.loads(request.POST['cropping'])
 
         return form
 
@@ -77,13 +79,9 @@ class SuggestionForm(forms.ModelForm):
         if self.cleaned_data.get('image', None):
             suggestion.image = self.cleaned_data['image']
 
-        if 'cropping' in self.cleaned_data:
-            suggestion.cropping = self.cleaned_data['cropping']
-
         if is_form_valid and submit == 'save':
             suggestion.slug = slugify(
                 suggestion.get_current_revision().title)
-            apply_cropping_to_image(suggestion, delete_original=False)
             suggestion.is_draft = False
             suggestion.save()
 

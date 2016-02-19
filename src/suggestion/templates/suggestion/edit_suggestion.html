@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% load notification_tags %}
-{% block head %}{{ form.media }}{% endblock %}
 {% block content %}
   <div class="row small-gap-below">
     <div class="text-center">
@@ -40,10 +39,11 @@
           <textarea class="form-field" name="description" rows="16">{{ form.description.value }}</textarea>
         </p>
         {% if show_image_form %}
+          <span>
+            <img alt="{{ image.url }}" id="suggestion-image" src="{% if image %}{{ image.url }}{% endif %}">
+            <input id="cropping" name="cropping" type="hidden" value="">
+          </span>
           <div class="suggestion-form--image">
-            <p>
-              {% if show_errors %}{{ form.cropping.errors }}{% endif %}
-              <label class="form-label" for="{{ form.cropping.id_for_label }}"></label>{{ form.cropping }}</p>
             <p>
               {% if show_errors %}{{ form.image.errors }}{% endif %}
               <label class="form-label" for="{{ form.image.id_for_label }}">Make your suggestion look good by uploading an image</label>{{ form.image }}
@@ -63,5 +63,19 @@
         </div>
       </form>
     </div>
-  </div>
-{% endblock %}
+  </div><script>
+// suggestion/init_suggestion_form.js
+$(document).ready(function() {
+    function updateCropping(c) {
+        var data = JSON.stringify(c);
+        $("#cropping").val(data)
+    }
+
+    $("#suggestion-image").Jcrop({
+        aspectRatio: 360 / 200,
+        setSelect: [ 0, 0, 180, 100 ],
+        onSelect: updateCropping,
+        onChange: updateCropping,
+    });
+});
+</script>{% endblock %}

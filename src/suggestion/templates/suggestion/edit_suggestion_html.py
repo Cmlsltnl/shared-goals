@@ -1,3 +1,4 @@
+from django.conf import settings
 from django_dominate.django_tags import *
 
 from dominate.tags import *
@@ -68,16 +69,15 @@ def suggestion_form():
             text("{{ form.description.value }}")
 
     with django_if("show_image_form"):
-        with div(_class="suggestion-form--image"):
-            with p():
-                with django_if("show_errors"):
-                    text("{{ form.cropping.errors }}")
-                label(
-                    _for="{{ form.cropping.id_for_label }}",
-                    _class="form-label"
-                )
-                text("{{ form.cropping }}")
+        with span():
+            img(
+                id="suggestion-image",
+                alt="{{ image.url }}",
+                src="{% if image %}{{ image.url }}{% endif %}",
+            )
+            input(id="cropping", name="cropping", value="", type="hidden")
 
+        with div(_class="suggestion-form--image"):
             with p():
                 with django_if("show_errors"):
                     text("{{ form.image.errors }}")
@@ -124,9 +124,6 @@ def suggestion_form():
 
 
 def result():
-    with django_block("head") as head:
-        text("{{ form.media }}")
-
     with django_block("content") as content:
         goal_header()
 
@@ -135,10 +132,11 @@ def result():
             with column(8):
                 suggestion_form()
 
+        inline_script(settings.BASE_DIR, "suggestion/init_suggestion_form.js")
+
     return (
         "{% extends 'base.html' %}",
         "{% load staticfiles %}",
         "{% load notification_tags %}",
-        head,
         content,
     )

@@ -3,6 +3,7 @@
 
 Links
 
+- https://cloud.google.com/appengine/docs/python/cloud-sql/django
 - http://serverfault.com/questions/216998/supervisord-doesnt-stop-nginx-process
 - http://stackoverflow.com/questions/11170425/how-to-unit-test-file-upload-in-django
 - http://stackoverflow.com/questions/641055/diff-to-html-diff2html-program

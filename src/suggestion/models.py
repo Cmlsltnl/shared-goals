@@ -5,8 +5,6 @@ from django.db import models
 
 from goal.models import Goal, GlobalUser
 
-from image_cropping import ImageCropField, ImageRatioField
-
 
 class Suggestion(models.Model):
     TYPE_ACTION = 0
@@ -23,8 +21,7 @@ class Suggestion(models.Model):
         max_digits=2, decimal_places=1, default=0.0)
     owner = models.ForeignKey(GlobalUser)
     is_draft = models.BooleanField(default=True)
-    image = ImageCropField(upload_to="suggestions", blank=True)
-    cropping = ImageRatioField('image', '360x200')
+    image = models.FileField(upload_to="suggestions", blank=True)
     slug = models.SlugField('slug', max_length=60)
     pub_date = models.DateTimeField('date published', auto_now=True)
 
