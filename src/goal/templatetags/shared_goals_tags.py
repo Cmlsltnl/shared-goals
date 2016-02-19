@@ -38,7 +38,7 @@ def reviews_by(goal, global_user):
 
 crop_script = """
 $(document).ready(function() {{
-    function updateCropping_{img_id}(c) {{
+    function updateCropping(c) {{
         var data = JSON.stringify(c);
         $("#{output_elm_id}").val(data)
     }}
@@ -46,8 +46,8 @@ $(document).ready(function() {{
     $("#{img_id}").Jcrop({{
         aspectRatio: 360 / 200,
         setSelect: [ 0, 0, 180, 100 ],
-        onSelect: updateCropping_{img_id},
-        onChange: updateCropping_{img_id},
+        onSelect: updateCropping,
+        onChange: updateCropping,
     }});
 }});
 """

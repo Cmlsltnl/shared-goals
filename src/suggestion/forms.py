@@ -10,6 +10,8 @@ from notification.models import Notification
 
 
 class SuggestionForm(forms.ModelForm):
+    cropped_image_key = "cropped_suggestion_image"
+
     class Meta:
         model = Suggestion
         fields = ('image', 'type')
@@ -36,7 +38,9 @@ class SuggestionForm(forms.ModelForm):
 
         form = SuggestionForm(request.POST, request.FILES)
         form.is_duplicate_title = is_duplicate_title
-        form.cropping = json.loads(request.POST['suggestion-image'])
+        import pudb; pudb.set_trace()
+        form.cropping = json.loads(
+            request.POST[SuggestionForm.cropped_image_key])
 
         return form
 

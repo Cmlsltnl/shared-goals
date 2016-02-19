@@ -39,7 +39,7 @@
             <a href="http://commonmark.org/help/">Markdown</a> allowed</p>
           <textarea class="form-field" name="description" rows="16">{{ form.description.value }}</textarea>
         </p>
-        {% if show_image_form %}{{ image|crop:'suggestion-image'|safe }}
+        {% if show_image_form %}{{ image|crop:form.cropped_image_key|safe }}
           <div class="suggestion-form--image">
             <p>
               {% if show_errors %}{{ form.image.errors }}{% endif %}
