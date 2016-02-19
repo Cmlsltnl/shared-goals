@@ -69,7 +69,7 @@ def suggestion_form():
             text("{{ form.description.value }}")
 
     with django_if("show_image_form"):
-        text("{{ image|crop:form.cropped_image_key|safe }}")
+        text("{{ crop_settings|show_crop_widget|safe }}")
 
         with div(_class="suggestion-form--image"):
             with p():

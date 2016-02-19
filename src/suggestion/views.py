@@ -66,7 +66,13 @@ class NewSuggestionView(PostSuggestionView):
 
         context = {
             'form': form,
-            'image': suggestion.image,
+            'crop_settings': {
+                'url': suggestion.image.url,
+                'klass': 'suggestion--image crop-image',
+                'output_key': form.cropped_image_key,
+                'aspect_ratio': 360 / 200,
+                'initial': [0, 0, 100, 180],
+            },
             'show_image_form': True,
             'show_errors': submit == 'save',
             'post_button_label': 'Submit',

@@ -38,7 +38,6 @@ class SuggestionForm(forms.ModelForm):
 
         form = SuggestionForm(request.POST, request.FILES)
         form.is_duplicate_title = is_duplicate_title
-        import pudb; pudb.set_trace()
         form.cropping = json.loads(
             request.POST[SuggestionForm.cropped_image_key])
 
