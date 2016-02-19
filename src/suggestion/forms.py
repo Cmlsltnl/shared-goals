@@ -36,7 +36,7 @@ class SuggestionForm(forms.ModelForm):
 
         form = SuggestionForm(request.POST, request.FILES)
         form.is_duplicate_title = is_duplicate_title
-        form.cropping = json.loads(request.POST['cropping'])
+        form.cropping = json.loads(request.POST['suggestion-image'])
 
         return form
 

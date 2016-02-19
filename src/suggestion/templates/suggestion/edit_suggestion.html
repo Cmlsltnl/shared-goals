@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% load notification_tags %}
+{% load shared_goals_tags %}
 {% block content %}
   <div class="row small-gap-below">
     <div class="text-center">
@@ -38,11 +39,7 @@
             <a href="http://commonmark.org/help/">Markdown</a> allowed</p>
           <textarea class="form-field" name="description" rows="16">{{ form.description.value }}</textarea>
         </p>
-        {% if show_image_form %}
-          <span>
-            <img alt="{{ image.url }}" id="suggestion-image" src="{% if image %}{{ image.url }}{% endif %}">
-            <input id="cropping" name="cropping" type="hidden" value="">
-          </span>
+        {% if show_image_form %}{{ image|crop:'suggestion-image'|safe }}
           <div class="suggestion-form--image">
             <p>
               {% if show_errors %}{{ form.image.errors }}{% endif %}

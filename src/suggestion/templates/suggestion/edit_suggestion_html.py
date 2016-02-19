@@ -69,13 +69,7 @@ def suggestion_form():
             text("{{ form.description.value }}")
 
     with django_if("show_image_form"):
-        with span():
-            img(
-                id="suggestion-image",
-                alt="{{ image.url }}",
-                src="{% if image %}{{ image.url }}{% endif %}",
-            )
-            input(id="cropping", name="cropping", value="", type="hidden")
+        text("{{ image|crop:'suggestion-image'|safe }}")
 
         with div(_class="suggestion-form--image"):
             with p():
@@ -138,5 +132,6 @@ def result():
         "{% extends 'base.html' %}",
         "{% load staticfiles %}",
         "{% load notification_tags %}",
+        "{% load shared_goals_tags %}",
         content,
     )

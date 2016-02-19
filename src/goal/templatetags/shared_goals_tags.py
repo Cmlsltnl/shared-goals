@@ -1,4 +1,12 @@
+import hashlib
+
 from django import template
+# from django.template import defaultfilters as filters
+
+from dominate.tags import span, img, script
+from dominate.tags import input as input_tag
+from dominate.util import raw
+
 from review.models import Review
 
 
@@ -26,3 +34,45 @@ def reviews_by(goal, global_user):
         r for r in reviews if
         r.description and r.revision.suggestion.goal == goal
     ]
+
+
+crop_script = """
+$(document).ready(function() {{
+    function updateCropping_{img_id}(c) {{
+        var data = JSON.stringify(c);
+        $("#{output_elm_id}").val(data)
+    }}
+
+    $("#{img_id}").Jcrop({{
+        aspectRatio: 360 / 200,
+        setSelect: [ 0, 0, 180, 100 ],
+        onSelect: updateCropping_{img_id},
+        onChange: updateCropping_{img_id},
+    }});
+}});
+"""
+
+
+@register.filter
+def crop(image, output_elm_id):
+    img_id = hashlib.md5(output_elm_id.encode()).hexdigest()
+
+    with span() as result:
+        img(
+            id=img_id,
+            alt=image.url,
+            src=image.url,
+        )
+        input_tag(
+            id="%s" % output_elm_id,
+            name="%s" % output_elm_id,
+            value="",
+            type="hidden"
+        )
+
+        with script():
+            script_contents = crop_script.format(
+                img_id=img_id, output_elm_id=output_elm_id)
+            raw(script_contents)
+
+    return str(result)
