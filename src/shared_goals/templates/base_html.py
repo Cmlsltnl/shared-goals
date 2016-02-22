@@ -86,6 +86,11 @@ def top_left_div():
     ):
         text("| About")
 
+    with a(
+        href="https://github.com/mnieber/shared-goals/blob/master/TERMS.md"
+    ):
+        text("| Terms")
+
     with a(href="https://github.com/mnieber/shared-goals/issues"):
         text("| Give feedback")
 
