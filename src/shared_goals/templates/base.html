@@ -7,8 +7,9 @@
     <div class="col-md-12">
       <div>
         <a href="{% url 'home' %}">Shared Goals</a>
-        <a href="https://github.com/mnieber/shared-goals/blob/master/README.md">| About</a>
-        <a href="https://github.com/mnieber/shared-goals/issues">| Give feedback</a>
+        <a href="{% url 'about' %}">| About</a>
+        <a href="{% url 'tos' %}">| Terms</a>
+        <a href="{% url 'feedback' %}">| Give feedback</a>
       </div>
       <div class="pull-right">
         {% if user.is_authenticated %}

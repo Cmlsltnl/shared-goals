@@ -81,17 +81,13 @@ def top_left_div():
     with a(href="{% url 'home' %}"):
         text("Shared Goals")
 
-    with a(
-        href="https://github.com/mnieber/shared-goals/blob/master/README.md"
-    ):
+    with a(href="{% url 'about' %}"):
         text("| About")
 
-    with a(
-        href="https://github.com/mnieber/shared-goals/blob/master/TERMS.md"
-    ):
+    with a(href="{% url 'tos' %}"):
         text("| Terms")
 
-    with a(href="https://github.com/mnieber/shared-goals/issues"):
+    with a(href="{% url 'feedback' %}"):
         text("| Give feedback")
 
 
