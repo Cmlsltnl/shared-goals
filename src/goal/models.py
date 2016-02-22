@@ -2,14 +2,11 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 
-from image_cropping import ImageCropField, ImageRatioField
-
 
 class GlobalUser(models.Model):
     user = models.OneToOneField(User)
     join_date = models.DateTimeField('date joined', auto_now_add=True)
-    image = ImageCropField(blank=True, upload_to='members')
-    cropping = ImageRatioField('image', '360x430')
+    image = models.FileField(blank=True, upload_to='members')
 
     @property
     def name(self):
@@ -23,8 +20,7 @@ class Goal(models.Model):
     title = models.CharField(max_length=100)
     pub_date = models.DateTimeField('date published', auto_now_add=True)
     slug = models.SlugField('slug', max_length=60, unique=True)
-    image = ImageCropField(blank=True, upload_to='goals')
-    cropping = ImageRatioField('image', '430x360')
+    image = models.FileField(blank=True, upload_to='goals')
     owner = models.ForeignKey(GlobalUser)
     is_draft = models.BooleanField(default=True)
 
@@ -41,8 +37,7 @@ class Member(models.Model):
     global_user = models.ForeignKey(GlobalUser, related_name="memberships")
     goal = models.ForeignKey(Goal, related_name="members")
     join_date = models.DateTimeField('date joined', auto_now_add=True)
-    image = ImageCropField(blank=True, upload_to='members')
-    cropping = ImageRatioField('image', '360x430')
+    image = models.FileField(blank=True, upload_to='members')
 
     @property
     def name(self):

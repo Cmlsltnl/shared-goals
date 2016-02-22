@@ -113,6 +113,15 @@ class NewGoalView(View):
 
         context = {
             'form': form,
+            'crop_settings': {
+                'url': goal.image.url if goal.image else "",
+                'klass': 'goal--image crop-image',
+                'output_key': form.cropped_image_key,
+                'jcrop': dict(
+                    aspectRatio=360 / 200,
+                    setSelect=[0, 0, 10000, 10000],
+                ),
+            },
             'show_image_form': True,
             'show_errors': submit == 'save',
             'post_button_label': 'Submit',

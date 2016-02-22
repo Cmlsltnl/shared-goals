@@ -33,14 +33,7 @@ def goal_form():
 
     with django_if("show_image_form"):
         with div(_class="goal-form--image"):
-            with p():
-                with django_if("show_errors"):
-                    text("{{ form.cropping.errors }}")
-                label(
-                    _for="{{ form.cropping.id_for_label }}",
-                    _class="form-label"
-                )
-                text("{{ form.cropping }}")
+            text("{{ crop_settings|django_jcrop_widget }}")
 
             with p():
                 with django_if("show_errors"):
@@ -87,9 +80,11 @@ def result():
             with column(8):
                 goal_form()
 
+        text("{% init_django_jcrop %}")
+
     return (
         "{% extends 'base.html' %}",
-        "{% load staticfiles %}",
+        "{% load django_jcrop_tags %}",
         head,
         content,
     )

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
-{% load staticfiles %}
 {% load notification_tags %}
 {% load shared_goals_tags %}
+{% load django_jcrop_tags %}
 {% block content %}
   <div class="row small-gap-below">
     <div class="text-center">
@@ -39,7 +39,7 @@
             <a href="http://commonmark.org/help/">Markdown</a> allowed</p>
           <textarea class="form-field" name="description" rows="16">{{ form.description.value }}</textarea>
         </p>
-        {% if show_image_form %}{{ crop_settings|show_crop_widget|safe }}
+        {% if show_image_form %}{{ crop_settings|django_jcrop_widget }}
           <div class="suggestion-form--image">
             <p>
               {% if show_errors %}{{ form.image.errors }}{% endif %}
@@ -60,19 +60,4 @@
         </div>
       </form>
     </div>
-  </div><script>
-// suggestion/init_suggestion_form.js
-$(document).ready(function() {
-    function updateCropping(c) {
-        var data = JSON.stringify(c);
-        $("#cropping").val(data)
-    }
-
-    $("#suggestion-image").Jcrop({
-        aspectRatio: 360 / 200,
-        setSelect: [ 0, 0, 180, 100 ],
-        onSelect: updateCropping,
-        onChange: updateCropping,
-    });
-});
-</script>{% endblock %}
+  </div>{% init_django_jcrop %}{% endblock %}

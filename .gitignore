@@ -1,4 +1,5 @@
 *.sqlite3
+*.pem
 migrations
 /static/
 /bin/log/
@@ -16,6 +17,7 @@ __pycache__/
 # Distribution / packaging
 .Python
 env/
+prodenv/
 build/
 develop-eggs/
 dist/

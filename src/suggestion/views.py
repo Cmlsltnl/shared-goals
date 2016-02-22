@@ -67,11 +67,13 @@ class NewSuggestionView(PostSuggestionView):
         context = {
             'form': form,
             'crop_settings': {
-                'url': suggestion.image.url,
+                'url': suggestion.image.url if suggestion.image else "",
                 'klass': 'suggestion--image crop-image',
                 'output_key': form.cropped_image_key,
-                'aspect_ratio': 360 / 200,
-                'initial': [0, 0, 100, 180],
+                'jcrop': dict(
+                    aspectRatio=360 / 200,
+                    setSelect=[0, 0, 10000, 10000],
+                ),
             },
             'show_image_form': True,
             'show_errors': submit == 'save',

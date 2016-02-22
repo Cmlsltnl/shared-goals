@@ -1,5 +1,4 @@
-- use filter of shape: crop_settings|show_crop_widget
-
+- add ToS
 - set focus when you open a new form
 - after submitting a review, scroll to it
 
@@ -14,6 +13,7 @@ Links
 
 Later
 
+- set maximum size for uploaded image
 - restrict accetable user names (so that we can lookup profiles properly)
 - learn how jcrop myself. How does cropping really work, what's up with the details file?
 - Ensure that uploaded images never override real images. Maybe uploaded images can go

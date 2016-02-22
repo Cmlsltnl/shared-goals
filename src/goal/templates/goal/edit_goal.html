@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load staticfiles %}
+{% load django_jcrop_tags %}
 {% block head %}{{ form.media }}{% endblock %}
 {% block content %}
   <div class="row">
@@ -13,10 +13,7 @@
           <input class="form-field" id="id_title" maxlength="100" name="title" type="text" value="{{ form.title.value }}">
         </p>
         {% if show_image_form %}
-          <div class="goal-form--image">
-            <p>
-              {% if show_errors %}{{ form.cropping.errors }}{% endif %}
-              <label class="form-label" for="{{ form.cropping.id_for_label }}"></label>{{ form.cropping }}</p>
+          <div class="goal-form--image">{{ crop_settings|django_jcrop_widget }}
             <p>
               {% if show_errors %}{{ form.image.errors }}{% endif %}
               <label class="form-label" for="{{ form.image.id_for_label }}">Upload an image to illustrate your goal</label>{{ form.image }}
@@ -33,5 +30,4 @@
         </div>
       </form>
     </div>
-  </div>
-{% endblock %}
+  </div>{% init_django_jcrop %}{% endblock %}

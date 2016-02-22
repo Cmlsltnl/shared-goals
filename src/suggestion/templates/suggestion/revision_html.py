@@ -34,7 +34,6 @@ def result():
 
     return (
         "{% extends 'base.html' %}\n",
-        "{% load staticfiles %}",
         "{% load humanize %}",
         "{% load markdown_deux_tags %}",
         "{% load notification_tags %}",

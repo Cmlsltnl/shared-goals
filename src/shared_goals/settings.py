@@ -38,9 +38,8 @@ INSTALLED_APPS = [
     'notification.apps.NotificationConfig',
     'django_extensions',
     'django_dominate',
+    'django_jcrop',
     'markdown_deux',
-    'easy_thumbnails',
-    'image_cropping',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -153,9 +152,5 @@ STATIC_ROOT = '/home/maarten/code/shared_goals/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = '/home/maarten/code/shared_goals/media/'
 
-EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails.txt")
-
 from .settings_registration import *
-from .settings_cropping import *
 from .settings_markdown import *

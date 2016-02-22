@@ -50,7 +50,6 @@ def result():
 
     return (
         "{% extends 'base.html' %}",
-        "{% load staticfiles %}",
         "{% load markdown_deux_tags %}",
         "{% load humanize %}",
         "{% load notification_tags %}",

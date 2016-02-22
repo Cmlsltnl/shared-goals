@@ -6,6 +6,8 @@ from django.template.defaultfilters import slugify
 
 from .models import Suggestion, Revision
 
+from goal.utils import apply_cropping_to_image
+
 from notification.models import Notification
 
 
@@ -38,8 +40,11 @@ class SuggestionForm(forms.ModelForm):
 
         form = SuggestionForm(request.POST, request.FILES)
         form.is_duplicate_title = is_duplicate_title
-        form.cropping = json.loads(
-            request.POST[SuggestionForm.cropped_image_key])
+        form.cropping = (
+            json.loads(request.POST[SuggestionForm.cropped_image_key])
+            if SuggestionForm.cropped_image_key in request.POST else
+            None
+        )
 
         return form
 
@@ -83,6 +88,22 @@ class SuggestionForm(forms.ModelForm):
             suggestion.image = self.cleaned_data['image']
 
         if is_form_valid and submit == 'save':
+            sx = (
+                self.cropping['natural_width'] /
+                self.cropping['display_width']
+            )
+            sy = (
+                self.cropping['natural_height'] /
+                self.cropping['display_height']
+            )
+            apply_cropping_to_image(
+                suggestion.image,
+                self.cropping['x'] * sx,
+                self.cropping['y'] * sy,
+                self.cropping['w'] * sx,
+                self.cropping['h'] * sy,
+            )
+
             suggestion.slug = slugify(
                 suggestion.get_current_revision().title)
             suggestion.is_draft = False

@@ -1,16 +1,19 @@
+import json
+
 from django import forms
 from django.db.models import Q
 from django.template.defaultfilters import slugify
 
 from .models import Goal
-
-from suggestion.utils import apply_cropping_to_image
+from .utils import apply_cropping_to_image
 
 
 class GoalForm(forms.ModelForm):
+    cropped_image_key = "cropped_goal_image"
+
     class Meta:
         model = Goal
-        fields = ('title', 'image', 'cropping')
+        fields = ('title', 'image')
 
     is_duplicate_title = lambda x: False
 
@@ -31,6 +34,11 @@ class GoalForm(forms.ModelForm):
 
         form = GoalForm(request.POST, request.FILES)
         form.is_duplicate_title = is_duplicate_title
+        form.cropping = (
+            json.loads(request.POST[GoalForm.cropped_image_key])
+            if GoalForm.cropped_image_key in request.POST else
+            None
+        )
 
         return form
 
@@ -55,12 +63,23 @@ class GoalForm(forms.ModelForm):
         if self.cleaned_data.get('image', None):
             goal.image = self.cleaned_data['image']
 
-        if 'cropping' in self.cleaned_data:
-            goal.cropping = self.cleaned_data['cropping']
-
         if is_form_valid and submit == 'save':
             goal.slug = slugify(goal.title)
-            apply_cropping_to_image(goal, delete_original=False)
+            sx = (
+                self.cropping['natural_width'] /
+                self.cropping['display_width']
+            )
+            sy = (
+                self.cropping['natural_height'] /
+                self.cropping['display_height']
+            )
+            apply_cropping_to_image(
+                goal.image,
+                self.cropping['x'] * sx,
+                self.cropping['y'] * sy,
+                self.cropping['w'] * sx,
+                self.cropping['h'] * sy,
+            )
             goal.is_draft = False
             goal.save()
         else:

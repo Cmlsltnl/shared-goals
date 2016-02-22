@@ -1,4 +1,3 @@
-from django.conf import settings
 from django_dominate.django_tags import *
 
 from dominate.tags import *
@@ -69,7 +68,7 @@ def suggestion_form():
             text("{{ form.description.value }}")
 
     with django_if("show_image_form"):
-        text("{{ crop_settings|show_crop_widget|safe }}")
+        text("{{ crop_settings|django_jcrop_widget }}")
 
         with div(_class="suggestion-form--image"):
             with p():
@@ -126,12 +125,12 @@ def result():
             with column(8):
                 suggestion_form()
 
-        inline_script(settings.BASE_DIR, "suggestion/init_suggestion_form.js")
+        text("{% init_django_jcrop %}")
 
     return (
         "{% extends 'base.html' %}",
-        "{% load staticfiles %}",
         "{% load notification_tags %}",
         "{% load shared_goals_tags %}",
+        "{% load django_jcrop_tags %}",
         content,
     )
