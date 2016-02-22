@@ -118,7 +118,7 @@ class NewGoalView(View):
                 'klass': 'goal--image crop-image',
                 'output_key': form.cropped_image_key,
                 'jcrop': dict(
-                    aspectRatio=360 / 200,
+                    aspectRatio=360.0 / 200.0,
                     setSelect=[0, 0, 10000, 10000],
                 ),
             },

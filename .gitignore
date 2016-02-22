@@ -1,5 +1,6 @@
 *.sqlite3
 *.pem
+*.sublime-workspace
 migrations
 /static/
 /bin/log/

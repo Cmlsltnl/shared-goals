@@ -66,12 +66,12 @@ class GoalForm(forms.ModelForm):
         if is_form_valid and submit == 'save':
             goal.slug = slugify(goal.title)
             sx = (
-                self.cropping['natural_width'] /
-                self.cropping['display_width']
+                float(self.cropping['natural_width']) /
+                float(self.cropping['display_width'])
             )
             sy = (
-                self.cropping['natural_height'] /
-                self.cropping['display_height']
+                float(self.cropping['natural_height']) /
+                float(self.cropping['display_height'])
             )
             apply_cropping_to_image(
                 goal.image,

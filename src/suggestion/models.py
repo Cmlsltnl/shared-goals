@@ -39,9 +39,8 @@ class Suggestion(models.Model):
         )
 
     def stars(self):
-        return (
-            emoji.emojize(":star:", use_aliases=True) * round(self.avg_rating)
-        )
+        factor = round(self.avg_rating) if self.avg_rating else 0
+        return emoji.emojize(":star:", use_aliases=True) * factor
 
 
 class Revision(models.Model):
