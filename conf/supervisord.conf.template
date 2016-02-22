@@ -1,0 +1,19 @@
+[supervisord]
+logfile={{shared_goals}}/log/shared_goals.log
+childlogdir={{shared_goals}}/log/
+
+;[program:nginx]
+;command=/usr/sbin/nginx -g 'daemon off;'
+
+[program:uwsgi]
+command={{shared_goals}}/env/bin/uwsgi --socket {{shared_goals}}/sg.sock --wsgi-file ./shared_goals/wsgi.py --chmod-socket=666
+environment=DJANGO_SETTINGS_FILE="shared_goals.settings"
+directory={{shared_goals}}/src
+
+[rpcinterface:supervisor]
+supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
+
+[inet_http_server]
+port=9001
+
+[supervisorctl]

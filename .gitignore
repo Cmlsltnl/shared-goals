@@ -1,4 +1,8 @@
 *.sqlite3
+supervisord.conf
+sharedgoals_nginx.conf
+*.sublime-project
+*.sublime-workspace
 *.pem
 *.pid
 *.sublime-workspace
