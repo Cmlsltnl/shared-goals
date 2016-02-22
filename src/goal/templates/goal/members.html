@@ -7,7 +7,7 @@
       <h1>{{ request.goal.title }}</h1>
       <div class="button-grp">
         <button class="btn btn-default" onclick="location.href='{% url 'goal' request.goal.slug %}';">Suggestions</button>
-        <button class="btn btn-default">Members</button>
+        <button class="btn btn-default" onclick="location.href='{% url 'members' request.goal.slug %}';">Members</button>
         {% if request.global_user %}
           <button class="btn btn-default" onclick="location.href='{{ profile_url }}';">Profile
             {% with request.global_user.notifications|unread as unread_notifications %}

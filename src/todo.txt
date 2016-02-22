@@ -26,3 +26,7 @@ into a suggestions_inbox folder
 - add a penalty to the mean rating that is higher for suggestions with few reviews
 - bug: when submitting a invalid suggestion, the image is no longer shown
 
+How-to
+
+- sudo /etc/init.d/nginx status
+- supervisord -n -c supervisord.conf

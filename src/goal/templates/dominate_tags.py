@@ -18,7 +18,11 @@ def goal_header():
                 _class="btn btn-default",
                 onclick="location.href='{% url 'goal' request.goal.slug %}';"
             )
-            button("Members", _class="btn btn-default")
+            button(
+                "Members",
+                _class="btn btn-default",
+                onclick="location.href='{% url 'members' request.goal.slug %}';"
+            )
             with django_if("request.global_user"):
                 with button(
                     _class="btn btn-default",
