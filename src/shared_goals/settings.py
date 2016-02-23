@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'review.apps.ReviewConfig',
     'notification.apps.NotificationConfig',
     'django_extensions',
-    'registration',
     'django_jcrop',
     'markdown_deux',
 

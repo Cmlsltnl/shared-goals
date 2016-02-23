@@ -188,6 +188,7 @@ class Command(BaseCommand):
         self.comment_2.save()
 
     def handle(self, *args, **options):
+        management.call_command('initdb')
         self.__migrate()
         self.__create_superuser()
         self.__create_users()

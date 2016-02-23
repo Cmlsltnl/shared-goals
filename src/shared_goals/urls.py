@@ -7,7 +7,7 @@ from django.views.generic.base import RedirectView
 from django.template import defaultfilters as filters
 
 from registration.forms import RegistrationForm, TOS_REQUIRED
-from registration.backends.default.views import RegistrationView
+from registration.backends.hmac.views import RegistrationView
 
 
 url_tos = r"https://github.com/mnieber/shared-goals/blob/master/TERMS.md"
