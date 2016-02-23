@@ -4,7 +4,8 @@ sudo usermod -g nginx -G ec2-user,wheel
 # TODO set default file permissions such that nginx can execute
 # also on /home and /home/ec2-user!
 
-# add IP to ALLOWED_HOSTS in settings.py
+# TODO add IP to ALLOWED_HOSTS in settings.py
+
 sudo yum install -y gcc libjpeg-devel zlib-devel nginx git
 
 git clone https://github.com/mnieber/shared-goals.git

@@ -1,5 +1,6 @@
 - update your security group rules to allow access from known IP addresses only.
 - remove read permissions for others from shared-goals
+- when a new use is registered, add as globaluser
 - set focus when you open a new form
 - after submitting a review, scroll to it
 
