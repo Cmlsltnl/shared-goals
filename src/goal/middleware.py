@@ -9,6 +9,13 @@ class ExtractGoalMiddleware:
             "global_user",
             GlobalUser.objects.filter(user_id=request.user.id).first()
         )
+        if not request.global_user and not request.user.is_anonymous():
+            setattr(
+                request,
+                "global_user",
+                GlobalUser.objects.create(user=request.user)
+            )
+
         setattr(request, "goal", None)
         setattr(request, "member", None)
 

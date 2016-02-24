@@ -1,3 +1,4 @@
+from django.conf import settings
 from django_dominate.django_tags import *
 
 from dominate.tags import *
@@ -55,17 +56,32 @@ def suggestion_form():
         ):
             text("Describe your suggestion")
 
-        with p(style="font-size: 10px;"):
-            with a(href=url_markdown):
-                text("Markdown")
-            text(" allowed")
+            with label(
+                _class="form-label pull-right"
+            ):
+                input(type="checkbox", id="chkPreview")
+                span("Preview")
+
+                with span(style="font-size: 10px;"):
+                    with a(href=url_markdown):
+                        text("Markdown")
+                    text(" allowed")
 
         with textarea(
+            id="description",
             name="description",
             rows="16",
             _class="form-field"
         ):
             text("{{ form.description.value }}")
+
+        div(
+            id="descriptionPreview",
+            _class="tiny-gap-above small-gap-below",
+            data_ajax_url=(
+                "{% url 'preview-suggestion' request.goal.slug %}"
+            )
+        )
 
     with django_if("show_image_form"):
         text("{{ crop_settings|django_jcrop_widget }}")
@@ -126,6 +142,7 @@ def result():
                 suggestion_form()
 
         text("{% init_django_jcrop %}")
+        inline_script(settings.BASE_DIR, "suggestion/init_suggestion_form.js")
 
     return (
         "{% extends 'base.html' %}",

@@ -14,6 +14,11 @@ urlpatterns = [
         name='update-suggestion'
     ),
     url(
+        r'^ajax-preview-suggestion/$',
+        views.PreviewSuggestionView.as_view(),
+        name='preview-suggestion'
+    ),
+    url(
         r'^by/(?P<suggestion_slug>[\-\w]+)/$',
         views.SuggestionView.as_view(),
         name='suggestion'

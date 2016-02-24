@@ -34,10 +34,16 @@
         </p>
         <p>
           {% if show_errors %}{{ form.description.errors }}{% endif %}
-          <label class="form-label" for="{{ form.description.id_for_label }}">Describe your suggestion</label>
-          <p style="font-size: 10px;">
-            <a href="http://commonmark.org/help/">Markdown</a> allowed</p>
-          <textarea class="form-field" name="description" rows="16">{{ form.description.value }}</textarea>
+          <label class="form-label" for="{{ form.description.id_for_label }}">Describe your suggestion
+            <label class="form-label pull-right">
+              <input id="chkPreview" type="checkbox">
+              <span>Preview</span>
+              <span style="font-size: 10px;">
+                <a href="http://commonmark.org/help/">Markdown</a> allowed</span>
+            </label>
+          </label>
+          <textarea class="form-field" id="description" name="description" rows="16">{{ form.description.value }}</textarea>
+          <div class="tiny-gap-above small-gap-below" data-ajax-url="{% url 'preview-suggestion' request.goal.slug %}" id="descriptionPreview"></div>
         </p>
         {% if show_image_form %}{{ crop_settings|django_jcrop_widget }}
           <div class="suggestion-form--image">
@@ -60,4 +66,32 @@
         </div>
       </form>
     </div>
-  </div>{% init_django_jcrop %}{% endblock %}
+  </div>{% init_django_jcrop %}<script>
+// suggestion/init_suggestion_form.js
+$(document).ready(function() {
+    var chkPreviewElm = $("#chkPreview");
+    chkPreviewElm.change(function() {
+        var previewElm = $("#descriptionPreview");
+        var descriptionElm = $("#description");
+        url_get_preview = previewElm.data("ajax-url");
+        var token = $("input[name='csrfmiddlewaretoken']").val();
+        previewElm.load(
+            url_get_preview,
+            {
+                csrfmiddlewaretoken: token,
+                text: descriptionElm.val()
+            }
+        );
+        if ($("#chkPreview").prop('checked')) {
+            previewElm.removeClass("hidden-but-not-gone");
+            descriptionElm.addClass("hidden-but-not-gone");
+        }
+        else {
+            previewElm.addClass("hidden-but-not-gone");
+            descriptionElm.removeClass("hidden-but-not-gone");
+        }
+        // previewElm.toggle($("#chkPreview").prop('checked'));
+        // descriptionElm.toggle(!$("#chkPreview").prop('checked'));
+    })
+});
+</script>{% endblock %}

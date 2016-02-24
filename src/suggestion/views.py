@@ -1,11 +1,13 @@
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import View
 from django.utils.decorators import method_decorator
 
 from goal.views import membership_required
+
+from markdown_deux.templatetags.markdown_deux_tags import markdown_filter
 
 from suggestion.forms import SuggestionForm
 from suggestion.models import Suggestion, Revision
@@ -132,6 +134,11 @@ class UpdateSuggestionView(PostSuggestionView):
         }
 
         return render(request, 'suggestion/edit_suggestion.html', context)
+
+
+class PreviewSuggestionView(View):
+    def post(self, request, goal_slug):
+        return HttpResponse(markdown_filter(request.POST['text']))
 
 
 class SuggestionView(View):
