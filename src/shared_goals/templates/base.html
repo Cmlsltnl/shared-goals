@@ -5,12 +5,12 @@
 {% block header %}
   <div class="row top-right-div">
     <div class="col-md-12">
-      <div>
+      <span>
         <a href="{% url 'home' %}">Shared Goals</a>
         <a href="{% url 'about' %}">| About</a>
         <a href="{% url 'tos' %}">| Terms</a>
         <a href="{% url 'feedback' %}">| Give feedback</a>
-      </div>
+      </span>
       <div class="pull-right">
         {% if user.is_authenticated %}
           {% if request.member %}

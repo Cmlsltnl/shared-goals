@@ -76,7 +76,7 @@ def top_right_div():
                 text("{% trans 'Log in' %}")
 
 
-@div
+@span
 def top_left_div():
     with a(href="{% url 'home' %}"):
         text("Shared Goals")

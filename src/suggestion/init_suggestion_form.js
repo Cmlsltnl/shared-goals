@@ -1,6 +1,6 @@
 $(document).ready(function() {
     var chkPreviewElm = $("#chkPreview");
-    chkPreviewElm.change(function() {
+    function onChkPreviewChanged() {
         var previewElm = $("#descriptionPreview");
         var descriptionElm = $("#description");
         url_get_preview = previewElm.data("ajax-url");
@@ -22,5 +22,7 @@ $(document).ready(function() {
         }
         // previewElm.toggle($("#chkPreview").prop('checked'));
         // descriptionElm.toggle(!$("#chkPreview").prop('checked'));
-    })
+    }
+    chkPreviewElm.change(onChkPreviewChanged);
+    onChkPreviewChanged();
 });

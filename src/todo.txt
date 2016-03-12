@@ -1,4 +1,5 @@
 - update your security group rules to allow access from known IP addresses only.
+- remove secret key from git
 - remove read permissions for others from shared-goals
 - when a new use is registered, add as globaluser
 - set focus when you open a new form
@@ -6,6 +7,7 @@
 
 Links
 
+- https://www.digitalocean.com/community/tutorials/how-to-use-postgresql-with-your-django-application-on-ubuntu-14-04
 - http://uwsgi-docs.readthedocs.org/en/latest/tutorials/Django_and_nginx.html
 - http://serverfault.com/questions/216998/supervisord-doesnt-stop-nginx-process
 - http://stackoverflow.com/questions/11170425/how-to-unit-test-file-upload-in-django

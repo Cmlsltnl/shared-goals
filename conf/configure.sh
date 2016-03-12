@@ -7,6 +7,7 @@ sudo usermod -g nginx -G ec2-user,wheel
 # TODO add IP to ALLOWED_HOSTS in settings.py
 
 sudo yum install -y gcc libjpeg-devel zlib-devel nginx git
+sudo yum install postgresql94 postgresql94-server postgresql94-libs postgresql94-contrib postgresql94-devel
 
 git clone https://github.com/mnieber/shared-goals.git
 chmod -R g+w shared-goals/
