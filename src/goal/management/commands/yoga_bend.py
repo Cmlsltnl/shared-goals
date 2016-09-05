@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 text = """
 It would be hard to imagine yoga without backbends—they’re invigorating, uplifting, and heart-opening. Backbends stimulate the proper functioning of the digestive system, help preserve the health of the vertebrae and spinal disks, and open the body to deep diaphragmatic breathing. It’s no wonder that backbends are an important part of any hatha yoga routine.
 

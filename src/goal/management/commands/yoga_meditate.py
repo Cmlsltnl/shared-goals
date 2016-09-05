@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 text = """
 Although you don’t need to formally meditate in order to practice hatha yoga—nor is the practice of hatha yoga mandatory in order to meditate—the two practices support each another. Through your practice of yoga, you’ve enhanced both your abilities to concentrate and to relax—the two most important requirements for a meditation practice. Now you can deepen your understanding of what meditation is and begin a practice of your own.
 

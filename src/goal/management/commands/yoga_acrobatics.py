@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 text = """
 From a brisk Portland walk to a warm AcroYoga welcome, you make your way to the Oregon Convention center for the 6th annual Divine Play AcroYoga Fest. Greeted by the smiling faces of AcroYoga friends from around the globe, you enter the convention center that has been transformed into a golden ticket to the largest and most diverse gathering of AcroYogis in the world.
 
