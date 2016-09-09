@@ -1,3 +1,5 @@
+"""Suggestion models."""
+
 import emoji
 
 from django.core.urlresolvers import reverse
@@ -6,7 +8,7 @@ from django.db import models
 from goal.models import Goal, GlobalUser
 
 
-class Suggestion(models.Model):
+class Suggestion(models.Model):  # noqa
     TYPE_ACTION = 0
     TYPE_PRACTICE = 1
 
@@ -25,13 +27,13 @@ class Suggestion(models.Model):
     slug = models.SlugField('slug', max_length=60)
     pub_date = models.DateTimeField('date published', auto_now=True)
 
-    def __str__(self):
+    def __str__(self):  # noqa
         return self.slug + ("(draft)" if self.is_draft else "")
 
-    def get_current_revision(self):
+    def get_current_revision(self):  # noqa
         return self.revisions.latest('pub_date')
 
-    def get_url(self):
+    def get_url(self):  # noqa
         return reverse(
             'suggestion',
             kwargs=dict(
@@ -39,15 +41,16 @@ class Suggestion(models.Model):
         )
 
     def stars(self):
-        factor = round(self.avg_rating) if self.avg_rating else 0
+        """Return a string with zero or more starts."""
+        factor = int(round(self.avg_rating) if self.avg_rating else 0)
         return emoji.emojize(":star:", use_aliases=True) * factor
 
 
-class Revision(models.Model):
+class Revision(models.Model):  # noqa
     title = models.CharField(max_length=100)
     description = models.TextField()
     pub_date = models.DateTimeField('date published', auto_now=True)
     suggestion = models.ForeignKey(Suggestion, related_name="revisions")
 
-    def __str__(self):
+    def __str__(self):  # noqa
         return "%s_%d" % (self.suggestion.slug, self.pk)

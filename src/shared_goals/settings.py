@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'review.apps.ReviewConfig',
     'notification.apps.NotificationConfig',
     'django_extensions',
+    'rest_framework',
     'django_jcrop',
     'markdown_deux',
 
@@ -58,7 +59,7 @@ MIDDLEWARE_CLASSES = [
     'goal.middleware.ExtractGoalMiddleware'
 ]
 
-ROOT_URLCONF = 'shared_goals.urls'
+ROOT_URLCONF = 'shared_goals.react_urls'
 
 TEMPLATES = [
     {
@@ -140,5 +141,5 @@ STATIC_ROOT = os.path.join(ROOT_DIR, "static")
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(ROOT_DIR, "media")
 
-from .settings_registration import *
-from .settings_markdown import *
+from .settings_registration import *  # noqa
+from .settings_markdown import *  # noqa
