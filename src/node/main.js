@@ -1,0 +1,1 @@
+require('../suggestion/jsx/suggestion.jsx');
