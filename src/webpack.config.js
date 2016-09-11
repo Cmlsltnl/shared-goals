@@ -1,12 +1,21 @@
 var path = require('path');
 
 module.exports = {
-  entry: './main.js',
-  output: { path: __dirname, filename: 'foobundle.js' },
+  entry: './bundle-in.js',
+  output: { path: __dirname, filename: '../res/js/bundle.js' },
 
   resolve: {
-    fallback: '/usr/lib/node_modules'
+    fallback: '/usr/lib/node_modules',
+    root: path.resolve(__dirname),
+    alias: {
+      app: 'shared_goals/jsx/app',
+      home: 'shared_goals/jsx/home',
+      goal: 'goal/jsx/goal',
+      suggestion: 'suggestion/jsx/suggestion',
+    },
+    extensions: ['', '.js', '.jsx']
   },
+
   resolveLoader: {
       fallback: '/usr/lib/node_modules'
   },

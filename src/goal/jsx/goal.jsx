@@ -1,7 +1,13 @@
-{% extends 'react_base.html' %}
-{% block react %}
+'use strict'
+
+var React = require('react')
 
 var Goal = React.createClass({
+  render: function() {}
+});
+
+
+Goal.Card = React.createClass({
   render: function() {
     return (
       <div className="goal row">
@@ -13,11 +19,11 @@ var Goal = React.createClass({
   }
 });
 
-var GoalList = React.createClass({
+Goal.CardList = React.createClass({
   render: function() {
     var goalNodes = this.props.data.map(function(goal) {
       return (
-        <Goal goal={goal} key={goal.pk}/>
+        <Goal.Card goal={goal} key={goal.pk}/>
       );
     });
     return (
@@ -28,17 +34,17 @@ var GoalList = React.createClass({
   }
 });
 
-var GoalsBox = React.createClass({
+Goal.CardListBox = React.createClass({
   loadGoalsFromServer: function() {
     $.ajax({
-      url: this.props.url,
+      url: "api/goals",
       dataType: 'json',
       cache: false,
       success: function(data) {
         this.setState({data: data});
       }.bind(this),
       error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
+        console.error("api/goals", status, err.toString());
       }.bind(this)
     });
   },
@@ -52,16 +58,18 @@ var GoalsBox = React.createClass({
   render: function() {
     return (
       <div className="goalsBox">
-        <h1>Goals</h1>
-        <GoalList data={this.state.data} />
+        <Goal.CardList data={this.state.data} />
       </div>
     );
   }
 });
 
-ReactDOM.render(
-  <GoalsBox url="/api/goals" pollInterval={100000} />,
-  document.getElementById('content')
-);
+Goal.Homer2 = (props) =>
+  <div className="container">
+    <div className="text-center">
+      <h1>Shared Goals</h1>
+    </div>
+    <Goal.CardListBox />
+  </div>
 
-{% endblock %}
+export default Goal

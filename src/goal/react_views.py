@@ -25,7 +25,7 @@ class GoalsView(View):
     """Show list of all goals."""
 
     def get(self, request):  # noqa
-        return render(request, 'react_goal/goals.jsx', {})
+        return render(request, 'shared_goals/react_base.html', {})
 
 
 class GoalView(View):
