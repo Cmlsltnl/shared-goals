@@ -17,12 +17,18 @@ Site.Home = (props) =>
     <Goal.CardListBox />
   </div>
 
-Site.Goal = (props) =>
-  <div className="container">
-    <div className="text-center">
-      <h1>Your goal...</h1>
-    </div>
-    <Suggestion.CardGridBox url="api/suggestions/{this.props.goal_slug}" />
-  </div>
+Site.Goal = React.createClass({
+  render: function() {
+    return (
+      <div className="container">
+        <div className="text-center">
+          <h1>Your goal...</h1>
+        </div>
+        <Suggestion.CardGridBox url={"/api/suggestions/" + this.props.params.goal_slug} />
+      </div>
+    )
+  }
+});
+
 
 export default Site

@@ -5,25 +5,17 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.views import static
 
-from rest_framework import routers
+from goal.react_views import GoalList
+from suggestion.react_views import SuggestionList
 
-from goal.react_views import GoalViewSet
-from suggestion.react_views import SuggestionViewSet
+from react_views import HomeView
 
-
-# Routers provide an easy way of automatically determining the URL conf.
-router = routers.DefaultRouter()
-router.register(r'goals', GoalViewSet)
-router.register(r'suggestions', SuggestionViewSet)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^api/', include(router.urls)),
-    url(
-        r'^api-auth/',
-        include('rest_framework.urls', namespace='rest_framework')
-    ),
-    url(r'', include('goal.react_urls')),
+    url(r'^api/goals', GoalList.as_view()),
+    url(r'^api/suggestions/(?P<goal_slug>[\-\w]+)$', SuggestionList.as_view()),
+    url(r'', HomeView.as_view(), name='home'),
 ]
 
 if settings.DEBUG:

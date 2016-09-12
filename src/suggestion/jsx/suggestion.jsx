@@ -82,3 +82,5 @@ Suggestion.CardGridBox = React.createClass({
     );
   }
 });
+
+export default Suggestion

@@ -1,11 +1,8 @@
 """Views for react based presentation."""
 
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
-from django.utils.decorators import method_decorator
-from django.views.generic import View
-
-from rest_framework import serializers, viewsets
+from rest_framework import serializers
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .models import Goal
 
@@ -13,34 +10,15 @@ from .models import Goal
 class GoalSerializer(serializers.ModelSerializer):  # noqa
     class Meta:  # noqa
         model = Goal
-        fields = ('title', 'get_url', 'pk')
+        fields = ('title', 'pk')
 
 
-class GoalViewSet(viewsets.ModelViewSet):  # noqa
-    queryset = Goal.objects.filter(is_draft=False)
-    serializer_class = GoalSerializer
-
-
-class GoalsView(View):
-    """Show list of all goals."""
+class GoalList(APIView):  # noqa
+    queryset = Goal.objects.all()
 
     def get(self, request):  # noqa
-        return render(request, 'shared_goals/react_base.html', {})
-
-
-class GoalView(View):
-    """Show list of all goals."""
-
-    def get(self, request, goal_slug):  # noqa
-        context = {
-            'goal': request.goal,
-        }
-        return render(request, 'react_goal/goal.jsx', context)
-
-
-class ProfileView(View):  # noqa
-    @method_decorator(login_required)
-    def get(self, request, goal_slug, username):  # noqa
-        context = {
-        }
-        return render(request, 'react_goal/profile.html', context)
+        serializer = GoalSerializer(
+            self.queryset.filter(is_draft=False),
+            many=True
+        )
+        return Response(serializer.data)

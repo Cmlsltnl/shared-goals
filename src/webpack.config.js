@@ -1,8 +1,16 @@
 var path = require('path');
+var BundleTracker = require('/usr/lib/node_modules/webpack-bundle-tracker')
 
 module.exports = {
   entry: './bundle-in.js',
-  output: { path: __dirname, filename: '../res/js/bundle.js' },
+  output: {
+      path: path.resolve('../assets/bundles/'),
+      filename: "[name]-[hash].js",
+  },
+
+  plugins: [
+    new BundleTracker({filename: './webpack-stats.json'}),
+  ],
 
   resolve: {
     fallback: '/usr/lib/node_modules',

@@ -1,6 +1,7 @@
 'use strict'
 
-var React = require('react')
+import React from 'react'
+import { Link } from 'react-router'
 
 var Goal = React.createClass({
   render: function() {}
@@ -11,9 +12,9 @@ Goal.Card = React.createClass({
   render: function() {
     return (
       <div className="goal row">
-        <a href={this.props.goal.get_url}>
+        <Link to={ {pathname: "/by/become-a-yogi/"} }>
           {this.props.goal.title}
-        </a>
+        </Link>
       </div>
     );
   }
@@ -63,13 +64,5 @@ Goal.CardListBox = React.createClass({
     );
   }
 });
-
-Goal.Homer2 = (props) =>
-  <div className="container">
-    <div className="text-center">
-      <h1>Shared Goals</h1>
-    </div>
-    <Goal.CardListBox />
-  </div>
 
 export default Goal

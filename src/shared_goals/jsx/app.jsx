@@ -12,5 +12,6 @@ const Container = (props) => <div><h1>hello</h1><Goal.Homer2 /></div>
 ReactDOM.render((
   <Router history={browserHistory}>
     <Route path="/" component={Site.Home} />
+    <Route path="/by/:goal_slug/" component={Site.Goal} />
   </Router>
 ), document.getElementById('root'));
