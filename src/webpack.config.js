@@ -9,7 +9,7 @@ module.exports = {
     root: path.resolve(__dirname),
     alias: {
       app: 'shared_goals/jsx/app',
-      home: 'shared_goals/jsx/home',
+      site: 'shared_goals/jsx/site',
       goal: 'goal/jsx/goal',
       suggestion: 'suggestion/jsx/suggestion',
     },

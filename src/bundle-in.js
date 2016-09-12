@@ -1,4 +1,4 @@
 require('app');
 require('goal');
-require('home');
+require('site');
 require('suggestion');
