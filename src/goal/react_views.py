@@ -4,13 +4,19 @@ from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Goal
+from .models import GlobalUser, Goal
 
 
 class GoalSerializer(serializers.ModelSerializer):  # noqa
     class Meta:  # noqa
         model = Goal
         fields = ('title', 'pk')
+
+
+class GlobalUserSerializer(serializers.ModelSerializer):  # noqa
+    class Meta:  # noqa
+        model = GlobalUser
+        fields = ('name', 'pk')
 
 
 class GoalListView(APIView):  # noqa

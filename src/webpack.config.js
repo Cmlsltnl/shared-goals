@@ -19,6 +19,7 @@ module.exports = {
       app: 'shared_goals/jsx/app',
       homepage: 'shared_goals/jsx/homepage',
       goalpage: 'shared_goals/jsx/goalpage',
+      suggestionpage: 'shared_goals/jsx/suggestionpage',
       goal: 'goal/jsx/goal',
       suggestion: 'suggestion/jsx/suggestion',
     },

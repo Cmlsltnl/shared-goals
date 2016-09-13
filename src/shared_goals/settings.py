@@ -60,7 +60,8 @@ MIDDLEWARE_CLASSES = [
     'goal.middleware.ExtractGoalMiddleware'
 ]
 
-ROOT_URLCONF = 'shared_goals.react_urls'
+USE_REACT = True
+ROOT_URLCONF = 'shared_goals.react_urls' if USE_REACT else 'shared_goals.urls'
 
 TEMPLATES = [
     {
@@ -74,9 +75,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-
-                'goal.context_processors.profile_url'
-            ],
+            ] +
+            ([] if USE_REACT else ['goal.context_processors.profile_url']),
             'libraries': {
                 # 'sorl_thumbnail': 'sorl.thumbnail.templatetags.thumbnail',
             },
