@@ -13,12 +13,23 @@ class GoalSerializer(serializers.ModelSerializer):  # noqa
         fields = ('title', 'pk')
 
 
-class GoalList(APIView):  # noqa
+class GoalListView(APIView):  # noqa
     queryset = Goal.objects.all()
 
     def get(self, request):  # noqa
         serializer = GoalSerializer(
             self.queryset.filter(is_draft=False),
             many=True
+        )
+        return Response(serializer.data)
+
+
+class GoalView(APIView):  # noqa
+    queryset = Goal.objects.all()
+
+    def get(self, request, goal_slug):  # noqa
+        serializer = GoalSerializer(
+            self.queryset.get(slug=goal_slug),
+            many=False
         )
         return Response(serializer.data)

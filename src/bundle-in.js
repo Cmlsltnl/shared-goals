@@ -1,4 +1,5 @@
 require('app');
 require('goal');
-require('site');
+require('homepage');
+require('goalpage');
 require('suggestion');

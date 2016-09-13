@@ -12,7 +12,7 @@ Goal.Card = React.createClass({
   render: function() {
     return (
       <div className="goal row">
-        <Link to={ {pathname: "/by/become-a-yogi/"} }>
+        <Link to={ {pathname: "/to/become-a-yogi/"} }>
           {this.props.goal.title}
         </Link>
       </div>
@@ -41,12 +41,8 @@ Goal.CardListBox = React.createClass({
       url: "api/goals",
       dataType: 'json',
       cache: false,
-      success: function(data) {
-        this.setState({data: data});
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error("api/goals", status, err.toString());
-      }.bind(this)
+      success: function(data) { this.setState({data: data}); }.bind(this),
+      error: function(xhr, status, err) { console.error("api/goals", status, err.toString()); }.bind(this)
     });
   },
   getInitialState: function() {

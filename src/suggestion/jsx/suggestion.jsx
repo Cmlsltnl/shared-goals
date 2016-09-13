@@ -62,10 +62,13 @@ Suggestion.CardGrid = React.createClass({
 });
 
 Suggestion.CardGridBox = React.createClass({
+  url: function() {
+    return "/api/suggestions/" + this.props.goal_slug;
+  },
   loadSuggestionsFromServer: function() {
-    $.ajax({ url: this.props.url, dataType: 'json', cache: false,
+    $.ajax({ url: this.url(), dataType: 'json', cache: false,
       success: function(data) { this.setState({data: data}); }.bind(this),
-      error: function(xhr, status, err) { console.error(this.props.url, status, err.toString()); }.bind(this)
+      error: function(xhr, status, err) { console.error(this.url(), status, err.toString()); }.bind(this)
     });
   },
   getInitialState: function() { return {data: []}; },
@@ -76,7 +79,6 @@ Suggestion.CardGridBox = React.createClass({
   render: function() {
     return (
       <div className="suggestion_CardGridBox">
-        <h1>Suggestions</h1>
         <Suggestion.CardGrid data={this.state.data} />
       </div>
     );
