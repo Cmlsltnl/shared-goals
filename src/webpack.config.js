@@ -1,4 +1,5 @@
 var path = require('path');
+var webpack = require('/usr/lib/node_modules/webpack');
 var BundleTracker = require('/usr/lib/node_modules/webpack-bundle-tracker')
 
 module.exports = {
@@ -9,20 +10,16 @@ module.exports = {
   },
 
   plugins: [
-    new BundleTracker({filename: './webpack-stats.json'}),
+    new BundleTracker({filename: './webpack-stats.json'})
   ],
 
   resolve: {
     fallback: '/usr/lib/node_modules',
-    root: path.resolve(__dirname),
+    root: [
+      path.resolve(__dirname),
+      path.resolve('shared_goals/jsx'),
+    ],
     alias: {
-      app: 'shared_goals/jsx/app',
-      reducers: 'shared_goals/jsx/reducers',
-      homepage: 'shared_goals/jsx/homepage',
-      goalpage: 'shared_goals/jsx/goalpage',
-      suggestionpage: 'shared_goals/jsx/suggestionpage',
-      goal: 'goal/jsx/goal',
-      suggestion: 'suggestion/jsx/suggestion',
     },
     extensions: ['', '.js', '.jsx']
   },
@@ -40,6 +37,10 @@ module.exports = {
         query: {
           presets: ['/usr/lib/node_modules/babel-preset-es2015', '/usr/lib/node_modules/babel-preset-react']
         }
+      },
+      {
+        test: /\.json$/,
+        loader: 'json'
       }
     ]
   },

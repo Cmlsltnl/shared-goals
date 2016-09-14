@@ -1,7 +1,8 @@
-require('app');
+require('actions');
 require('reducers');
-require('goal');
-require('homepage');
-require('goalpage');
-require('suggestionpage');
-require('suggestion');
+require('presentation/goal');
+require('presentation/suggestion');
+require('containers/app');
+require('containers/homepage');
+require('containers/goalpage');
+require('containers/suggestionpage');

@@ -11,7 +11,7 @@ from goal.react_views import GlobalUserSerializer
 class RevisionSerializer(serializers.ModelSerializer):  # noqa
     class Meta:  # noqa
         model = Revision
-        fields = ('title', 'description', 'pub_date')
+        fields = ('title', 'description', 'pub_date_display')
 
 
 class SuggestionSerializer(serializers.ModelSerializer):  # noqa

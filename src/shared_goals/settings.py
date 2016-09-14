@@ -61,6 +61,7 @@ MIDDLEWARE_CLASSES = [
 ]
 
 USE_REACT = True
+
 ROOT_URLCONF = 'shared_goals.react_urls' if USE_REACT else 'shared_goals.urls'
 
 TEMPLATES = [

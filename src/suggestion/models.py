@@ -2,6 +2,7 @@
 
 import emoji
 
+from django.contrib.humanize.templatetags.humanize import naturaltime
 from django.core.urlresolvers import reverse
 from django.db import models
 
@@ -51,6 +52,9 @@ class Revision(models.Model):  # noqa
     description = models.TextField()
     pub_date = models.DateTimeField('date published', auto_now=True)
     suggestion = models.ForeignKey(Suggestion, related_name="revisions")
+
+    def pub_date_display(self):  # noqa
+        return naturaltime(self.pub_date)
 
     def __str__(self):  # noqa
         return "%s_%d" % (self.suggestion.slug, self.pk)
