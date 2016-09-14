@@ -1,39 +1,41 @@
 'use strict'
 
-import React from 'react'
+import React, { PropTypes } from 'react'
 import { Link } from 'react-router'
 
 var Goal = React.createClass({
   render: function() {}
 });
 
+Goal.Card = ({ title, goal_slug }) => (
+  <div className="goal row">
+    <Link to={ {pathname: "/to/" + goal_slug + "/"} }>
+      {title}
+    </Link>
+  </div>
+);
 
-Goal.Card = React.createClass({
-  render: function() {
-    return (
-      <div className="goal row">
-        <Link to={ {pathname: "/to/become-a-yogi/"} }>
-          {this.props.goal.title}
-        </Link>
-      </div>
-    );
-  }
-});
+Goal.Card.propTypes = {
+  title: PropTypes.string.isRequired,
+  goal_slug: PropTypes.string.isRequired
+}
 
-Goal.CardList = React.createClass({
-  render: function() {
-    var goalNodes = this.props.data.map(function(goal) {
-      return (
-        <Goal.Card goal={goal} key={goal.pk}/>
-      );
-    });
+Goal.CardList = ({ goals }) => {
+  var goalNodes = goals.map(function(goal) {
     return (
-      <div className="goalList">
-      {goalNodes}
-      </div>
+      <Goal.Card title={goal.title} goal_slug={goal.slug} key={goal.pk}/>
     );
-  }
-});
+  });
+  return (
+    <div className="goalList">
+    {goalNodes}
+    </div>
+  );
+}
+
+Goal.CardList.propTypes = {
+  goals: PropTypes.array
+}
 
 Goal.CardListBox = React.createClass({
   loadGoalsFromServer: function() {
@@ -55,7 +57,7 @@ Goal.CardListBox = React.createClass({
   render: function() {
     return (
       <div className="goalsBox">
-        <Goal.CardList data={this.state.data} />
+        <Goal.CardList goals={this.state.data} />
       </div>
     );
   }

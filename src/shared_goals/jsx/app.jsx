@@ -6,11 +6,22 @@ import SuggestionPage from 'suggestionpage'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Router, Route, browserHistory } from 'react-router'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux';
+import appReducer from 'reducers'
+
+const Root = ({ store }) => (
+  <Provider store={store}>
+      <Router history={browserHistory}>
+        <Route path="/" component={HomePage.Page} />
+        <Route path="/to/:goal_slug/" component={GoalPage.Page} />
+        <Route path="/to/:goal_slug/by/:suggestion_slug" component={SuggestionPage.Page} />
+      </Router>
+  </Provider>
+);
+
+let store = createStore(appReducer)
 
 ReactDOM.render((
-  <Router history={browserHistory}>
-    <Route path="/" component={HomePage.Page} />
-    <Route path="/to/:goal_slug/" component={GoalPage.Page} />
-    <Route path="/to/:goal_slug/by/:suggestion_slug" component={SuggestionPage.Page} />
-  </Router>
+    <Root store={store} />
 ), document.getElementById('root'));

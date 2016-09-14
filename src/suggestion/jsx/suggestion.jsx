@@ -1,65 +1,82 @@
 'use strict'
 
-var React = require('react')
+import React, { PropTypes } from 'react'
 
 var Suggestion = React.createClass({
   render: function() {}
 });
 
-Suggestion.Card = React.createClass({
-  render: function() {
-    var style = {};
-    if (this.props.suggestion.image) {
-      style.backgroundImage = "url(" + this.props.suggestion.image + ")";
-    }
+Suggestion.Card = ({ url, type, stars, title, image }) => {
+  var style = {};
+  if (image) {
+    style.backgroundImage = "url(" + image + ")";
+  }
 
-    return (
-      <div className="col-md-4">
-        <a href={this.props.suggestion.get_url}>
-          <div className="suggestion--image" style={style}>
-            <div className="suggestion--gradient"></div>
-            <span className="suggestion--title">
-              <span className="suggestion--title--caption">
-                {this.props.suggestion.get_type_display} {this.props.suggestion.stars}
-              </span>
-              <h3>{this.props.suggestion.current_revision.title}</h3>
+  return (
+    <div className="col-md-4">
+      <a href={url}>
+        <div className="suggestion--image" style={style}>
+          <div className="suggestion--gradient"></div>
+          <span className="suggestion--title">
+            <span className="suggestion--title--caption">
+              {type} {stars}
             </span>
-          </div>
-        </a>
-      </div>
-    );
-  }
-});
-
-Suggestion.CardGrid = React.createClass({
-  chunks: function(items, chunkSize) {
-      var R = [];
-      for (var i=0; i<items.length; i+=chunkSize)
-          R.push(items.slice(i,i+chunkSize));
-      return R;
-  },
-  render: function() {
-    var suggestionNodes = this.props.data.map(function(suggestion) {
-      return (
-        <Suggestion.Card suggestion={suggestion} key={suggestion.pk}/>
-      );
-    });
-
-    var rows = this.chunks(suggestionNodes, 3).map(function(chunk, index) {
-      return (
-        <div className="row gap--small-above" key={index}>
-        {chunk}
+            <h3>{title}</h3>
+          </span>
         </div>
-      );
-    });
+      </a>
+    </div>
+  );
+}
 
+Suggestion.Card.propTypes = {
+  url: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  stars: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  image: PropTypes.string.isRequired,
+}
+
+let chunks = function(items, chunkSize) {
+    var R = [];
+    for (var i=0; i<items.length; i+=chunkSize)
+        R.push(items.slice(i,i+chunkSize));
+    return R;
+}
+
+Suggestion.CardGrid = ({ goal_slug, suggestions }) => {
+  var suggestionNodes = suggestions.map(function(suggestion) {
     return (
-      <div>
-      {rows}
+      <Suggestion.Card
+        url={"/to/" + goal_slug + "/by/" + suggestion.slug + "/"}
+        type={suggestion.get_type_display}
+        stars={suggestion.stars}
+        title={suggestion.current_revision.title}
+        image={suggestion.image}
+        key={suggestion.pk}
+      />
+    );
+  });
+
+  var rows = chunks(suggestionNodes, 3).map(function(chunk, index) {
+    return (
+      <div className="row gap--small-above" key={index}>
+      {chunk}
       </div>
     );
-  }
-});
+  });
+
+  return (
+    <div>
+    {rows}
+    </div>
+  );
+}
+
+Suggestion.CardGrid.propTypes = {
+  goal_slug: PropTypes.string.isRequired,
+  suggestions: PropTypes.array.isRequired
+}
 
 Suggestion.CardGridBox = React.createClass({
   url: function() {
@@ -79,7 +96,10 @@ Suggestion.CardGridBox = React.createClass({
   render: function() {
     return (
       <div className="suggestion_CardGridBox">
-        <Suggestion.CardGrid data={this.state.data} />
+        <Suggestion.CardGrid
+          goal_slug={this.props.goal_slug}
+          suggestions={this.state.data}
+        />
       </div>
     );
   }

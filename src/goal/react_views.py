@@ -10,7 +10,7 @@ from .models import GlobalUser, Goal
 class GoalSerializer(serializers.ModelSerializer):  # noqa
     class Meta:  # noqa
         model = Goal
-        fields = ('title', 'pk')
+        fields = ('title', 'pk', 'slug')
 
 
 class GlobalUserSerializer(serializers.ModelSerializer):  # noqa

@@ -1,4 +1,5 @@
 require('app');
+require('reducers');
 require('goal');
 require('homepage');
 require('goalpage');

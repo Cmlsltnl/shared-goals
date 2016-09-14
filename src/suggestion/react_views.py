@@ -25,6 +25,7 @@ class SuggestionSerializer(serializers.ModelSerializer):  # noqa
             'pk',
             'stars',
             'owner',
+            'slug',
         )
 
     current_revision = RevisionSerializer(
