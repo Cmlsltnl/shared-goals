@@ -1,3 +1,7 @@
+.form--error {
+    color: red;
+}
+
 .form--label {
     display: block;
 }
@@ -22,6 +26,24 @@
     display: block;
     height: 200px;
     background-size: cover;
+}
+
+.suggestion--form--text {
+    width:100%;
+    height:100%;
+}
+
+.suggestion--form--markdown {
+    font-size: 10px;
+    margin-left: 5px;
+    height:100%;
+}
+
+.suggestion--form--crop {
+}
+
+.suggestion--form--image {
+    background-color: lightgray;
 }
 
 .suggestion--title {
@@ -49,3 +71,17 @@
     padding-bottom: 28px;
 }
 
+.gap--small-right {
+    padding-right: 28px;
+}
+
+.gap--tiny-above {
+    padding-top: 14px;
+}
+
+.hidden {
+    display:none;
+}
+
+.suggestion--form--preview {
+}

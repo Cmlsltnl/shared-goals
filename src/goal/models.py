@@ -9,7 +9,7 @@ from django.template.defaultfilters import slugify
 class GlobalUser(models.Model):
     """Any user of Shared Goals."""
 
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, related_name="global_user")
     join_date = models.DateTimeField('date joined', auto_now_add=True)
     image = models.FileField(blank=True, upload_to='members')
 
@@ -55,6 +55,17 @@ class Member(models.Model):
     @property
     def name(self):  # noqa
         return self.global_user.name
+
+    @staticmethod
+    def lookup(user, goal_slug):
+        """Look up a member given a user and goal_slug."""
+        try:
+            return Member.objects.get(
+                global_user__user=user,
+                goal__slug=goal_slug
+            )
+        except Member.DoesNotExist:
+            return None
 
     def __str__(self):  # noqa
         return self.name

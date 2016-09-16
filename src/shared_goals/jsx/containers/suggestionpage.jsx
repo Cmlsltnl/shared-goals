@@ -1,5 +1,3 @@
-'use strict'
-
 import Actions from 'actions'
 import GoalPage from 'containers/goalpage'
 import Goal from 'presentation/goal'
@@ -16,8 +14,7 @@ var SuggestionPage = React.createClass({
 
 SuggestionPage.Page = React.createClass({
   componentDidMount: function() {
-    this.props.fetchGoal(this.props.params.goal_slug)
-    this.props.fetchSuggestion(
+    this.props.fetchBundle(
       this.props.params.goal_slug, this.props.params.suggestion_slug
     )
   },
@@ -25,6 +22,27 @@ SuggestionPage.Page = React.createClass({
   render: function() {
     let goal = this.props.goal;
     let suggestion = this.props.suggestion;
+    let review = this.props.review;
+    let flags = this.props.flags;
+    let fetchBundle = this.props.fetchBundle;
+    let reportReviewFormErrors = this.props.reportReviewFormErrors;
+
+    if (!goal || !suggestion)
+    {
+      return (<div/>);
+    }
+
+    let postReview = function(form_data) {
+      $.ajax({
+        type: "POST",
+        url: "/api/review/" + goal.slug + "/" + suggestion.slug,
+        data: form_data,
+        success: function(data)
+        {
+          this.props.receivePostedReview(data);
+        }.bind(this)
+      });
+    }.bind(this)
 
     return (
       <div className="container">
@@ -32,12 +50,16 @@ SuggestionPage.Page = React.createClass({
         <Suggestion.PageHeader
           url={"/to/" + goal.slug + "/by/" + suggestion.slug + "/"}
           suggestion={suggestion}
-          revision={suggestion.current_revision}
         />
-        <Review.Form
-          goal={goal}
-          suggestion={suggestion}
-        />
+        {
+          flags.add_review
+          ? <Review.Form goal={goal}
+            suggestion={suggestion}
+            review={review}
+            postReview={postReview}
+          />
+          : null
+        }
       </div>
     );
   }
@@ -46,19 +68,21 @@ SuggestionPage.Page = React.createClass({
 SuggestionPage.Page = connect(
   function(state) {
     return {
-      goal: state.goal.json,
-      suggestion: state.suggestion.json
+      goal: state.bundle.goal,
+      suggestion: state.bundle.suggestion,
+      review: state.bundle.review,
+      flags: state.bundle.flags,
     }
   },
 
   function(dispatch) {
     return {
-      fetchGoal: (goal_slug) => {
-        dispatch(Actions.fetchGoal(goal_slug))
+      fetchBundle: (goal_slug, suggestion_slug) => {
+        dispatch(Actions.fetchBundle(goal_slug, suggestion_slug))
       },
-      fetchSuggestion: (goal_slug, suggestion_slug) => {
-        dispatch(Actions.fetchSuggestion(goal_slug, suggestion_slug))
-      }
+      receivePostedReview: (json) => {
+        dispatch(Actions.receivePostedReview(json))
+      },
     }
   }
 )(SuggestionPage.Page);

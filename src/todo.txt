@@ -1,9 +1,6 @@
 - update your security group rules to allow access from known IP addresses only.
-- remove secret key from git
-- remove read permissions for others from shared-goals
-- when a new use is registered, add as globaluser
-- set focus when you open a new form
-- after submitting a review, scroll to it
+- remove read permissions for others from shared-goals folder
+- when a new user is registered, add as globaluser
 
 Links
 
@@ -12,23 +9,20 @@ Links
 - http://serverfault.com/questions/216998/supervisord-doesnt-stop-nginx-process
 - http://stackoverflow.com/questions/11170425/how-to-unit-test-file-upload-in-django
 - http://stackoverflow.com/questions/641055/diff-to-html-diff2html-program
-- https://github.com/edoburu/django-fluent-comments/
-- https://github.com/HonzaKral/django-threadedcomments
 
 Later
 
+- do not update a suggestion, create a new one with the same slug. Merge revision into suggestion. Do also not update review, create new ones. When showing a review, add a button to view old comments.
+
 - set maximum size for uploaded image
-- restrict accetable user names (so that we can lookup profiles properly)
-- learn how jcrop myself. How does cropping really work, what's up with the details file?
+- restrict acceptable user names (so that we can lookup profiles properly)
 - Ensure that uploaded images never override real images. Maybe uploaded images can go
 into a suggestions_inbox folder
 - Use now() timestamp from the db server
 - Advise member that their profile is totally public
 - use markdown in reviews and comments, but with a more modest style
-- Highlight currently selected main menu item
 - garbage collect revisions that have no reviews and are not the latest one
 - add a penalty to the mean rating that is higher for suggestions with few reviews
-- bug: when submitting a invalid suggestion, the image is no longer shown
 
 How-to
 

@@ -1,11 +1,13 @@
 """Suggestion models."""
 
 import emoji
+import os
 
 from django.contrib.humanize.templatetags.humanize import naturaltime
 from django.core.urlresolvers import reverse
 from django.db import models
 
+from goal.utils import apply_cropping_to_image
 from goal.models import Goal, GlobalUser
 
 
@@ -25,6 +27,7 @@ class Suggestion(models.Model):  # noqa
     owner = models.ForeignKey(GlobalUser)
     is_draft = models.BooleanField(default=True)
     image = models.FileField(upload_to="suggestions", blank=True)
+    uncropped_image = models.FileField(upload_to="suggestions", blank=True)
     slug = models.SlugField('slug', max_length=60)
     pub_date = models.DateTimeField('date published', auto_now=True)
 
@@ -45,6 +48,26 @@ class Suggestion(models.Model):  # noqa
         """Return a string with zero or more starts."""
         factor = int(round(self.avg_rating) if self.avg_rating else 0)
         return emoji.emojize(":star:", use_aliases=True) * factor
+
+    def apply_cropping(self, crop):
+        """Set self.image to the cropped self.ucropped_image."""
+        apply_cropping_to_image(
+            self.uncropped_image,
+            crop['x'],
+            crop['y'],
+            crop['width'],
+            crop['height'],
+        )
+        if (
+            self.image and
+            os.path.exists(self.image.path) and
+            self.image.path != self.uncropped_image.path
+        ):
+            os.unlink(self.image.path)
+
+        self.image.name = self.uncropped_image.name
+        self.save()
+
 
 
 class Revision(models.Model):  # noqa

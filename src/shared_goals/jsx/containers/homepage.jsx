@@ -1,5 +1,3 @@
-'use strict'
-
 import Actions from 'actions'
 import Goal from 'presentation/goal'
 
@@ -13,16 +11,31 @@ var HomePage = React.createClass({
 
 HomePage.Page = React.createClass({
   componentDidMount: function() {
+    this.props.fetchBundle();
     this.props.fetchGoalsIfNeeded();
   },
 
   render: function() {
+    let goals = this.props.goals;
+    if (!goals)
+    {
+      return (<div/>);
+    }
+
     return (
       <div className="container">
-        <div className="text-center">
-          <h1>Shared Goals</h1>
+        <div className="row">
+          <div className="col-md-12">
+            <div className="text-center">
+              <h1>Shared Goals</h1>
+            </div>
+          </div>
         </div>
-        <Goal.CardList goals={this.props.goals} />
+        <div className="row">
+          <div className="col-md-12">
+            <Goal.CardList goals={goals} />
+          </div>
+        </div>
       </div>
     )
   }
@@ -37,6 +50,9 @@ HomePage.Page = connect(
 
   function(dispatch) {
     return {
+      fetchBundle: () => {
+        dispatch(Actions.fetchBundle())
+      },
       fetchGoalsIfNeeded: () => {
         dispatch(Actions.fetchGoalsIfNeeded())
       }

@@ -1,3 +1,5 @@
+"""Models for reviews."""
+
 from django.contrib.humanize.templatetags.humanize import naturaltime
 from django.db import models
 
@@ -6,7 +8,7 @@ from goal.models import GlobalUser
 from suggestion.models import Revision
 
 
-class Review(models.Model):
+class Review(models.Model):  # noqa
     EXPERIENCE_NOT_TRIED = 0
     EXPERIENCE_TRIED = 1
     EXPERIENCE_DOING = 2
@@ -26,16 +28,16 @@ class Review(models.Model):
     experience = models.PositiveSmallIntegerField(
         choices=EXPERIENCE_CHOICES, default=0, blank=True)
 
-    def __str__(self):
+    def __str__(self):  # noqa
         return "Review by %s for %s" % (self.owner, self.revision)
 
     @property
-    def header(self):
+    def header(self):  # noqa
         header = self.owner.name
         header += ", %s" % naturaltime(self.pub_date)
         return header
 
-    def published_comments(self):
+    def published_comments(self):  # noqa
         comments = [
             c for c in self.comments.filter(
                 is_draft=False, reply_to=None
@@ -54,7 +56,7 @@ class Review(models.Model):
         return result
 
 
-class Comment(models.Model):
+class Comment(models.Model):  # noqa
     pub_date = models.DateTimeField('date published', auto_now_add=True)
     owner = models.ForeignKey(GlobalUser)
 
@@ -65,13 +67,13 @@ class Comment(models.Model):
     body = models.TextField()
     is_draft = models.BooleanField(default=True)
 
-    def __str__(self):
+    def __str__(self):  # noqa
         return (
             "Comment by %s on %s (%s)"
             % (self.owner, self.review, self.reply_to_id)
         )
 
-    def indent(self):
+    def indent(self):  # noqa
         result = 0
         current = self
         while current.reply_to:

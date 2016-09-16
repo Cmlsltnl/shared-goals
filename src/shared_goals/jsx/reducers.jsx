@@ -2,69 +2,55 @@ import { combineReducers } from 'redux'
 import
   Actions,
   {
-     REQUEST_GOAL,
-     RECEIVE_GOAL,
-     REQUEST_GOALS,
-     RECEIVE_GOALS,
-     REQUEST_SUGGESTION,
-     RECEIVE_SUGGESTION,
-     REQUEST_SUGGESTIONS,
-     RECEIVE_SUGGESTIONS
+    REQUEST_BUNDLE,
+    RECEIVE_BUNDLE,
+    REQUEST_GOALS,
+    RECEIVE_GOALS,
+    REQUEST_SUGGESTIONS,
+    RECEIVE_SUGGESTIONS,
+    RECEIVE_POSTED_GOAL,
+    RECEIVE_POSTED_SUGGESTION,
+    RECEIVE_POSTED_REVIEW,
+    SET_SUGGESTION_IMAGE_URL,
+    SET_NEW_SUGGESTION_IMAGE_URL,
   } from 'actions'
 
-function goalReducer(
+function bundleReducer(
   state = {
-    json: {
-      title: "",
-      pk: -1,
-      slug: ""
-    },
+    json: {},
     isFetching: false
   },
   action
 )
 {
   switch (action.type) {
-    case REQUEST_GOAL:
+    case REQUEST_BUNDLE:
       return Object.assign({}, state, {
         isFetching: true
       })
-    case RECEIVE_GOAL:
+    case RECEIVE_BUNDLE:
       return Object.assign({}, state, {
-        json: action.json,
+        goal: action.json.goal,
+        suggestion: action.json.suggestion,
+        newSuggestion: action.json.new_suggestion,
+        review: action.json.review,
+        flags: action.json.flags,
         isFetching: false
       })
-    default:
-      return state
-  }
-}
-
-function suggestionReducer(
-  state = {
-    json: {
-      owner: {
-        name: ""
-      },
-      pub_date_display: "",
-      current_revision: {
-        description: ""
-      }
-    },
-    isFetching: false
-  },
-  action
-)
-{
-  switch (action.type) {
-    case REQUEST_SUGGESTION:
+    case SET_NEW_SUGGESTION_IMAGE_URL:
+      let newSuggestion = Object.assign({}, state.newSuggestion, {
+        uncropped_image: action.url
+      });
       return Object.assign({}, state, {
-        isFetching: true
-      })
-    case RECEIVE_SUGGESTION:
+        newSuggestion: newSuggestion
+      });
+    case SET_SUGGESTION_IMAGE_URL:
+      let suggestion = Object.assign({}, state.suggestion, {
+        uncropped_image: action.url
+      });
       return Object.assign({}, state, {
-        json: action.json,
-        isFetching: false
-      })
+        suggestion: suggestion
+      });
     default:
       return state
   }
@@ -119,11 +105,38 @@ function goalsReducer(
   }
 }
 
+function postResultsReducer(
+  state = {
+    goal: {},
+    suggestion: {},
+    review: {},
+  },
+  action
+)
+{
+  switch (action.type) {
+    case RECEIVE_POSTED_GOAL:
+      return Object.assign({}, state, {
+        goal: action.json
+      })
+    case RECEIVE_POSTED_SUGGESTION:
+      return Object.assign({}, state, {
+        suggestion: action.json
+      })
+    case RECEIVE_POSTED_REVIEW:
+      return Object.assign({}, state, {
+        review: action.json
+      })
+    default:
+      return state
+  }
+}
+
 const appReducer = combineReducers({
-  goal: goalReducer,
+  bundle: bundleReducer,
   goals: goalsReducer,
-  suggestion: suggestionReducer,
-  suggestions: suggestionsReducer
+  suggestions: suggestionsReducer,
+  postResults: postResultsReducer,
 })
 
 export default appReducer

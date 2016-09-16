@@ -5,34 +5,42 @@ var Actions = React.createClass({
   render: function() {}
 });
 
-export const REQUEST_GOAL = 'REQUEST_GOAL'
-export const RECEIVE_GOAL = 'RECEIVE_GOAL'
+export const REQUEST_BUNDLE = 'REQUEST_BUNDLE'
+export const RECEIVE_BUNDLE = 'RECEIVE_BUNDLE'
 export const REQUEST_GOALS = 'REQUEST_GOALS'
 export const RECEIVE_GOALS = 'RECEIVE_GOALS'
 export const REQUEST_SUGGESTIONS = 'REQUEST_SUGGESTIONS'
 export const RECEIVE_SUGGESTIONS = 'RECEIVE_SUGGESTIONS'
-export const REQUEST_SUGGESTION = 'REQUEST_SUGGESTION'
-export const RECEIVE_SUGGESTION = 'RECEIVE_SUGGESTION'
+export const RECEIVE_POSTED_GOAL = 'RECEIVE_POSTED_GOAL'
+export const RECEIVE_POSTED_SUGGESTION = 'RECEIVE_POSTED_SUGGESTION'
+export const RECEIVE_POSTED_REVIEW = 'RECEIVE_POSTED_REVIEW'
+export const SET_SUGGESTION_IMAGE_URL = 'SET_SUGGESTION_IMAGE_URL'
+export const SET_NEW_SUGGESTION_IMAGE_URL = 'SET_NEW_SUGGESTION_IMAGE_URL'
 
-function requestGoal() {
+function requestBundle() {
   return {
-    type: REQUEST_GOAL
+    type: REQUEST_BUNDLE
   }
 }
 
-function receiveGoal(json) {
+function receiveBundle(json) {
   return {
-    type: RECEIVE_GOAL,
+    type: RECEIVE_BUNDLE,
     json: json
   }
 }
 
-Actions.fetchGoal = function(goal_slug) {
+Actions.fetchBundle = function(goal_slug="none", suggestion_slug="none") {
   return dispatch => {
-    dispatch(requestGoal())
-    return fetch('/api/goal/' + goal_slug)
+    dispatch(requestBundle())
+    return fetch(
+        '/api/bundle/' + goal_slug + "/" + suggestion_slug,
+        {
+            credentials: 'same-origin'
+        }
+    )
       .then(response => response.json())
-      .then(json => dispatch(receiveGoal(json)))
+      .then(json => dispatch(receiveBundle(json)))
   }
 }
 
@@ -52,7 +60,12 @@ function receiveGoals(json) {
 function fetchGoals() {
   return dispatch => {
     dispatch(requestGoals())
-    return fetch('/api/goals')
+    return fetch(
+        '/api/goals',
+        {
+            credentials: 'same-origin'
+        }
+    )
       .then(response => response.json())
       .then(json => dispatch(receiveGoals(json)))
   }
@@ -92,7 +105,12 @@ function receiveSuggestions(json, goal_slug) {
 function fetchSuggestions(goal_slug) {
   return dispatch => {
     dispatch(requestSuggestions(goal_slug))
-    return fetch('/api/suggestions/' + goal_slug)
+    return fetch(
+        '/api/suggestions/' + goal_slug,
+        {
+            credentials: 'same-origin'
+        }
+    )
       .then(response => response.json())
       .then(json => dispatch(receiveSuggestions(json, goal_slug)))
   }
@@ -113,26 +131,54 @@ Actions.fetchSuggestionsIfNeeded = function(goal_slug) {
   }
 }
 
-function requestSuggestion() {
+Actions.receivePostedGoal = function(json) {
   return {
-    type: REQUEST_SUGGESTION
-  }
-}
-
-function receiveSuggestion(json) {
-  return {
-    type: RECEIVE_SUGGESTION,
+  type: RECEIVE_POSTED_GOAL,
     json: json
   }
 }
 
-Actions.fetchSuggestion = function(goal_slug, suggestion_slug) {
-  return dispatch => {
-    dispatch(requestSuggestion())
-    return fetch('/api/suggestion/' + goal_slug + "/" + suggestion_slug)
-      .then(response => response.json())
-      .then(json => dispatch(receiveSuggestion(json)))
+Actions.receivePostedSuggestion = function(json) {
+  return {
+  type: RECEIVE_POSTED_SUGGESTION,
+    json: json
   }
 }
+
+Actions.receivePostedReview = function(json) {
+  return {
+  type: RECEIVE_POSTED_REVIEW,
+    json: json
+  }
+}
+
+Actions.fetchBundle = function(goal_slug="none", suggestion_slug="none") {
+  return dispatch => {
+    dispatch(requestBundle())
+    return fetch(
+        '/api/bundle/' + goal_slug + "/" + suggestion_slug,
+        {
+            credentials: 'same-origin'
+        }
+    )
+      .then(response => response.json())
+      .then(json => dispatch(receiveBundle(json)))
+  }
+}
+
+Actions.setSuggestionImageUrl = function(url) {
+  return {
+  type: SET_SUGGESTION_IMAGE_URL,
+    url: url
+  }
+}
+
+Actions.setNewSuggestionImageUrl = function(url) {
+  return {
+  type: SET_NEW_SUGGESTION_IMAGE_URL,
+    url: url
+  }
+}
+
 
 export default Actions
