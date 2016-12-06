@@ -85,4 +85,4 @@ class BundleView(APIView):  # noqa
 
 class HomeView(View):  # noqa
     def get(self, request):  # noqa
-        return render(request, 'shared_goals/react_base.html', {})
+        return render(request, 'main/react_base.html', {})

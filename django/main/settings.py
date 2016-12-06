@@ -62,13 +62,13 @@ MIDDLEWARE_CLASSES = [
 
 USE_REACT = True
 
-ROOT_URLCONF = 'shared_goals.react_urls' if USE_REACT else 'shared_goals.urls'
+ROOT_URLCONF = 'main.react_urls' if USE_REACT else 'main.urls'
 
 TEMPLATES = [
     {
         # 'BACKEND': 'django.template.backends.jinja2.Jinja2',
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, "shared_goals", "templates")],
+        'DIRS': [os.path.join(BASE_DIR, "main", "templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -85,7 +85,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'shared_goals.wsgi.application'
+WSGI_APPLICATION = 'main.wsgi.application'
 
 
 # Database
@@ -146,7 +146,7 @@ MEDIA_ROOT = os.path.join(ROOT_DIR, "media")
 WEBPACK_LOADER = {
     'DEFAULT': {
         'BUNDLE_DIR_NAME': 'bundles/',
-        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
+        'STATS_FILE': os.path.join(ROOT_DIR, 'webpack/webpack-stats.json'),
     }
 }
 

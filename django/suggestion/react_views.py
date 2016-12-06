@@ -65,6 +65,7 @@ class SuggestionUpdateSerializer(serializers.Serializer):  # noqa
 class SuggestionSerializer(serializers.ModelSerializer):  # noqa
     class Meta:  # noqa
         model = Suggestion
+        fields = '__all__'
 
     current_revision = RevisionSerializer(
         source='get_current_revision', many=False)
@@ -73,7 +74,6 @@ class SuggestionSerializer(serializers.ModelSerializer):  # noqa
         source='get_type_display', max_length=200)
 
     owner = GlobalUserSerializer(many=False)
-
 
 class SuggestionList(APIView):  # noqa
     queryset = Suggestion.objects.all()

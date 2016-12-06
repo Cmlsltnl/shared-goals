@@ -58,7 +58,7 @@ let store = createStore(
             thunkMiddleware, // lets us dispatch() functions
             loggerMiddleware // neat middleware that logs actions
         ),
-        window.devToolsExtension ? window.devToolsExtension() : DevTools.instrument()
+        window.devToolsExtension ? window.devToolsExtension() : f => f
     )
 )
 

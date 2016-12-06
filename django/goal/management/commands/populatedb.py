@@ -20,8 +20,9 @@ from .yoga_twist_2 import text as yoga_twist_2_content
 
 
 class Command(BaseCommand):
-    help = \
+    help = (
         'Populates the database with example suggestions'
+    )
 
     def add_arguments(self, parser):
         pass

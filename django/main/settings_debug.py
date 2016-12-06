@@ -23,6 +23,6 @@ SECRET_KEY = '8fbc%#p8369y4%9wqky9a9d7+4m7183@)vz4#)9y#h8p)r7d(t'
 DEBUG = True
 
 STATICFILES_DIRS = [
-    os.path.join(ROOT_DIR, "assets"),
+    os.path.join(ROOT_DIR, "webpack"),
     '/usr/lib/node_modules/',
 ]

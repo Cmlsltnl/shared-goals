@@ -5,8 +5,9 @@ from django.core import management
 
 
 class Command(BaseCommand):
-    help = \
+    help = (
         'Creates empty database tables'
+    )
 
     def add_arguments(self, parser):
         pass

@@ -1,0 +1,39 @@
+FROM ubuntu:16.04
+
+RUN apt-get update && apt-get install -y --force-yes python2.7 python-pip libjpeg-dev zlib1g-dev
+RUN pip install --upgrade pip
+
+COPY REQUIREMENTS.txt /root/REQUIREMENTS.txt
+RUN pip install -r /root/REQUIREMENTS.txt
+
+RUN apt-get update && apt-get install -y curl
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
+RUN apt-get install -y nodejs
+RUN apt-get install -y locate nano
+
+COPY MOREREQS.txt /root/MOREREQS.txt
+RUN pip install -r /root/MOREREQS.txt
+
+RUN npm install \
+    webpack \
+    webpack-dev-server \
+    babel-loader \
+    babel-core \
+    babel-preset-es2015 \
+    babel-preset-react \
+    react \
+    react-dom \
+    react-router \
+    webpack-bundle-tracker \
+    redux \
+    react-redux \
+    isomorphic-fetch \
+    babel-polyfill \
+    redux-logger \
+    redux-thunk \
+    react-markdown \
+    json-loader \
+    js-cookie \
+    object-assign \
+    react-image-crop \
+    -g
